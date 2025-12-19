@@ -7,7 +7,7 @@ const navLinks = [
   { name: "About", href: "#about" },
   { name: "Events", href: "#events" },
   { name: "Sponsors", href: "#sponsors" },
-  { name: "Gallery", href: "#gallery" }
+  { name: "Gallery", href: "#gallery" },
 ];
 
 const Navbar = () => {
@@ -42,7 +42,8 @@ const Navbar = () => {
           : "bg-transparent"
       }`}
     >
-      {/* <ShootingStars /> */} {/* Uncomment to enable shooting stars effect */}
+      {/* <ShootingStars /> */}{" "}
+      {/* Uncomment to enable shooting stars effect */}
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-20">
           {/* Logo */}
@@ -83,7 +84,6 @@ const Navbar = () => {
           </button>
         </div>
       </div>
-
       {/* Mobile Menu */}
       <AnimatePresence>
         {isOpen && (

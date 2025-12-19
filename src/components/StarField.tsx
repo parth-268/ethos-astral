@@ -12,7 +12,7 @@ interface Star {
 const StarField = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const starsRef = useRef<Star[]>([]);
-  const animationRef = useRef<number>();
+  const animationRef = useRef<number>(null);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -30,7 +30,7 @@ const StarField = () => {
     const initStars = () => {
       starsRef.current = [];
       const numStars = Math.floor((canvas.width * canvas.height) / 8000);
-      
+
       for (let i = 0; i < numStars; i++) {
         starsRef.current.push({
           x: Math.random() * canvas.width,
@@ -44,7 +44,7 @@ const StarField = () => {
 
     const animate = () => {
       if (!ctx || !canvas) return;
-      
+
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
       starsRef.current.forEach((star) => {
