@@ -18,7 +18,8 @@ const menuVariants = {
     y: -10,
     transition: {
       duration: 0.3,
-      ease: [0.4, 0, 0.2, 1], // Smooth bezier curve
+      // Fixed: 'as const' makes this a readonly tuple
+      ease: [0.4, 0, 0.2, 1] as const,
     },
   },
   visible: {
@@ -26,9 +27,10 @@ const menuVariants = {
     y: 0,
     transition: {
       duration: 0.4,
-      ease: [0.4, 0, 0.2, 1],
-      staggerChildren: 0.1, // Stagger link animations
-      delayChildren: 0.1, // Wait slightly for menu to settle
+      // Fixed: 'as const' makes this a readonly tuple
+      ease: [0.4, 0, 0.2, 1] as const,
+      staggerChildren: 0.1,
+      delayChildren: 0.1,
     },
   },
   exit: {
@@ -36,7 +38,9 @@ const menuVariants = {
     y: -10,
     transition: {
       duration: 0.3,
-      ease: "easeInOut",
+      // FIX: Added 'as const' here.
+      // This tells TS: "This is the specific string 'easeInOut', not just any string"
+      ease: "easeInOut" as const,
       staggerChildren: 0.05,
       staggerDirection: -1,
     },
@@ -177,7 +181,7 @@ const Navbar = () => {
             animate="visible"
             exit="exit"
             className="md:hidden absolute top-16 left-0 w-full h-[calc(100vh-4rem)] bg-background/95 backdrop-blur-2xl border-t border-border overflow-hidden"
-            style={{ willChange: "transform, opacity" }} // Performance optimization
+            style={{ willChange: "transform, opacity" }}
           >
             {/* Ambient Background Glow (Animated) */}
             <div className="absolute inset-0 w-full h-full pointer-events-none">

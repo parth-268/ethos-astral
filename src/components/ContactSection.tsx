@@ -19,7 +19,7 @@ const ContactSection = () => {
         left: Math.random() * 100,
         top: Math.random() * 100,
       })),
-    []
+    [],
   );
 
   const handleSubmit = (e: React.FormEvent) => {
