@@ -111,44 +111,35 @@ const EventsSection = () => {
           {events.map((event, index) => (
             <motion.div
               key={event.title}
-              initial={{ opacity: 0, y: 40, rotateY: -10 }}
-              animate={isInView ? { opacity: 1, y: 0, rotateY: 0 } : {}}
+              initial={{ opacity: 0, y: 40 }} // Removed rotateY initial to reduce jerkiness
+              animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.6, delay: 0.2 + index * 0.1 }}
-              className="group relative perspective-1000"
+              className="group relative perspective-[2000px]" // Increased perspective
             >
-              <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-cyan-500/5 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              {/* Hover Glow Behind */}
+              <div className="absolute inset-0 bg-blue-500/20 rounded-2xl blur-3xl opacity-0 group-hover:opacity-70 transition-opacity duration-700" />
 
-              <div className="relative bg-card/30 backdrop-blur-md border border-blue-500/20 rounded-2xl p-8 overflow-hidden hover:border-blue-400/40 transition-all duration-500 group-hover:transform group-hover:scale-[1.02]">
-                {/* Gradient sweep on hover */}
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-blue-500/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
+              <div className="relative h-full bg-[#0a0a12]/60 backdrop-blur-xl border border-white/10 rounded-2xl p-8 overflow-hidden transition-all duration-500 group-hover:-translate-y-2 group-hover:shadow-[0_0_40px_rgba(59,130,246,0.2)]">
+                {/* Top Highlight (Glass Edge) */}
+                <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-blue-400/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
                 <div className="relative z-10">
-                  <div className="w-14 h-14 bg-blue-500/10 rounded-xl flex items-center justify-center mb-6 group-hover:bg-blue-500/20 transition-colors border border-blue-500/20">
-                    <event.icon className="w-7 h-7 text-blue-400" />
+                  <div className="w-14 h-14 bg-gradient-to-br from-blue-500/20 to-transparent rounded-xl flex items-center justify-center mb-6 border border-blue-500/20 group-hover:scale-110 transition-transform duration-500">
+                    <event.icon className="w-7 h-7 text-blue-400 group-hover:text-white transition-colors" />
                   </div>
-                  <h3 className="font-display text-2xl text-foreground mb-3">
+
+                  <h3 className="font-display text-2xl text-white mb-3 tracking-wide">
                     {event.title}
                   </h3>
-                  <p className="text-muted-foreground leading-relaxed">
+
+                  <p className="text-blue-200/60 leading-relaxed text-sm">
                     {event.description}
                   </p>
                 </div>
 
-                {/* Hover indicator */}
-                <div className="absolute bottom-6 right-6 w-10 h-10 rounded-full bg-blue-500/10 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-x-4 group-hover:translate-x-0 border border-blue-500/30">
-                  <svg
-                    className="w-5 h-5 text-blue-400"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M17 8l4 4m0 0l-4 4m4-4H3"
-                    />
-                  </svg>
+                {/* Decorative corner accent */}
+                <div className="absolute bottom-0 right-0 p-6 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                  <div className="w-2 h-2 rounded-full bg-blue-400 shadow-[0_0_10px_#60a5fa]" />
                 </div>
               </div>
             </motion.div>

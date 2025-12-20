@@ -1,5 +1,5 @@
 import { motion, useInView } from "framer-motion";
-import { useRef, useState } from "react";
+import { useRef, useState, useMemo } from "react";
 import { Send, Mail, Phone, MapPin, Leaf, Radio } from "lucide-react";
 import { toast } from "sonner";
 import Planet from "./Planet";
@@ -12,6 +12,15 @@ const ContactSection = () => {
     email: "",
     message: "",
   });
+
+  const floatingElements = useMemo(
+    () =>
+      [...Array(15)].map(() => ({
+        left: Math.random() * 100,
+        top: Math.random() * 100,
+      })),
+    []
+  );
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -36,13 +45,13 @@ const ContactSection = () => {
       </div>
 
       {/* Organic floating elements */}
-      {[...Array(15)].map((_, i) => (
+      {floatingElements.map((element, i) => (
         <motion.div
           key={i}
           className="absolute"
           style={{
-            left: `${Math.random() * 100}%`,
-            top: `${Math.random() * 100}%`,
+            left: `${element.left}%`,
+            top: `${element.top}%`,
           }}
           animate={{
             y: [0, -40, 0],
@@ -94,7 +103,7 @@ const ContactSection = () => {
                 Open Transmission Channel
               </h3>
               <p className="text-muted-foreground leading-relaxed">
-                Have questions about ETHOS 2025? Want to sponsor or partner with
+                Have questions about ETHOS 2026? Want to sponsor or partner with
                 us? Send us a signal across the cosmos.
               </p>
             </div>

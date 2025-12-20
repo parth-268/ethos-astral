@@ -419,3 +419,14 @@
 html {
   scroll-behavior: smooth;
 }
+
+.iim-logo {
+  background: transparent;
+  mix-blend-mode: multiply;
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  width: 64px;
+  z-index: 20;
+  opacity: 0.85;
+}
