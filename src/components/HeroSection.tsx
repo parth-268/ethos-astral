@@ -1,7 +1,7 @@
 import { motion, useScroll, useTransform } from "framer-motion";
 import { Calendar, MapPin, ArrowRight, Sparkles } from "lucide-react";
 import Planet from "./Planet";
-import ethosLogo from "../assets/ethos_logo_2.png";
+import ethosLogo from "../assets/ethos_logo_2.png"; // Ensure this matches your file name
 
 const HeroSection = () => {
   const { scrollY } = useScroll();
@@ -28,7 +28,7 @@ const HeroSection = () => {
 
       {/* Floating cosmic elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {/* Main Sun Planet */}
+        {/* Main Sun Planet - Adjusted for Mobile */}
         <div className="absolute -right-20 top-20 opacity-60 md:-right-32 md:top-1/4">
           <Planet
             size="w-48 h-48 md:w-96 md:h-96"
@@ -157,7 +157,7 @@ const HeroSection = () => {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.8 }}
-          className="flex flex-col sm:flex-row items-center justify-center gap-3 md:gap-6 mb-10 md:mb-12"
+          className="flex flex-col sm:flex-row items-center justify-center gap-3 md:gap-6 mb-6"
         >
           <div className="flex items-center gap-3 text-foreground/90 bg-white/5 border border-white/10 px-5 py-2.5 rounded-full backdrop-blur-md hover:bg-white/10 transition-colors w-full sm:w-auto justify-center">
             <Calendar className="w-4 h-4 md:w-5 md:h-5 text-primary" />
@@ -179,7 +179,7 @@ const HeroSection = () => {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.9 }}
-          className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full px-4 sm:px-0"
+          className="flex flex-col sm:flex-row items-center justify-center gap-1 w-full px-4 sm:px-0"
         >
           <a
             href="#events"
@@ -194,12 +194,12 @@ const HeroSection = () => {
         </motion.div>
       </motion.div>
 
-      {/* Scroll Indicator - UPDATED: Added md:hidden */}
+      {/* Scroll Indicator - MOVED UP to bottom-14 */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1.5, duration: 0.8 }}
-        className="absolute bottom-12 left-1/2 -translate-x-1/2 block md:hidden z-20"
+        className="absolute bottom-14 left-1/2 -translate-x-1/2 block md:hidden z-20"
       >
         <motion.div
           animate={{ y: [0, 10, 0] }}

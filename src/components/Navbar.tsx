@@ -104,19 +104,11 @@ const Navbar = () => {
             </div>
 
             <div className="flex flex-col justify-center">
-              <span className="text-[9px] sm:text-[10px] tracking-[0.2em] text-muted-foreground uppercase leading-tight">
-                IIM Sambalpur
+              <span className="text-[12px] sm:text-[14px] tracking-[0.2em] text-muted-foreground uppercase leading-tight">
+                IIM
               </span>
-
-              <span className="font-display text-lg sm:text-2xl tracking-wider text-white group-hover:text-shadow-[0_0_20px_rgba(255,255,255,0.5)] hidden transition-all leading-none mt-0.5">
-                ETHOS
-              </span>
-
-              <span className="text-[8px] tracking-widest text-primary/80 uppercase md:block leading-tight">
-                Astral
-              </span>
-              <span className="text-[8px] tracking-widest text-primary/80 uppercase md:block leading-tight">
-                Transcendence
+              <span className="text-[10px] sm:text-[12px] tracking-[0.2em] text-muted-foreground uppercase leading-tight">
+                Sambalpur
               </span>
             </div>
           </a>
@@ -134,7 +126,7 @@ const Navbar = () => {
                   <img
                     src={ethosLogo}
                     alt="Ethos Center Logo"
-                    className="h-8 md:h-12 w-auto object-contain drop-shadow-[0_0_10px_rgba(255,215,0,0.4)]"
+                    className="h-10 md:h-14 w-auto object-contain drop-shadow-[0_0_10px_rgba(255,215,0,0.4)]"
                   />
                 </motion.div>
               )}
