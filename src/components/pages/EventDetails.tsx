@@ -14,7 +14,19 @@ import Navbar from "../Navbar";
 
 import culturalBg from "@/assets/cultural_bg.jpg"; // Example import if using local images
 
-const eventDatabase: Record<string, any> = {
+interface EventData {
+  title: string;
+  subtitle: string;
+  description: string;
+  image: string;
+  date: string;
+  location: string;
+  prize: string;
+  registerLink: string;
+  rules: string[];
+}
+
+const eventDatabase: Record<string, EventData> = {
   "pro-nites": {
     title: "PRO NITES",
     subtitle: "The Galaxy's Loudest Symphony",
@@ -90,6 +102,7 @@ const EventDetails = () => {
         </div>
 
         <div className="container mx-auto px-4 relative z-10">
+          {/* --- FIX: Added '/' before '#events' --- */}
           <Link
             to="/#events"
             className="inline-flex items-center gap-2 text-blue-300 hover:text-white mb-6 transition-colors group"

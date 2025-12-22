@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import EventDetails from "./components/pages/EventDetails";
+import GalleryDetails from "./components/pages/GalleryDetails";
 
 const queryClient = new QueryClient();
 
@@ -22,6 +23,8 @@ const App = () => (
           {/* 2. Dynamic Event Details Page */}
           {/* CRITICAL FIX: This must be defined BEFORE the catch-all '*' route */}
           <Route path="/events/:eventId" element={<EventDetails />} />
+
+          <Route path="/gallery/:year" element={<GalleryDetails />} />
 
           {/* 3. 404 Catch-All Route (Must be last) */}
           <Route path="*" element={<NotFound />} />

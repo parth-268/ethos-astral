@@ -1,29 +1,43 @@
 import { motion, useInView } from "framer-motion";
-import { useRef, useState } from "react";
-import { Sparkles, Eye } from "lucide-react";
+import { useRef } from "react";
+import { Link } from "react-router-dom";
+import { Play, ArrowRight, Image as ImageIcon } from "lucide-react";
 import Planet from "./Planet";
 
-const galleryImages = [
-  { id: 1, category: "performances", year: 2021 },
-  { id: 2, category: "cultural", year: 2022 },
-  { id: 3, category: "competitions", year: 2023 },
-  { id: 4, category: "performances", year: 2024 },
-  { id: 5, category: "cultural", year: 2023 },
-  { id: 6, category: "competitions", year: 2024 },
+const archives = [
+  {
+    year: "2025",
+    title: "The Cosmic Echo",
+    image:
+      "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?q=80&w=2070&auto=format&fit=crop",
+    color: "from-purple-500",
+  },
+  {
+    year: "2024",
+    title: "Stellar Origins",
+    image:
+      "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?q=80&w=2070&auto=format&fit=crop",
+    color: "from-blue-500",
+  },
+  {
+    year: "2023",
+    title: "First Light",
+    image:
+      "https://images.unsplash.com/photo-1501281668745-f7f57925c3b4?q=80&w=2070&auto=format&fit=crop",
+    color: "from-emerald-500",
+  },
 ];
 
 const GallerySection = () => {
   const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
-  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+  const isInView = useInView(ref, { once: true, margin: "-50px" });
 
   return (
     <section
       id="gallery"
-      className="py-32 relative overflow-hidden nebula-aurora"
+      className="py-20 md:py-32 relative overflow-hidden nebula-aurora"
     >
-      {/* Aurora Planet */}
-      <div className="absolute -right-40 top-20 opacity-50">
+      <div className="hidden md:block absolute -right-40 top-20 opacity-50 pointer-events-none">
         <Planet
           size="w-64 h-64"
           gradient="var(--planet-aurora)"
@@ -32,137 +46,116 @@ const GallerySection = () => {
         />
       </div>
 
-      {/* Aurora lights effect */}
-      <motion.div
-        animate={{
-          opacity: [0.3, 0.5, 0.3],
-          scale: [1, 1.1, 1],
-        }}
-        transition={{ duration: 8, repeat: Infinity }}
-        className="absolute top-0 left-0 right-0 h-96 pointer-events-none"
-        style={{
-          background:
-            "linear-gradient(180deg, hsl(280 80% 60% / 0.1) 0%, transparent 100%)",
-        }}
-      />
-
-      {/* Floating particles */}
-      {[...Array(20)].map((_, i) => (
-        <motion.div
-          key={i}
-          className="absolute w-1 h-1 rounded-full"
-          style={{
-            left: `${Math.random() * 100}%`,
-            top: `${Math.random() * 100}%`,
-            background: `hsl(${280 + Math.random() * 60} 80% 60%)`,
-          }}
-          animate={{
-            y: [0, -80, 0],
-            opacity: [0.2, 0.8, 0.2],
-          }}
-          transition={{
-            duration: 6 + Math.random() * 4,
-            repeat: Infinity,
-            delay: Math.random() * 3,
-          }}
-        />
-      ))}
-
       <div className="container mx-auto px-4 relative z-10" ref={ref}>
         <motion.div
-          initial={{ opacity: 0, y: 40 }}
+          initial={{ opacity: 0, y: 30 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.8 }}
-          className="text-center mb-16"
+          className="text-center mb-12 md:mb-16"
         >
           <motion.div
             initial={{ scale: 0 }}
             animate={isInView ? { scale: 1 } : {}}
             transition={{ duration: 0.5, delay: 0.2 }}
-            className="inline-flex items-center gap-2 px-4 py-2 bg-purple-500/10 border border-purple-500/30 rounded-full text-purple-400 text-sm font-semibold tracking-widest uppercase mb-6"
+            className="inline-flex items-center gap-2 px-4 py-2 bg-purple-500/10 border border-purple-500/30 rounded-full text-purple-400 text-xs md:text-sm font-semibold tracking-widest uppercase mb-4 md:mb-6"
           >
-            <Sparkles className="w-4 h-4" />
-            Aurora Nebula — Memory Lane
+            <ImageIcon className="w-3 h-3 md:w-4 md:h-4" />
+            Visual Archives
           </motion.div>
-
-          <h2 className="font-display text-5xl md:text-7xl text-gradient-aurora">
-            GALLERY
+          <h2 className="font-display text-4xl sm:text-5xl md:text-7xl text-gradient-aurora mb-4 md:mb-6 leading-tight">
+            MEMORIES ACROSS TIME
           </h2>
         </motion.div>
 
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-          {galleryImages.map((image, index) => (
+        {/* 1. AFTERMOVIE SECTION */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={isInView ? { opacity: 1, scale: 1 } : {}}
+          transition={{ duration: 0.8, delay: 0.2 }}
+          className="relative w-full max-w-4xl mx-auto mb-16 md:mb-20 rounded-2xl md:rounded-3xl overflow-hidden shadow-[0_0_30px_rgba(168,85,247,0.15)] border border-purple-500/20 group"
+        >
+          <div className="aspect-video w-full bg-black relative flex items-center justify-center overflow-hidden">
+            {/* CORRECTED IFRAME:
+                1. Use "https://www.youtube.com/embed/" 
+                2. Do NOT use "m.youtube.com" or "watch?v="
+             */}
+            <iframe
+              width="100%"
+              height="100%"
+              src="https://www.youtube.com/embed/sETmARPKYfA"
+              title="Ethos Aftermovie"
+              className="absolute inset-0 z-10"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+            />
+          </div>
+
+          <div className="absolute bottom-0 left-0 right-0 p-4 md:p-6 bg-gradient-to-t from-black/90 to-transparent pointer-events-none z-20">
+            <div className="flex items-center gap-3 md:gap-4">
+              <div className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-purple-600 flex items-center justify-center text-white shadow-lg shadow-purple-600/50">
+                <Play className="w-4 h-4 md:w-5 md:h-5 fill-current" />
+              </div>
+              <div>
+                <h3 className="text-lg md:text-xl font-display text-white">
+                  Ethos 2025 Aftermovie
+                </h3>
+                <p className="text-purple-200/60 text-xs md:text-sm">
+                  Relive the cosmic journey
+                </p>
+              </div>
+            </div>
+          </div>
+        </motion.div>
+
+        {/* 2. YEAR CARDS */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {archives.map((archive, index) => (
             <motion.div
-              key={image.id}
+              key={archive.year}
               initial={{ opacity: 0, y: 30 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.6, delay: 0.2 + index * 0.1 }}
-              className={`relative overflow-hidden rounded-2xl cursor-pointer group ${
-                index === 0 || index === 5
-                  ? "md:row-span-2 md:aspect-auto aspect-square"
-                  : "aspect-square"
-              }`}
-              onMouseEnter={() => setHoveredIndex(index)}
-              onMouseLeave={() => setHoveredIndex(null)}
+              transition={{ duration: 0.6, delay: 0.4 + index * 0.1 }}
+              className="group relative h-64 md:h-96 perspective-[1000px]"
             >
-              {/* Gradient placeholder */}
-              <div
-                className="absolute inset-0"
-                style={{
-                  background: `linear-gradient(${135 + index * 30}deg, 
-                    hsl(${280 + index * 15} 70% ${35 + index * 5}%) 0%, 
-                    hsl(${320 + index * 10} 60% ${25 + index * 3}%) 100%)`,
-                }}
-              />
-
-              {/* Year overlay */}
-              <div className="absolute inset-0 flex items-center justify-center bg-background/40">
-                <span className="font-display text-4xl md:text-6xl text-foreground/20 group-hover:text-foreground/10 transition-colors">
-                  ETHOS {image.year}
-                </span>
-              </div>
-
-              {/* Hover Overlay */}
-              <motion.div
-                initial={false}
-                animate={{ opacity: hoveredIndex === index ? 1 : 0 }}
-                className="absolute inset-0 bg-gradient-to-t from-purple-900/80 via-purple-800/40 to-transparent flex items-end justify-center pb-8"
+              <Link
+                to={`/gallery/${archive.year}`}
+                className="block h-full w-full"
               >
-                <span className="inline-flex items-center gap-2 px-5 py-2.5 bg-purple-500 text-white rounded-full text-sm font-medium">
-                  <Eye className="w-4 h-4" />
-                  View Memory
-                </span>
-              </motion.div>
+                <div className="relative h-full w-full rounded-2xl overflow-hidden border border-white/10 transition-all duration-500 md:group-hover:-translate-y-2 md:group-hover:shadow-[0_0_30px_rgba(168,85,247,0.3)]">
+                  <div className="absolute inset-0">
+                    <img
+                      src={archive.image}
+                      alt={archive.title}
+                      className="w-full h-full object-cover transition-transform duration-700 md:group-hover:scale-110"
+                    />
+                    <div className="absolute inset-0 bg-black/40 transition-colors duration-500" />
+                    <div
+                      className={`absolute inset-0 bg-gradient-to-t ${archive.color} to-transparent opacity-60 mix-blend-overlay`}
+                    />
+                  </div>
+
+                  <div className="absolute inset-0 p-6 md:p-8 flex flex-col justify-end">
+                    <div className="transform transition-transform duration-500 md:translate-y-4 md:group-hover:translate-y-0">
+                      <span className="text-5xl md:text-6xl font-display text-white/10 absolute -top-8 -left-2 select-none">
+                        {archive.year}
+                      </span>
+                      <h3 className="text-2xl md:text-3xl font-display text-white mb-1 relative z-10">
+                        {archive.year}
+                      </h3>
+                      <p className="text-white/80 font-light text-sm md:text-base mb-4 relative z-10">
+                        {archive.title}
+                      </p>
+
+                      <div className="flex items-center gap-2 text-white font-medium text-sm md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300">
+                        View Gallery <ArrowRight className="w-4 h-4" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </Link>
             </motion.div>
           ))}
         </div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.8, delay: 0.8 }}
-          className="text-center mt-12"
-        >
-          <a
-            href="#"
-            className="inline-flex items-center gap-2 text-purple-400 hover:text-purple-300 transition-colors font-medium"
-          >
-            Explore Full Galaxy
-            <svg
-              className="w-5 h-5"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M17 8l4 4m0 0l-4 4m4-4H3"
-              />
-            </svg>
-          </a>
-        </motion.div>
       </div>
     </section>
   );

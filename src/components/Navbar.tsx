@@ -1,24 +1,24 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useTransition } from "react";
 import { Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { Link, useLocation } from "react-router-dom"; // 1. Import Link
 import iimLogo from "../assets/iim_sambalpur_logo.png";
 import ethosLogo from "../assets/ethos_logo_2.png";
 
+// 2. UPDATED LINKS: Added "/" prefix to make them absolute paths
 const navLinks = [
-  { name: "About", href: "#about" },
-  { name: "Events", href: "#events" },
-  { name: "Sponsors", href: "#sponsors" },
-  { name: "Gallery", href: "#gallery" },
+  { name: "About", href: "/#about" },
+  { name: "Events", href: "/#events" },
+  { name: "Sponsors", href: "/#sponsors" },
+  { name: "Gallery", href: "/#gallery" },
 ];
 
-// Optimized Animation Variants
 const menuVariants = {
   hidden: {
     opacity: 0,
     y: -10,
     transition: {
       duration: 0.3,
-      // Fixed: 'as const' makes this a readonly tuple
       ease: [0.4, 0, 0.2, 1] as const,
     },
   },
@@ -27,7 +27,6 @@ const menuVariants = {
     y: 0,
     transition: {
       duration: 0.4,
-      // Fixed: 'as const' makes this a readonly tuple
       ease: [0.4, 0, 0.2, 1] as const,
       staggerChildren: 0.1,
       delayChildren: 0.1,
@@ -38,8 +37,6 @@ const menuVariants = {
     y: -10,
     transition: {
       duration: 0.3,
-      // FIX: Added 'as const' here.
-      // This tells TS: "This is the specific string 'easeInOut', not just any string"
       ease: "easeInOut" as const,
       staggerChildren: 0.05,
       staggerDirection: -1,
@@ -56,11 +53,13 @@ const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [showCenterLogo, setShowCenterLogo] = useState(false);
+  const [, startTransition] = useTransition();
+  const location = useLocation();
 
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 50);
-      setShowCenterLogo(window.scrollY > window.innerHeight - 100);
+      setShowCenterLogo(window.scrollY > window.innerHeight / 2);
     };
 
     window.addEventListener("scroll", handleScroll);
@@ -74,6 +73,13 @@ const Navbar = () => {
       document.body.style.overflow = "unset";
     }
   }, [isOpen]);
+
+  // Close mobile menu when route changes
+  useEffect(() => {
+    startTransition(() => {
+      setIsOpen(false);
+    });
+  }, [location, startTransition]);
 
   return (
     <motion.nav
@@ -118,7 +124,7 @@ const Navbar = () => {
             </div>
           </a>
 
-          {/* CENTER: Floating Logo - Navigates to Top (#) */}
+          {/* CENTER: Floating Logo - Internal Link (Use <Link>) */}
           <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-40">
             <AnimatePresence>
               {showCenterLogo && (
@@ -128,14 +134,13 @@ const Navbar = () => {
                   exit={{ opacity: 0, y: -10, scale: 0.9 }}
                   transition={{ duration: 0.5 }}
                 >
-                  {/* Wrapped image in anchor tag */}
-                  <a href="#">
+                  <Link to="/">
                     <img
                       src={ethosLogo}
                       alt="Ethos Center Logo"
                       className="h-10 md:h-14 w-auto object-contain drop-shadow-[0_0_10px_rgba(255,215,0,0.4)] hover:scale-105 transition-transform duration-300"
                     />
-                  </a>
+                  </Link>
                 </motion.div>
               )}
             </AnimatePresence>
@@ -144,22 +149,23 @@ const Navbar = () => {
           {/* RIGHT: Desktop Navigation */}
           <div className="hidden md:flex items-center gap-8 z-50">
             {navLinks.map((link) => (
-              <a
+              // 3. FIX: Swapped <a> for <Link> and href for to
+              <Link
                 key={link.name}
-                href={link.href}
+                to={link.href}
                 className="relative text-sm font-medium text-gray-300 hover:text-white transition-colors duration-300 tracking-wide group"
               >
                 {link.name}
                 <span className="absolute -bottom-1 left-0 w-0 h-[2px] bg-gradient-to-r from-primary to-accent transition-all duration-300 group-hover:w-full" />
-              </a>
+              </Link>
             ))}
 
-            <a
-              href="#contact"
+            <Link
+              to="/#contact"
               className="px-6 py-2 bg-white/5 hover:bg-white/10 border border-white/10 hover:border-primary/50 text-white font-semibold text-sm rounded-full transition-all duration-300 backdrop-blur-sm shadow-[0_0_20px_rgba(0,0,0,0.2)] hover:shadow-[0_0_20px_rgba(var(--primary),0.3)]"
             >
               Contact Us
-            </a>
+            </Link>
           </div>
 
           {/* Mobile Menu Button */}
@@ -183,7 +189,7 @@ const Navbar = () => {
             className="md:hidden absolute top-16 left-0 w-full h-[calc(100vh-4rem)] bg-background/95 backdrop-blur-2xl border-t border-border overflow-hidden"
             style={{ willChange: "transform, opacity" }}
           >
-            {/* Ambient Background Glow (Animated) */}
+            {/* Ambient Background Glow */}
             <div className="absolute inset-0 w-full h-full pointer-events-none">
               <motion.div
                 animate={{ opacity: [0.5, 0.8, 0.5], scale: [1, 1.1, 1] }}
@@ -208,25 +214,26 @@ const Navbar = () => {
 
             <div className="flex flex-col items-center justify-center h-full gap-8 relative z-10">
               {navLinks.map((link) => (
-                <motion.a
-                  variants={linkVariants}
-                  key={link.name}
-                  href={link.href}
-                  onClick={() => setIsOpen(false)}
-                  className="text-2xl font-medium text-foreground/80 hover:text-primary transition-colors tracking-wide"
-                >
-                  {link.name}
-                </motion.a>
+                <motion.div key={link.name} variants={linkVariants}>
+                  {/* 4. FIX: Use Link inside motion div for mobile menu */}
+                  <Link
+                    to={link.href}
+                    onClick={() => setIsOpen(false)}
+                    className="text-2xl font-medium text-foreground/80 hover:text-primary transition-colors tracking-wide"
+                  >
+                    {link.name}
+                  </Link>
+                </motion.div>
               ))}
 
               <motion.div variants={linkVariants} className="pt-4">
-                <a
-                  href="#contact"
+                <Link
+                  to="/#contact"
                   onClick={() => setIsOpen(false)}
                   className="px-10 py-3 bg-gradient-to-r from-primary to-accent text-primary-foreground font-bold text-lg rounded-full shadow-[0_0_30px_rgba(var(--primary),0.4)]"
                 >
                   Contact Us
-                </a>
+                </Link>
               </motion.div>
             </div>
           </motion.div>

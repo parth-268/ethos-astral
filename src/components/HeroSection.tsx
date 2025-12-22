@@ -1,13 +1,45 @@
 import { motion, useScroll, useTransform } from "framer-motion";
-import { Calendar, MapPin, ArrowRight, Sparkles } from "lucide-react";
+import { Calendar, MapPin, Sparkles } from "lucide-react"; // Removed ArrowRight
+import { useState, useEffect } from "react"; // Import hooks
 import Planet from "./Planet";
-import ethosLogo from "../assets/ethos_logo_2.png"; // Ensure this matches your file name
+import ethosLogo from "../assets/ethos_logo_2.png";
 
 const HeroSection = () => {
   const { scrollY } = useScroll();
   // Parallax effects
   const yText = useTransform(scrollY, [0, 500], [0, 150]);
   const yButtons = useTransform(scrollY, [0, 500], [0, 100]);
+
+  // --- COUNTDOWN LOGIC START ---
+  const calculateTimeLeft = () => {
+    const difference = +new Date("2026-01-22") - +new Date();
+    let timeLeft = {
+      days: 0,
+      hours: 0,
+      minutes: 0,
+      seconds: 0,
+    };
+
+    if (difference > 0) {
+      timeLeft = {
+        days: Math.floor(difference / (1000 * 60 * 60 * 24)),
+        hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
+        minutes: Math.floor((difference / 1000 / 60) % 60),
+        seconds: Math.floor((difference / 1000) % 60),
+      };
+    }
+    return timeLeft;
+  };
+
+  const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setTimeLeft(calculateTimeLeft());
+    }, 1000);
+    return () => clearInterval(timer);
+  }, []);
+  // --- COUNTDOWN LOGIC END ---
 
   return (
     <section
@@ -72,12 +104,8 @@ const HeroSection = () => {
         ))}
       </div>
 
-      {/* =========================================
-          CONTENT
-          ========================================= */}
-
       <motion.div
-        style={{ y: yText }} // Smooth scroll parallax
+        style={{ y: yText }}
         className="relative z-10 container mx-auto px-4 sm:px-6 text-center"
       >
         {/* Eyebrow Label */}
@@ -98,10 +126,8 @@ const HeroSection = () => {
 
         {/* LOGO SECTION - ENHANCED VISIBILITY */}
         <div className="relative mb-8 md:mb-10 flex justify-center items-center">
-          {/* Atmosphere Layer (Backing Glow) */}
           <motion.div
             initial={{ opacity: 0, scale: 0.8 }}
-            // UPDATED: Increased opacity to 0.75 and scale to 1.05 for a bigger, brighter aura
             animate={{ opacity: 0.75, scale: 1.05 }}
             transition={{ duration: 1.2, delay: 0.4 }}
             className="absolute z-0 w-full max-w-[280px] md:max-w-[650px]"
@@ -125,14 +151,10 @@ const HeroSection = () => {
               type: "spring",
               stiffness: 40,
             }}
-            // UPDATED:
-            // 1. Added brightness-110 to make the gold pop
-            // 2. Increased drop-shadow spread and opacity [0_0_35px_rgba(255,215,0,0.6)]
             className="relative z-10 w-full max-w-[260px] md:max-w-[550px] lg:max-w-[650px] object-contain brightness-110 drop-shadow-[0_0_35px_rgba(255,215,0,0.6)]"
           />
         </div>
 
-        {/* BIGGER THEME TITLE */}
         <div className="overflow-hidden mb-6 md:mb-8">
           <motion.div
             initial={{ y: "100%" }}
@@ -145,7 +167,6 @@ const HeroSection = () => {
           </motion.div>
         </div>
 
-        {/* Description */}
         <motion.p
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -156,7 +177,6 @@ const HeroSection = () => {
           art, and cosmic competition.
         </motion.p>
 
-        {/* Info Cards */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
@@ -177,7 +197,7 @@ const HeroSection = () => {
           </div>
         </motion.div>
 
-        {/* CTA Buttons */}
+        {/* CTA Buttons - NOW WITH COUNTDOWN */}
         <motion.div
           style={{ y: yButtons }}
           initial={{ opacity: 0, y: 30 }}
@@ -190,14 +210,41 @@ const HeroSection = () => {
             className="group relative w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-primary via-accent to-primary bg-[length:200%_100%] hover:bg-right text-primary-foreground font-bold rounded-full transition-all duration-500 flex items-center justify-center gap-2 overflow-hidden"
           >
             <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/40 to-transparent -translate-x-full group-hover:animate-shine" />
-            <span className="relative flex items-center gap-2">
-              Explore The Ascension Dimensions
-              <ArrowRight className="w-4 h-4 md:w-5 md:h-5 group-hover:translate-x-1 transition-transform" />
+
+            {/* UPDATED: Countdown Timer Display */}
+            <span className="relative flex items-center gap-4 font-mono text-lg md:text-xl tracking-widest">
+              <div className="flex flex-col items-center leading-none">
+                <span className="font-bold">{timeLeft.days}</span>
+                <span className="text-[9px] opacity-70 uppercase font-sans">
+                  Days
+                </span>
+              </div>
+              <span className="opacity-50">:</span>
+              <div className="flex flex-col items-center leading-none">
+                <span className="font-bold">{timeLeft.hours}</span>
+                <span className="text-[9px] opacity-70 uppercase font-sans">
+                  Hrs
+                </span>
+              </div>
+              <span className="opacity-50">:</span>
+              <div className="flex flex-col items-center leading-none">
+                <span className="font-bold">{timeLeft.minutes}</span>
+                <span className="text-[9px] opacity-70 uppercase font-sans">
+                  Mins
+                </span>
+              </div>
+              <span className="opacity-50">:</span>
+              <div className="flex flex-col items-center leading-none">
+                <span className="font-bold">{timeLeft.seconds}</span>
+                <span className="text-[9px] opacity-70 uppercase font-sans">
+                  Secs
+                </span>
+              </div>
             </span>
           </a>
         </motion.div>
 
-        {/* Scroll Indicator - Relative Flow for Mobile Stability */}
+        {/* Scroll Indicator */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}

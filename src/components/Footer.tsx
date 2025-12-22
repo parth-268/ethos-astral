@@ -32,7 +32,7 @@ const Footer = () => {
               <Twitter className="w-5 h-5" />
             </a>
             <a
-              href="https://www.linkedin.com/company/ethos-iimsbp/"
+              href="https://www.linkedin.com/in/ethos-the-annual-fest-of-iim-sambalpur-8546a626a/"
               target="_blank"
               rel="noopener noreferrer"
               className="w-10 h-10 bg-card border border-border rounded-full flex items-center justify-center hover:border-primary hover:text-primary transition-all"
@@ -40,7 +40,7 @@ const Footer = () => {
               <Linkedin className="w-5 h-5" />
             </a>
             <a
-              href="https://www.youtube.com/@PRMediaCommitteeIIMSambalpur"
+              href="https://www.youtube.com/@iimsambalpurannualfest/"
               target="_blank"
               rel="noopener noreferrer"
               className="w-10 h-10 bg-card border border-border rounded-full flex items-center justify-center hover:border-primary hover:text-primary transition-all"

@@ -1,12 +1,12 @@
 import { motion, useInView, useSpring, useMotionValue } from "framer-motion";
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useMemo } from "react";
 import { Users, Trophy, Calendar, Sparkles, Orbit } from "lucide-react";
 import Planet from "./Planet";
 
-// Stats data - Added href to Missions
+// Stats data
 const stats = [
   { icon: Users, value: "3000+", label: "Explorers" },
-  { icon: Trophy, value: "50+", label: "Missions", href: "#events" }, // <-- Link added here
+  { icon: Trophy, value: "50+", label: "Missions", href: "#events" },
   { icon: Calendar, value: "3", label: "Days" },
   { icon: Sparkles, value: "10+", label: "Galaxies" },
 ];
@@ -47,6 +47,17 @@ const AboutSection = () => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
 
+  // --- FIX: Generate random particles ONCE to avoid impure render error ---
+  const particles = useMemo(() => {
+    return [...Array(12)].map(() => ({
+      left: Math.random() * 100,
+      top: Math.random() * 100,
+      xOffset: Math.random() * 30 - 15,
+      duration: 5 + Math.random() * 5,
+      delay: Math.random() * 3,
+    }));
+  }, []);
+
   return (
     <section
       id="about"
@@ -63,24 +74,24 @@ const AboutSection = () => {
         />
       </div>
 
-      {/* Floating dust particles */}
-      {[...Array(12)].map((_, i) => (
+      {/* Floating dust particles - Using stable random values */}
+      {particles.map((particle, i) => (
         <motion.div
           key={i}
           className="absolute w-1 h-1 bg-orange-400/40 rounded-full will-change-transform"
           style={{
-            left: `${Math.random() * 100}%`,
-            top: `${Math.random() * 100}%`,
+            left: `${particle.left}%`,
+            top: `${particle.top}%`,
           }}
           animate={{
             y: [0, -50, 0],
-            x: [0, Math.random() * 30 - 15, 0],
+            x: [0, particle.xOffset, 0],
             opacity: [0.2, 0.6, 0.2],
           }}
           transition={{
-            duration: 5 + Math.random() * 5,
+            duration: particle.duration,
             repeat: Infinity,
-            delay: Math.random() * 3,
+            delay: particle.delay,
           }}
         />
       ))}
@@ -117,17 +128,14 @@ const AboutSection = () => {
         {/* Stats Grid */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8">
           {stats.map((stat, index) => {
-            // Check if this stat has a link
             const isLink = !!stat.href;
 
-            // Define the inner content of the card
             const CardContent = (
               <>
                 <div className="absolute inset-0 bg-gradient-to-br from-orange-500/10 to-red-500/5 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                 <div
                   className={`relative h-full bg-black/40 md:bg-card/30 backdrop-blur-none md:backdrop-blur-md border border-orange-500/20 rounded-2xl p-6 md:p-8 text-center hover:border-orange-500/50 transition-all duration-300 shadow-[0_0_0_1px_rgba(249,115,22,0.05)] hover:shadow-[0_0_20px_rgba(249,115,22,0.15)] ${isLink ? "cursor-pointer" : ""}`}
                 >
-                  {/* Animated Icon */}
                   <motion.div
                     animate={{
                       y: [0, -5, 0],
@@ -146,7 +154,6 @@ const AboutSection = () => {
                     <stat.icon className="w-8 h-8 md:w-10 md:h-10 text-orange-400 mx-auto mb-4 group-hover:scale-110 transition-transform duration-300" />
                   </motion.div>
 
-                  {/* Animated Counter Value */}
                   <div className="font-display text-3xl md:text-5xl text-foreground mb-2 bg-gradient-to-b from-white via-white to-white/70 bg-clip-text text-transparent drop-shadow-sm">
                     <Counter value={stat.value} />
                   </div>
@@ -166,7 +173,6 @@ const AboutSection = () => {
                 transition={{ duration: 0.6, delay: 0.3 + index * 0.1 }}
                 className="group relative will-change-transform"
               >
-                {/* Conditionally wrap in <a> tag if href exists */}
                 {isLink ? (
                   <a href={stat.href} className="block h-full w-full relative">
                     {CardContent}
