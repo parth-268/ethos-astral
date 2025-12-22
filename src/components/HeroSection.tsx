@@ -10,7 +10,6 @@ const HeroSection = () => {
   const yButtons = useTransform(scrollY, [0, 500], [0, 100]);
 
   return (
-    // Changed pb-32 to pb-20 since we are using relative positioning now
     <section
       id="hero"
       className="relative min-h-screen flex items-center justify-center overflow-hidden nebula-sun pt-20 pb-20 md:py-0"
@@ -97,12 +96,13 @@ const HeroSection = () => {
           </div>
         </motion.div>
 
-        {/* LOGO SECTION */}
+        {/* LOGO SECTION - ENHANCED VISIBILITY */}
         <div className="relative mb-8 md:mb-10 flex justify-center items-center">
-          {/* Atmosphere Layer */}
+          {/* Atmosphere Layer (Backing Glow) */}
           <motion.div
             initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 0.6, scale: 1 }}
+            // UPDATED: Increased opacity to 0.75 and scale to 1.05 for a bigger, brighter aura
+            animate={{ opacity: 0.75, scale: 1.05 }}
             transition={{ duration: 1.2, delay: 0.4 }}
             className="absolute z-0 w-full max-w-[280px] md:max-w-[650px]"
           >
@@ -125,7 +125,10 @@ const HeroSection = () => {
               type: "spring",
               stiffness: 40,
             }}
-            className="relative z-10 w-full max-w-[260px] md:max-w-[550px] lg:max-w-[650px] object-contain drop-shadow-[0_0_15px_rgba(255,215,0,0.3)]"
+            // UPDATED:
+            // 1. Added brightness-110 to make the gold pop
+            // 2. Increased drop-shadow spread and opacity [0_0_35px_rgba(255,215,0,0.6)]
+            className="relative z-10 w-full max-w-[260px] md:max-w-[550px] lg:max-w-[650px] object-contain brightness-110 drop-shadow-[0_0_35px_rgba(255,215,0,0.6)]"
           />
         </div>
 
@@ -194,8 +197,7 @@ const HeroSection = () => {
           </a>
         </motion.div>
 
-        {/* Scroll Indicator - NOW RELATIVE to CTA Button */}
-        {/* Removed 'absolute bottom-X' and used 'mt-12' to make it flow naturally below the button */}
+        {/* Scroll Indicator - Relative Flow for Mobile Stability */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
