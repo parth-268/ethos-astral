@@ -10,9 +10,10 @@ const HeroSection = () => {
   const yButtons = useTransform(scrollY, [0, 500], [0, 100]);
 
   return (
+    // Changed pb-32 to pb-20 since we are using relative positioning now
     <section
       id="hero"
-      className="relative min-h-screen flex items-center justify-center overflow-hidden nebula-sun pt-20 pb-32 md:py-0"
+      className="relative min-h-screen flex items-center justify-center overflow-hidden nebula-sun pt-20 pb-20 md:py-0"
     >
       {/* Ethereal light rays */}
       <div className="absolute inset-0 overflow-hidden">
@@ -192,33 +193,34 @@ const HeroSection = () => {
             </span>
           </a>
         </motion.div>
-      </motion.div>
 
-      {/* Scroll Indicator - MOVED UP to bottom-14 */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1.5, duration: 0.8 }}
-        className="absolute bottom-14 left-1/2 -translate-x-1/2 block md:hidden z-20"
-      >
+        {/* Scroll Indicator - NOW RELATIVE to CTA Button */}
+        {/* Removed 'absolute bottom-X' and used 'mt-12' to make it flow naturally below the button */}
         <motion.div
-          animate={{ y: [0, 10, 0] }}
-          transition={{ duration: 1.5, repeat: Infinity }}
-          className="flex flex-col items-center gap-2"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1.5, duration: 0.8 }}
+          className="mt-12 flex justify-center md:hidden"
         >
-          <span className="text-[10px] md:text-xs text-muted-foreground tracking-[0.3em] uppercase">
-            Scroll
-          </span>
-          <div className="w-5 h-8 md:w-6 md:h-10 border-2 border-primary/40 rounded-full flex justify-center pt-1.5 md:pt-2">
-            <motion.div
-              animate={{
-                opacity: [0.5, 1, 0.5],
-                height: ["20%", "60%", "20%"],
-              }}
-              transition={{ duration: 1.5, repeat: Infinity }}
-              className="w-1 h-2 md:w-1.5 md:h-3 bg-gradient-to-b from-primary to-accent rounded-full"
-            />
-          </div>
+          <motion.div
+            animate={{ y: [0, 10, 0] }}
+            transition={{ duration: 1.5, repeat: Infinity }}
+            className="flex flex-col items-center gap-2"
+          >
+            <span className="text-[10px] md:text-xs text-muted-foreground tracking-[0.3em] uppercase">
+              Scroll
+            </span>
+            <div className="w-5 h-8 md:w-6 md:h-10 border-2 border-primary/40 rounded-full flex justify-center pt-1.5 md:pt-2">
+              <motion.div
+                animate={{
+                  opacity: [0.5, 1, 0.5],
+                  height: ["20%", "60%", "20%"],
+                }}
+                transition={{ duration: 1.5, repeat: Infinity }}
+                className="w-1 h-2 md:w-1.5 md:h-3 bg-gradient-to-b from-primary to-accent rounded-full"
+              />
+            </div>
+          </motion.div>
         </motion.div>
       </motion.div>
 
