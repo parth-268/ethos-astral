@@ -1,31 +1,107 @@
 import { motion, useInView } from "framer-motion";
 import { useRef, useState, useMemo } from "react";
-import { Send, Mail, Phone, MapPin, Leaf, Radio } from "lucide-react";
+import { Send, Mail, Phone, MapPin, Radio, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import Planet from "./Planet";
 
 const ContactSection = () => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
+
+  // --- FUNCTIONAL STATE ---
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     message: "",
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
+  // --- PERFORMANCE: Memoized particles ---
   const floatingElements = useMemo(
     () =>
       [...Array(15)].map(() => ({
         left: Math.random() * 100,
         top: Math.random() * 100,
+        duration: 4 + Math.random() * 4,
+        delay: Math.random() * 2,
       })),
     [],
   );
 
-  const handleSubmit = (e: React.FormEvent) => {
+  // --- ANIMATION VARIANTS ---
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.2,
+        delayChildren: 0.3,
+      },
+    },
+  };
+
+  const cardVariants = {
+    hidden: { opacity: 0, x: -30 },
+    visible: {
+      opacity: 1,
+      x: 0,
+      transition: {
+        type: "spring" as const, // <--- FIX: Added 'as const'
+        stiffness: 100,
+        damping: 20,
+      },
+    },
+  };
+
+  const formVariants = {
+    hidden: { opacity: 0, x: 30 },
+    visible: {
+      opacity: 1,
+      x: 0,
+      transition: {
+        type: "spring" as const, // <--- FIX: Added 'as const'
+        stiffness: 100,
+        damping: 20,
+        delay: 0.6,
+      },
+    },
+  };
+
+  // --- FUNCTIONAL LOGIC ---
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    toast.success("Transmission sent! We'll respond shortly.");
-    setFormData({ name: "", email: "", message: "" });
+    setIsSubmitting(true);
+
+    try {
+      const response = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          // Replace with your actual Access Key
+          access_key: "468e4a91-7f38-4390-bb1b-c0010fe07652",
+          name: formData.name,
+          email: formData.email,
+          message: formData.message,
+          subject: `New Transmission from ${formData.name}`,
+        }),
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        toast.success("Transmission successful! We have received your signal.");
+        setFormData({ name: "", email: "", message: "" });
+      } else {
+        toast.error("Transmission failed. Please verify your frequency.");
+      }
+    } catch (error) {
+      toast.error("Critical Uplink Error. Check your connection.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -34,46 +110,46 @@ const ContactSection = () => {
       className="py-32 relative overflow-hidden nebula-emerald"
     >
       {/* Emerald Planet */}
-      <div className="absolute -left-48 bottom-10 opacity-50">
+      <div className="absolute -left-48 bottom-10 opacity-50 pointer-events-none">
         <Planet
           size="w-80 h-80"
           gradient="var(--planet-emerald)"
           glowColor="hsl(150 70% 45% / 0.4)"
           moons={1}
-          delay={0.4}
+          delay={0.3}
         />
       </div>
 
-      {/* Organic floating elements */}
-      {floatingElements.map((element, i) => (
+      {/* Floating Elements */}
+      {floatingElements.map((item, i) => (
         <motion.div
           key={i}
-          className="absolute"
+          className="absolute w-1 h-1 bg-emerald-400/40 rounded-full"
           style={{
-            left: `${element.left}%`,
-            top: `${element.top}%`,
+            left: `${item.left}%`,
+            top: `${item.top}%`,
+            willChange: "transform, opacity",
           }}
           animate={{
-            y: [0, -40, 0],
-            rotate: [0, 360],
-            opacity: [0.2, 0.5, 0.2],
+            y: [0, -30, 0],
+            opacity: [0.2, 0.6, 0.2],
           }}
           transition={{
-            duration: 8 + Math.random() * 4,
+            duration: item.duration,
             repeat: Infinity,
-            delay: Math.random() * 3,
+            delay: item.delay,
+            ease: "easeInOut",
           }}
-        >
-          <Leaf className="w-4 h-4 text-emerald-500/30" />
-        </motion.div>
+        />
       ))}
 
       <div className="container mx-auto px-4 relative z-10" ref={ref}>
+        {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.8 }}
-          className="text-center mb-16"
+          className="text-center mb-16 will-change-transform"
         >
           <motion.div
             initial={{ scale: 0 }}
@@ -82,115 +158,120 @@ const ContactSection = () => {
             className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-500/10 border border-emerald-500/30 rounded-full text-emerald-400 text-sm font-semibold tracking-widest uppercase mb-6"
           >
             <Radio className="w-4 h-4" />
-            Planet Terra — Command Center
+            Planet Terra — The Living Core
           </motion.div>
 
-          <h2 className="font-display text-5xl md:text-7xl text-gradient-emerald">
-            CONTACT US
+          <h2 className="font-display text-5xl md:text-7xl text-gradient-emerald mb-6">
+            ESTABLISH CONTACT
           </h2>
+          <p className="text-lg text-emerald-100/60 font-light max-w-2xl mx-auto">
+            Ready to embark on this cosmic journey? Send a transmission to our
+            base station, and our team will respond at light speed.
+          </p>
         </motion.div>
 
-        <div className="grid lg:grid-cols-2 gap-12 max-w-5xl mx-auto">
-          {/* Contact Info */}
+        <div className="grid lg:grid-cols-2 gap-12 max-w-6xl mx-auto">
+          {/* Contact Info Cards */}
           <motion.div
-            initial={{ opacity: 0, x: -40 }}
-            animate={isInView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="space-y-8"
+            className="space-y-6"
+            variants={containerVariants}
+            initial="hidden"
+            animate={isInView ? "visible" : "hidden"}
           >
-            <div>
-              <h3 className="font-display text-3xl text-foreground mb-4">
-                Open Transmission Channel
-              </h3>
-              <p className="text-muted-foreground leading-relaxed">
-                Have questions about ETHOS 2026? Want to sponsor or partner with
-                us? Send us a signal across the cosmos.
-              </p>
-            </div>
-
-            <div className="space-y-6">
-              <motion.div
-                initial={{ opacity: 0, x: -20 }}
-                animate={isInView ? { opacity: 1, x: 0 } : {}}
-                transition={{ duration: 0.5, delay: 0.4 }}
-                className="flex items-start gap-4 group"
-              >
-                <div className="w-12 h-12 bg-emerald-500/10 rounded-xl flex items-center justify-center flex-shrink-0 border border-emerald-500/20 group-hover:bg-emerald-500/20 transition-colors">
-                  <Mail className="w-5 h-5 text-emerald-400" />
+            {/* CARD 1: Email */}
+            <motion.div
+              variants={cardVariants}
+              className="bg-card/30 backdrop-blur-md border border-emerald-500/20 rounded-2xl p-8 hover:border-emerald-500/40 transition-colors duration-300 group will-change-transform"
+            >
+              <div className="flex items-start gap-6">
+                <div className="w-12 h-12 bg-emerald-500/20 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                  <Mail className="w-6 h-6 text-emerald-400" />
                 </div>
                 <div>
-                  <h4 className="font-medium text-foreground mb-1">
-                    Quantum Mail
-                  </h4>
+                  <h3 className="font-display text-2xl text-white mb-2">
+                    Email Frequency
+                  </h3>
+                  <p className="text-emerald-100/60 mb-2">
+                    For general inquiries and sponsorship
+                  </p>
                   <a
                     href="mailto:ethos@iimsambalpur.ac.in"
-                    className="text-muted-foreground hover:text-emerald-400 transition-colors"
+                    className="text-emerald-400 hover:text-emerald-300 font-medium tracking-wide transition-colors"
                   >
                     ethos@iimsambalpur.ac.in
                   </a>
                 </div>
-              </motion.div>
+              </div>
+            </motion.div>
 
-              <motion.div
-                initial={{ opacity: 0, x: -20 }}
-                animate={isInView ? { opacity: 1, x: 0 } : {}}
-                transition={{ duration: 0.5, delay: 0.5 }}
-                className="flex items-start gap-4 group"
-              >
-                <div className="w-12 h-12 bg-emerald-500/10 rounded-xl flex items-center justify-center flex-shrink-0 border border-emerald-500/20 group-hover:bg-emerald-500/20 transition-colors">
-                  <Phone className="w-5 h-5 text-emerald-400" />
+            {/* CARD 2: Phone */}
+            <motion.div
+              variants={cardVariants}
+              className="bg-card/30 backdrop-blur-md border border-emerald-500/20 rounded-2xl p-8 hover:border-emerald-500/40 transition-colors duration-300 group will-change-transform"
+            >
+              <div className="flex items-start gap-6">
+                <div className="w-12 h-12 bg-emerald-500/20 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                  <Phone className="w-6 h-6 text-emerald-400" />
                 </div>
                 <div>
-                  <h4 className="font-medium text-foreground mb-1">
-                    Subspace Frequency
-                  </h4>
+                  <h3 className="font-display text-2xl text-white mb-2">
+                    Direct Line
+                  </h3>
+                  <p className="text-emerald-100/60 mb-2">
+                    Available during Earth business hours
+                  </p>
                   <a
-                    href="tel:+917978123456"
-                    className="text-muted-foreground hover:text-emerald-400 transition-colors"
+                    href="tel:+919876543210"
+                    className="text-emerald-400 hover:text-emerald-300 font-medium tracking-wide transition-colors"
                   >
-                    +91 7978 123 456
+                    +91 987 654 3210
                   </a>
                 </div>
-              </motion.div>
+              </div>
+            </motion.div>
 
-              <motion.div
-                initial={{ opacity: 0, x: -20 }}
-                animate={isInView ? { opacity: 1, x: 0 } : {}}
-                transition={{ duration: 0.5, delay: 0.6 }}
-                className="flex items-start gap-4 group"
-              >
-                <div className="w-12 h-12 bg-emerald-500/10 rounded-xl flex items-center justify-center flex-shrink-0 border border-emerald-500/20 group-hover:bg-emerald-500/20 transition-colors">
-                  <MapPin className="w-5 h-5 text-emerald-400" />
+            {/* CARD 3: Location */}
+            <motion.div
+              variants={cardVariants}
+              className="bg-card/30 backdrop-blur-md border border-emerald-500/20 rounded-2xl p-8 hover:border-emerald-500/40 transition-colors duration-300 group will-change-transform"
+            >
+              <div className="flex items-start gap-6">
+                <div className="w-12 h-12 bg-emerald-500/20 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                  <MapPin className="w-6 h-6 text-emerald-400" />
                 </div>
                 <div>
-                  <h4 className="font-medium text-foreground mb-1">
+                  <h3 className="font-display text-2xl text-white mb-2">
                     Base Coordinates
-                  </h4>
-                  <p className="text-muted-foreground">
-                    IIM Sambalpur, Jyoti Vihar
+                  </h3>
+                  <p className="text-emerald-100/60">
+                    IIM Sambalpur Campus
                     <br />
-                    Burla, Sambalpur - 768019
-                    <br />
-                    Odisha, India
+                    Basantpur, Odisha 768025
                   </p>
                 </div>
-              </motion.div>
-            </div>
+              </div>
+            </motion.div>
           </motion.div>
 
           {/* Contact Form */}
           <motion.div
-            initial={{ opacity: 0, x: 40 }}
-            animate={isInView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.8, delay: 0.4 }}
+            variants={formVariants}
+            initial="hidden"
+            animate={isInView ? "visible" : "hidden"}
+            className="will-change-transform"
           >
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div>
+            <form
+              onSubmit={handleSubmit}
+              className="bg-card/30 backdrop-blur-md border border-emerald-500/20 rounded-3xl p-8 md:p-10 space-y-6 relative overflow-hidden"
+            >
+              <div className="absolute -top-20 -right-20 w-64 h-64 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none transform-gpu" />
+
+              <div className="relative z-10">
                 <label
                   htmlFor="name"
                   className="block text-sm font-medium text-foreground mb-2"
                 >
-                  Identification
+                  Explorer Identity
                 </label>
                 <input
                   type="text"
@@ -200,17 +281,17 @@ const ContactSection = () => {
                     setFormData({ ...formData, name: e.target.value })
                   }
                   required
-                  className="w-full px-4 py-3 bg-card/50 backdrop-blur-sm border border-emerald-500/20 rounded-xl focus:outline-none focus:border-emerald-500/50 focus:ring-1 focus:ring-emerald-500/20 transition-all text-foreground placeholder:text-muted-foreground"
-                  placeholder="Your name"
+                  className="w-full px-4 py-3 bg-black/40 border border-emerald-500/20 rounded-xl focus:outline-none focus:border-emerald-500/50 focus:ring-1 focus:ring-emerald-500/20 transition-all text-foreground placeholder:text-muted-foreground"
+                  placeholder="Your Name"
                 />
               </div>
 
-              <div>
+              <div className="relative z-10">
                 <label
                   htmlFor="email"
                   className="block text-sm font-medium text-foreground mb-2"
                 >
-                  Return Frequency
+                  Communication Channel (Email)
                 </label>
                 <input
                   type="email"
@@ -220,12 +301,12 @@ const ContactSection = () => {
                     setFormData({ ...formData, email: e.target.value })
                   }
                   required
-                  className="w-full px-4 py-3 bg-card/50 backdrop-blur-sm border border-emerald-500/20 rounded-xl focus:outline-none focus:border-emerald-500/50 focus:ring-1 focus:ring-emerald-500/20 transition-all text-foreground placeholder:text-muted-foreground"
+                  className="w-full px-4 py-3 bg-black/40 border border-emerald-500/20 rounded-xl focus:outline-none focus:border-emerald-500/50 focus:ring-1 focus:ring-emerald-500/20 transition-all text-foreground placeholder:text-muted-foreground"
                   placeholder="your@email.com"
                 />
               </div>
 
-              <div>
+              <div className="relative z-10">
                 <label
                   htmlFor="message"
                   className="block text-sm font-medium text-foreground mb-2"
@@ -240,17 +321,27 @@ const ContactSection = () => {
                   }
                   required
                   rows={4}
-                  className="w-full px-4 py-3 bg-card/50 backdrop-blur-sm border border-emerald-500/20 rounded-xl focus:outline-none focus:border-emerald-500/50 focus:ring-1 focus:ring-emerald-500/20 transition-all text-foreground placeholder:text-muted-foreground resize-none"
+                  className="w-full px-4 py-3 bg-black/40 border border-emerald-500/20 rounded-xl focus:outline-none focus:border-emerald-500/50 focus:ring-1 focus:ring-emerald-500/20 transition-all text-foreground placeholder:text-muted-foreground resize-none"
                   placeholder="Your transmission..."
                 />
               </div>
 
               <button
                 type="submit"
-                className="w-full px-8 py-4 bg-emerald-500 text-white font-semibold rounded-xl hover:glow-emerald transition-all duration-300 flex items-center justify-center gap-2"
+                disabled={isSubmitting}
+                className="w-full px-8 py-4 bg-emerald-500 disabled:bg-emerald-500/50 disabled:cursor-not-allowed text-white font-semibold rounded-xl hover:bg-emerald-400 transition-all duration-300 flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(16,185,129,0.3)] hover:shadow-[0_0_30px_rgba(16,185,129,0.5)]"
               >
-                Transmit Message
-                <Send className="w-5 h-5" />
+                {isSubmitting ? (
+                  <>
+                    Transmitting...
+                    <Loader2 className="w-5 h-5 animate-spin" />
+                  </>
+                ) : (
+                  <>
+                    Transmit Message
+                    <Send className="w-5 h-5" />
+                  </>
+                )}
               </button>
             </form>
           </motion.div>

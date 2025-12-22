@@ -16,7 +16,7 @@ const Footer = () => {
           {/* Social Links */}
           <div className="flex items-center gap-4">
             <a
-              href="https://instagram.com/ethos_iims"
+              href="https://www.instagram.com/ethos.iimsambalpur"
               target="_blank"
               rel="noopener noreferrer"
               className="w-10 h-10 bg-card border border-border rounded-full flex items-center justify-center hover:border-primary hover:text-primary transition-all"
@@ -32,7 +32,7 @@ const Footer = () => {
               <Twitter className="w-5 h-5" />
             </a>
             <a
-              href="https://linkedin.com/company/iimsambalpur"
+              href="https://www.linkedin.com/company/ethos-iimsbp/"
               target="_blank"
               rel="noopener noreferrer"
               className="w-10 h-10 bg-card border border-border rounded-full flex items-center justify-center hover:border-primary hover:text-primary transition-all"
@@ -40,7 +40,7 @@ const Footer = () => {
               <Linkedin className="w-5 h-5" />
             </a>
             <a
-              href="https://youtube.com/@iimsambalpur"
+              href="https://www.youtube.com/@PRMediaCommitteeIIMSambalpur"
               target="_blank"
               rel="noopener noreferrer"
               className="w-10 h-10 bg-card border border-border rounded-full flex items-center justify-center hover:border-primary hover:text-primary transition-all"

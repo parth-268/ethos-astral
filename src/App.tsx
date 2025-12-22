@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
+import EventDetails from "./components/pages/EventDetails";
 
 const queryClient = new QueryClient();
 
@@ -15,8 +16,14 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <Routes>
+          {/* 1. Main Landing Page */}
           <Route path="/" element={<Index />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+
+          {/* 2. Dynamic Event Details Page */}
+          {/* CRITICAL FIX: This must be defined BEFORE the catch-all '*' route */}
+          <Route path="/events/:eventId" element={<EventDetails />} />
+
+          {/* 3. 404 Catch-All Route (Must be last) */}
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

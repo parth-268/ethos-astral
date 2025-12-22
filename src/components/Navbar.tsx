@@ -92,14 +92,19 @@ const Navbar = () => {
 
       <div className="container mx-auto px-4 relative">
         <div className="flex items-center justify-between h-16 md:h-20">
-          {/* LEFT: Brand Block */}
-          <a href="#" className="flex items-center gap-3 group z-50">
+          {/* LEFT: Brand Block - Navigates to IIM Sambalpur Website */}
+          <a
+            href="https://www.iimsambalpur.ac.in"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-3 group z-50"
+          >
             <div className="relative">
               <div className="absolute -inset-1 rounded-lg bg-gradient-to-r from-primary to-accent blur-lg opacity-75 group-hover:opacity-100 transition-opacity duration-500 animate-tilt" />
               <img
                 src={iimLogo}
                 alt="IIM Sambalpur Logo"
-                className="w-8 h-8 sm:w-10 sm:h-10 relative z-10"
+                className="w-9 h-9 sm:w-10 sm:h-10 relative z-10"
               />
             </div>
 
@@ -113,7 +118,7 @@ const Navbar = () => {
             </div>
           </a>
 
-          {/* CENTER: Floating Logo */}
+          {/* CENTER: Floating Logo - Navigates to Top (#) */}
           <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-40">
             <AnimatePresence>
               {showCenterLogo && (
@@ -123,11 +128,14 @@ const Navbar = () => {
                   exit={{ opacity: 0, y: -10, scale: 0.9 }}
                   transition={{ duration: 0.5 }}
                 >
-                  <img
-                    src={ethosLogo}
-                    alt="Ethos Center Logo"
-                    className="h-10 md:h-14 w-auto object-contain drop-shadow-[0_0_10px_rgba(255,215,0,0.4)]"
-                  />
+                  {/* Wrapped image in anchor tag */}
+                  <a href="#">
+                    <img
+                      src={ethosLogo}
+                      alt="Ethos Center Logo"
+                      className="h-10 md:h-14 w-auto object-contain drop-shadow-[0_0_10px_rgba(255,215,0,0.4)] hover:scale-105 transition-transform duration-300"
+                    />
+                  </a>
                 </motion.div>
               )}
             </AnimatePresence>
