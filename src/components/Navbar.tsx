@@ -3,7 +3,7 @@ import { Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link, useLocation } from "react-router-dom"; // 1. Import Link
 import iimLogo from "../assets/iim_sambalpur_logo.png";
-import ethosLogo from "../assets/ethos_logo_2.png";
+import ethosLogo from "../assets/ethos_logo_3.png";
 
 // 2. UPDATED LINKS: Added "/" prefix to make them absolute paths
 const navLinks = [

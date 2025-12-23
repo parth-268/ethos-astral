@@ -2,7 +2,7 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { Calendar, MapPin, Sparkles } from "lucide-react"; // Removed ArrowRight
 import { useState, useEffect } from "react"; // Import hooks
 import Planet from "./Planet";
-import ethosLogo from "../assets/ethos_logo_2.png";
+import ethosLogo from "../assets/ethos_logo_3.png";
 
 const HeroSection = () => {
   const { scrollY } = useScroll();
