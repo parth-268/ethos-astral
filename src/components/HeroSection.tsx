@@ -44,7 +44,7 @@ const HeroSection = () => {
   return (
     <section
       id="hero"
-      className="relative min-h-screen flex items-center justify-center overflow-hidden nebula-sun pt-20 pb-20 md:py-0"
+      className="relative min-h-screen flex items-center justify-center overflow-hidden nebula-sun pt-20 pb-20 md:py-12"
     >
       {/* Ethereal light rays */}
       <div className="absolute inset-0 overflow-hidden">
@@ -197,51 +197,62 @@ const HeroSection = () => {
           </div>
         </motion.div>
 
-        {/* CTA Buttons - NOW WITH COUNTDOWN */}
+        {/* COUNTDOWN */}
         <motion.div
           style={{ y: yButtons }}
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.9 }}
-          className="flex flex-col sm:flex-row items-center justify-center gap-1 w-full px-4 sm:px-0"
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.8, delay: 0.85 }}
+          className="mb-3 md:mb-6 flex justify-center w-full"
         >
-          <a
-            href="#events"
-            className="group relative w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-primary via-accent to-primary bg-[length:200%_100%] hover:bg-right text-primary-foreground font-bold rounded-full transition-all duration-500 flex items-center justify-center gap-2 overflow-hidden"
-          >
-            <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/40 to-transparent -translate-x-full group-hover:animate-shine" />
-
-            {/* UPDATED: Countdown Timer Display */}
-            <span className="relative flex items-center gap-4 font-mono text-lg md:text-xl tracking-widest">
-              <div className="flex flex-col items-center leading-none">
-                <span className="font-bold">{timeLeft.days}</span>
-                <span className="text-[9px] opacity-70 uppercase font-sans">
+          {/* CHANGES:
+             1. w-[90%] sm:w-fit: Makes it wider/bigger on mobile while fitting content on desktop.
+             2. px-6 py-4 (Mobile): Slightly bigger padding for mobile impact.
+             3. md:px-16 md:py-3 (Desktop): Much wider horizontally, sleek vertically.
+          */}
+          <div className="relative w-[90%] sm:w-fit mx-auto px-6 py-4 md:px-12 md:py-3 bg-white/5 border border-white/10 backdrop-blur-md rounded-xl md:rounded-2xl shadow-[0_0_30px_rgba(0,0,0,0.4)]">
+            <div className="grid grid-cols-4 gap-2 md:gap-12 text-center divide-x divide-white/10">
+              {/* DAYS */}
+              <div className="flex flex-col items-center px-1">
+                <span className="font-mono font-bold text-2xl md:text-5xl text-transparent bg-clip-text bg-gradient-to-b from-white to-blue-200 leading-none">
+                  {timeLeft.days}
+                </span>
+                <span className="text-[9px] md:text-xs text-blue-400 uppercase font-sans tracking-widest mt-1">
                   Days
                 </span>
               </div>
-              <span className="opacity-50">:</span>
-              <div className="flex flex-col items-center leading-none">
-                <span className="font-bold">{timeLeft.hours}</span>
-                <span className="text-[9px] opacity-70 uppercase font-sans">
+
+              {/* HOURS */}
+              <div className="flex flex-col items-center px-1">
+                <span className="font-mono font-bold text-2xl md:text-5xl text-transparent bg-clip-text bg-gradient-to-b from-white to-blue-200 leading-none">
+                  {timeLeft.hours}
+                </span>
+                <span className="text-[9px] md:text-xs text-blue-400 uppercase font-sans tracking-widest mt-1">
                   Hrs
                 </span>
               </div>
-              <span className="opacity-50">:</span>
-              <div className="flex flex-col items-center leading-none">
-                <span className="font-bold">{timeLeft.minutes}</span>
-                <span className="text-[9px] opacity-70 uppercase font-sans">
+
+              {/* MINS */}
+              <div className="flex flex-col items-center px-1">
+                <span className="font-mono font-bold text-2xl md:text-5xl text-transparent bg-clip-text bg-gradient-to-b from-white to-blue-200 leading-none">
+                  {timeLeft.minutes}
+                </span>
+                <span className="text-[9px] md:text-xs text-blue-400 uppercase font-sans tracking-widest mt-1">
                   Mins
                 </span>
               </div>
-              <span className="opacity-50">:</span>
-              <div className="flex flex-col items-center leading-none">
-                <span className="font-bold">{timeLeft.seconds}</span>
-                <span className="text-[9px] opacity-70 uppercase font-sans">
+
+              {/* SECONDS */}
+              <div className="flex flex-col items-center px-1">
+                <span className="font-mono font-bold text-2xl md:text-5xl text-transparent bg-clip-text bg-gradient-to-b from-white to-blue-200 leading-none min-w-[1.5ch]">
+                  {timeLeft.seconds}
+                </span>
+                <span className="text-[9px] md:text-xs text-blue-400 uppercase font-sans tracking-widest mt-1">
                   Secs
                 </span>
               </div>
-            </span>
-          </a>
+            </div>
+          </div>
         </motion.div>
 
         {/* Scroll Indicator */}
