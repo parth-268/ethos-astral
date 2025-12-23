@@ -1,6 +1,6 @@
 import { motion, useScroll, useTransform } from "framer-motion";
-import { Calendar, MapPin, Sparkles } from "lucide-react"; // Removed ArrowRight
-import { useState, useEffect } from "react"; // Import hooks
+import { Calendar, MapPin, Sparkles } from "lucide-react";
+import { useState, useEffect } from "react";
 import Planet from "./Planet";
 import ethosLogo from "../assets/ethos_logo_3.png";
 
@@ -44,7 +44,7 @@ const HeroSection = () => {
   return (
     <section
       id="hero"
-      className="relative min-h-screen flex items-center justify-center overflow-hidden nebula-sun pt-20 pb-20 md:py-12"
+      className="relative min-h-screen flex items-center justify-center overflow-hidden nebula-sun pt-20 pb-20 md:py-0"
     >
       {/* Ethereal light rays */}
       <div className="absolute inset-0 overflow-hidden">
@@ -108,12 +108,12 @@ const HeroSection = () => {
         style={{ y: yText }}
         className="relative z-10 container mx-auto px-4 sm:px-6 text-center"
       >
-        {/* Eyebrow Label */}
+        {/* Eyebrow Label - MOVED LOWER with 'mt-12' */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
-          className="mb-6 md:mb-8 flex justify-center"
+          className="md:mt-16 mb-6 md:mb-8 flex justify-center"
         >
           <div className="relative group cursor-default">
             <div className="absolute inset-0 bg-primary/20 blur-lg rounded-full opacity-50" />
@@ -161,7 +161,7 @@ const HeroSection = () => {
             animate={{ y: 0 }}
             transition={{ duration: 0.8, delay: 0.6, ease: "circOut" }}
           >
-            <h2 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-display tracking-[0.15em] uppercase text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 via-purple-300 to-cyan-300 drop-shadow-lg leading-tight">
+            <h2 className="text-4xl sm:text-4xl md:text-6xl lg:text-7xl font-display tracking-[0.15em] uppercase text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 via-purple-300 to-cyan-300 drop-shadow-lg leading-tight">
               Astral Transcendence
             </h2>
           </motion.div>
@@ -210,11 +210,11 @@ const HeroSection = () => {
              2. px-6 py-4 (Mobile): Slightly bigger padding for mobile impact.
              3. md:px-16 md:py-3 (Desktop): Much wider horizontally, sleek vertically.
           */}
-          <div className="relative w-[90%] sm:w-fit mx-auto px-6 py-4 md:px-12 md:py-3 bg-white/5 border border-white/10 backdrop-blur-md rounded-xl md:rounded-2xl shadow-[0_0_30px_rgba(0,0,0,0.4)]">
+          <div className="relative w-[90%] sm:w-fit mx-auto px-6 py-3 md:px-12 md:py-3 bg-white/5 border border-white/10 backdrop-blur-md rounded-xl md:rounded-2xl shadow-[0_0_30px_rgba(0,0,0,0.4)]">
             <div className="grid grid-cols-4 gap-2 md:gap-12 text-center divide-x divide-white/10">
               {/* DAYS */}
               <div className="flex flex-col items-center px-1">
-                <span className="font-mono font-bold text-2xl md:text-5xl text-transparent bg-clip-text bg-gradient-to-b from-white to-blue-200 leading-none">
+                <span className="font-mono font-bold text-3xl md:text-4xl text-transparent bg-clip-text bg-gradient-to-b from-white to-blue-200 leading-none">
                   {timeLeft.days}
                 </span>
                 <span className="text-[9px] md:text-xs text-blue-400 uppercase font-sans tracking-widest mt-1">
@@ -224,7 +224,7 @@ const HeroSection = () => {
 
               {/* HOURS */}
               <div className="flex flex-col items-center px-1">
-                <span className="font-mono font-bold text-2xl md:text-5xl text-transparent bg-clip-text bg-gradient-to-b from-white to-blue-200 leading-none">
+                <span className="font-mono font-bold text-3xl md:text-4xl text-transparent bg-clip-text bg-gradient-to-b from-white to-blue-200 leading-none">
                   {timeLeft.hours}
                 </span>
                 <span className="text-[9px] md:text-xs text-blue-400 uppercase font-sans tracking-widest mt-1">
@@ -234,7 +234,7 @@ const HeroSection = () => {
 
               {/* MINS */}
               <div className="flex flex-col items-center px-1">
-                <span className="font-mono font-bold text-2xl md:text-5xl text-transparent bg-clip-text bg-gradient-to-b from-white to-blue-200 leading-none">
+                <span className="font-mono font-bold text-3xl md:text-4xl text-transparent bg-clip-text bg-gradient-to-b from-white to-blue-200 leading-none">
                   {timeLeft.minutes}
                 </span>
                 <span className="text-[9px] md:text-xs text-blue-400 uppercase font-sans tracking-widest mt-1">
@@ -244,7 +244,7 @@ const HeroSection = () => {
 
               {/* SECONDS */}
               <div className="flex flex-col items-center px-1">
-                <span className="font-mono font-bold text-2xl md:text-5xl text-transparent bg-clip-text bg-gradient-to-b from-white to-blue-200 leading-none min-w-[1.5ch]">
+                <span className="font-mono font-bold text-3xl md:text-4xl text-transparent bg-clip-text bg-gradient-to-b from-white to-blue-200 leading-none min-w-[1.5ch]">
                   {timeLeft.seconds}
                 </span>
                 <span className="text-[9px] md:text-xs text-blue-400 uppercase font-sans tracking-widest mt-1">
@@ -260,7 +260,7 @@ const HeroSection = () => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 1.5, duration: 0.8 }}
-          className="mt-12 flex justify-center md:hidden"
+          className="mt-8 flex justify-center md:hidden"
         >
           <motion.div
             animate={{ y: [0, 10, 0] }}

@@ -7,31 +7,30 @@ import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import EventDetails from "./components/pages/EventDetails";
 import GalleryDetails from "./components/pages/GalleryDetails";
+import ScrollToTop from "./components/ScrollToTop"; // <--- 1. Import it
 
 const queryClient = new QueryClient();
 
-const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <Routes>
-          {/* 1. Main Landing Page */}
-          <Route path="/" element={<Index />} />
+const App = () => {
+  return (
+    <QueryClientProvider client={queryClient}>
+      <TooltipProvider>
+        <Toaster />
+        <Sonner />
+        <BrowserRouter>
+          {/* 2. Place it here, inside the Router */}
+          <ScrollToTop />
 
-          {/* 2. Dynamic Event Details Page */}
-          {/* CRITICAL FIX: This must be defined BEFORE the catch-all '*' route */}
-          <Route path="/events/:eventId" element={<EventDetails />} />
-
-          <Route path="/gallery/:year" element={<GalleryDetails />} />
-
-          {/* 3. 404 Catch-All Route (Must be last) */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
-    </TooltipProvider>
-  </QueryClientProvider>
-);
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="/events/:id" element={<EventDetails />} />
+            <Route path="/gallery/:year" element={<GalleryDetails />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </BrowserRouter>
+      </TooltipProvider>
+    </QueryClientProvider>
+  );
+};
 
 export default App;

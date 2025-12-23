@@ -57,6 +57,7 @@ const Footer = () => {
             <p className="text-xs text-muted-foreground/60 mt-1">
               All rights reserved
             </p>
+            <p className="text-sm text-muted-foreground">APSK.</p>
           </div>
         </div>
       </div>
