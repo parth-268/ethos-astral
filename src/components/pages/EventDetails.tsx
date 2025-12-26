@@ -12,7 +12,7 @@ import {
 } from "lucide-react";
 import Navbar from "../Navbar";
 
-import culturalBg from "@/assets/cultural_bg.jpg"; // Example import if using local images
+import culturalBg from "@/assets/cultural_bg.jpg";
 
 interface EventData {
   title: string;
@@ -37,8 +37,8 @@ const eventDatabase: Record<string, EventData> = {
     date: "24 Jan 2026",
     location: "Main Ground, IIM Sambalpur",
     prize: "N/A",
-    registerLink:
-      "https://docs.google.com/forms/d/e/1FAIpQLSd_YOUR_FORM_ID/viewform",
+    // 1. CHANGED: Set to empty string to hide button
+    registerLink: "",
     rules: [
       "Entry allowed only with valid ID cards.",
       "Gates close at 8:00 PM strictly.",
@@ -102,7 +102,6 @@ const EventDetails = () => {
         </div>
 
         <div className="container mx-auto px-4 relative z-10">
-          {/* --- FIX: Added '/' before '#events' --- */}
           <Link
             to="/#events"
             className="inline-flex items-center gap-2 text-blue-300 hover:text-white mb-6 transition-colors group"
@@ -236,16 +235,18 @@ const EventDetails = () => {
                 </div>
               </div>
 
-              {/* UPDATED: Registration Button is now a Link */}
-              <a
-                href={data.registerLink}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="relative z-10 w-full mt-8 py-4 bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-500 hover:to-blue-400 text-white font-bold rounded-xl shadow-lg shadow-blue-500/25 transition-all transform hover:scale-[1.02] flex items-center justify-center gap-2"
-              >
-                Register for Mission
-                <ExternalLink className="w-4 h-4" />
-              </a>
+              {/* 2. UPDATED: Button only renders if registerLink exists */}
+              {data.registerLink && (
+                <a
+                  href={data.registerLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="relative z-10 w-full mt-8 py-4 bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-500 hover:to-blue-400 text-white font-bold rounded-xl shadow-lg shadow-blue-500/25 transition-all transform hover:scale-[1.02] flex items-center justify-center gap-2"
+                >
+                  Register for Mission
+                  <ExternalLink className="w-4 h-4" />
+                </a>
+              )}
 
               <div className="absolute bottom-0 right-0 p-6 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none">
                 <div className="w-2 h-2 rounded-full bg-blue-400 shadow-[0_0_10px_#60a5fa]" />

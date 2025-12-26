@@ -7,7 +7,7 @@ import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import EventDetails from "./components/pages/EventDetails";
 import GalleryDetails from "./components/pages/GalleryDetails";
-import ScrollToTop from "./components/ScrollToTop"; // <--- 1. Import it
+import ScrollToTop from "./components/ScrollToTop";
 
 const queryClient = new QueryClient();
 
@@ -18,12 +18,11 @@ const App = () => {
         <Toaster />
         <Sonner />
         <BrowserRouter>
-          {/* 2. Place it here, inside the Router */}
           <ScrollToTop />
 
           <Routes>
             <Route path="/" element={<Index />} />
-            <Route path="/events/:id" element={<EventDetails />} />
+            <Route path="/events/:eventId" element={<EventDetails />} />
             <Route path="/gallery/:year" element={<GalleryDetails />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
