@@ -1,6 +1,8 @@
-// src/data/events.ts
+// src/data/events.ts - FIXED VERSION with proper image imports
 import { LucideIcon } from "lucide-react";
 import { Mic2, Palette, Gamepad2, Award, Music, Camera } from "lucide-react";
+
+import culturalBg from "@/assets/cultural_bg.jpg";
 
 export interface EventCard {
   icon: LucideIcon;
@@ -85,7 +87,7 @@ export const EVENT_DATABASE: Record<string, EventDetails> = {
     subtitle: "Artistry Across Dimensions",
     description:
       "A celebration of diverse traditions and futuristic art forms. From classical dance to avant-garde drama, witness the cultural heartbeat of the universe.",
-    image: "/src/assets/cultural_bg.jpg", // Will need to be imported properly
+    image: culturalBg,
     date: "22-23 Jan 2026",
     location: "Auditorium",
     prize: "₹ 50,000",
