@@ -1,17 +1,12 @@
+// src/components/Navbar.tsx - Optimized Version
 import { useState, useEffect, useTransition } from "react";
 import { Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Link, useLocation } from "react-router-dom"; // 1. Import Link
+import { Link, useLocation } from "react-router-dom";
 import iimLogo from "../assets/iim_sambalpur_logo.png";
 import ethosLogo from "../assets/ethos_logo_3.png";
-
-// 2. UPDATED LINKS: Added "/" prefix to make them absolute paths
-const navLinks = [
-  { name: "About", href: "/#about" },
-  { name: "Events", href: "/#events" },
-  { name: "Sponsors", href: "/#sponsors" },
-  { name: "Gallery", href: "/#gallery" },
-];
+import { NAV_LINKS, A11Y } from "@/config/constants";
+import { useReducedMotion } from "@/hooks/useReducedMotion";
 
 const menuVariants = {
   hidden: {
@@ -55,6 +50,7 @@ const Navbar = () => {
   const [showCenterLogo, setShowCenterLogo] = useState(false);
   const [, startTransition] = useTransition();
   const location = useLocation();
+  const prefersReducedMotion = useReducedMotion();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -85,12 +81,17 @@ const Navbar = () => {
     <motion.nav
       initial={{ y: -100 }}
       animate={{ y: 0 }}
-      transition={{ duration: 0.6, ease: "easeOut" }}
+      transition={{
+        duration: prefersReducedMotion ? 0.01 : 0.6,
+        ease: "easeOut",
+      }}
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
         scrolled
           ? "bg-[#030305]/80 backdrop-blur-md border-b border-white/5 shadow-[0_4px_30px_rgba(0,0,0,0.5)]"
           : "bg-transparent"
       }`}
+      role="navigation"
+      aria-label={A11Y.ariaLabels.navigation}
     >
       <div
         className={`absolute bottom-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-primary/50 to-transparent transition-opacity duration-500 ${scrolled ? "opacity-100" : "opacity-0"}`}
@@ -98,12 +99,13 @@ const Navbar = () => {
 
       <div className="container mx-auto px-4 relative">
         <div className="flex items-center justify-between h-16 md:h-20">
-          {/* LEFT: Brand Block - Navigates to IIM Sambalpur Website */}
+          {/* LEFT: Brand Block */}
           <a
             href="https://www.iimsambalpur.ac.in"
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-3 group z-50"
+            aria-label="Visit IIM Sambalpur website"
           >
             <div className="relative">
               <div className="absolute -inset-1 rounded-lg bg-gradient-to-r from-primary to-accent blur-lg opacity-75 group-hover:opacity-100 transition-opacity duration-500 animate-tilt" />
@@ -111,6 +113,7 @@ const Navbar = () => {
                 src={iimLogo}
                 alt="IIM Sambalpur Logo"
                 className="w-9 h-9 sm:w-10 sm:h-10 relative z-10"
+                loading="eager"
               />
             </div>
 
@@ -124,7 +127,7 @@ const Navbar = () => {
             </div>
           </a>
 
-          {/* CENTER: Floating Logo - Internal Link (Use <Link>) */}
+          {/* CENTER: Floating Logo */}
           <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-40">
             <AnimatePresence>
               {showCenterLogo && (
@@ -132,13 +135,14 @@ const Navbar = () => {
                   initial={{ opacity: 0, y: -20, scale: 0.8 }}
                   animate={{ opacity: 1, y: 0, scale: 1 }}
                   exit={{ opacity: 0, y: -10, scale: 0.9 }}
-                  transition={{ duration: 0.5 }}
+                  transition={{ duration: prefersReducedMotion ? 0.01 : 0.5 }}
                 >
-                  <Link to="/">
+                  <Link to="/" aria-label="Go to homepage">
                     <img
                       src={ethosLogo}
-                      alt="Ethos Center Logo"
+                      alt="Ethos Logo"
                       className="h-10 md:h-14 w-auto object-contain drop-shadow-[0_0_10px_rgba(255,215,0,0.4)] hover:scale-105 transition-transform duration-300"
+                      loading="lazy"
                     />
                   </Link>
                 </motion.div>
@@ -148,8 +152,7 @@ const Navbar = () => {
 
           {/* RIGHT: Desktop Navigation */}
           <div className="hidden md:flex items-center gap-8 z-50">
-            {navLinks.map((link) => (
-              // 3. FIX: Swapped <a> for <Link> and href for to
+            {NAV_LINKS.map((link) => (
               <Link
                 key={link.name}
                 to={link.href}
@@ -172,6 +175,9 @@ const Navbar = () => {
           <button
             onClick={() => setIsOpen(!isOpen)}
             className="md:hidden p-2 text-foreground z-50 active:scale-95 transition-transform"
+            aria-label={isOpen ? A11Y.ariaLabels.closeModal : "Open menu"}
+            aria-expanded={isOpen}
+            aria-controls="mobile-menu"
           >
             {isOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
@@ -182,29 +188,43 @@ const Navbar = () => {
       <AnimatePresence>
         {isOpen && (
           <motion.div
+            id="mobile-menu"
             variants={menuVariants}
             initial="hidden"
             animate="visible"
             exit="exit"
             className="md:hidden absolute top-16 left-0 w-full h-[calc(100vh-4rem)] bg-background/95 backdrop-blur-2xl border-t border-border overflow-hidden"
             style={{ willChange: "transform, opacity" }}
+            role="dialog"
+            aria-label={A11Y.ariaLabels.mobileMenu}
           >
             {/* Ambient Background Glow */}
-            <div className="absolute inset-0 w-full h-full pointer-events-none">
+            <div
+              className="absolute inset-0 w-full h-full pointer-events-none"
+              aria-hidden="true"
+            >
               <motion.div
-                animate={{ opacity: [0.5, 0.8, 0.5], scale: [1, 1.1, 1] }}
+                animate={
+                  prefersReducedMotion
+                    ? {}
+                    : { opacity: [0.5, 0.8, 0.5], scale: [1, 1.1, 1] }
+                }
                 transition={{
                   duration: 4,
-                  repeat: Infinity,
+                  repeat: prefersReducedMotion ? 0 : Infinity,
                   ease: "easeInOut",
                 }}
                 className="absolute -top-[20%] -left-[20%] w-[80%] h-[80%] bg-primary/20 rounded-full blur-[120px]"
               />
               <motion.div
-                animate={{ opacity: [0.5, 0.8, 0.5], scale: [1, 1.1, 1] }}
+                animate={
+                  prefersReducedMotion
+                    ? {}
+                    : { opacity: [0.5, 0.8, 0.5], scale: [1, 1.1, 1] }
+                }
                 transition={{
                   duration: 5,
-                  repeat: Infinity,
+                  repeat: prefersReducedMotion ? 0 : Infinity,
                   ease: "easeInOut",
                   delay: 1,
                 }}
@@ -212,10 +232,9 @@ const Navbar = () => {
               />
             </div>
 
-            <div className="flex flex-col items-center justify-center h-full gap-8 relative z-10">
-              {navLinks.map((link) => (
+            <nav className="flex flex-col items-center justify-center h-full gap-8 relative z-10">
+              {NAV_LINKS.map((link) => (
                 <motion.div key={link.name} variants={linkVariants}>
-                  {/* 4. FIX: Use Link inside motion div for mobile menu */}
                   <Link
                     to={link.href}
                     onClick={() => setIsOpen(false)}
@@ -235,7 +254,7 @@ const Navbar = () => {
                   Contact Us
                 </Link>
               </motion.div>
-            </div>
+            </nav>
           </motion.div>
         )}
       </AnimatePresence>

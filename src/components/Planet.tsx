@@ -1,4 +1,6 @@
+// src/components/Planet.tsx - Optimized Version
 import { motion } from "framer-motion";
+import { useReducedMotion } from "@/hooks/useReducedMotion";
 
 interface PlanetProps {
   className?: string;
@@ -19,12 +21,20 @@ const Planet = ({
   moons = 0,
   delay = 0,
 }: PlanetProps) => {
+  const prefersReducedMotion = useReducedMotion();
+
   return (
     <motion.div
       initial={{ scale: 0, opacity: 0 }}
       animate={{ scale: 1, opacity: 1 }}
-      transition={{ duration: 2, delay, type: "spring", stiffness: 40 }}
+      transition={{
+        duration: prefersReducedMotion ? 0.01 : 2,
+        delay: prefersReducedMotion ? 0 : delay,
+        type: "spring",
+        stiffness: 40,
+      }}
       className={`relative ${className} flex items-center justify-center`}
+      aria-hidden="true"
     >
       {/* 1. Volumetric Atmosphere (The Outer Glow) */}
       <div
@@ -38,19 +48,15 @@ const Planet = ({
 
       {/* 2. Main Planet Sphere */}
       <motion.div
-        animate={{ rotate: 360 }}
+        animate={prefersReducedMotion ? {} : { rotate: 360 }}
         transition={{
           duration: 120,
-          repeat: Infinity,
+          repeat: prefersReducedMotion ? 0 : Infinity,
           ease: "linear",
         }}
         className={`${size} rounded-full relative z-10 overflow-hidden`}
         style={{
           background: gradient,
-          // Complex shadow:
-          // 1. Inset dark shadow (bottom-right) for 3D depth
-          // 2. Inset bright glow (top-left) for atmosphere edge
-          // 3. Drop shadow for immediate glow
           boxShadow: `
             inset -30px -30px 80px rgba(0,0,0,0.8), 
             inset 10px 10px 40px rgba(255,255,255,0.2),
@@ -58,7 +64,7 @@ const Planet = ({
           `,
         }}
       >
-        {/* Soft Gas Bands (No harsh strips) */}
+        {/* Soft Gas Bands */}
         <div
           className="absolute inset-0 opacity-30"
           style={{
@@ -73,10 +79,10 @@ const Planet = ({
         <div className="absolute top-[15%] left-[15%] w-[25%] h-[25%] rounded-full bg-white blur-xl opacity-40" />
       </motion.div>
 
-      {/* 3. Rings (More 3D and ethereal) */}
+      {/* 3. Rings */}
       {rings && (
         <motion.div
-          animate={{ rotateX: 75, rotateZ: -10 }} // Tilted 3D perspective
+          animate={prefersReducedMotion ? {} : { rotateX: 75, rotateZ: -10 }}
           className="absolute z-0 pointer-events-none"
           style={{
             width: "160%",
@@ -91,7 +97,7 @@ const Planet = ({
               boxShadow: `0 0 20px ${glowColor}`,
             }}
           />
-          {/* Inner Ice Ring (Sharper) */}
+          {/* Inner Ice Ring */}
           <div
             className="absolute inset-[12%] rounded-full border-[2px] opacity-30"
             style={{
@@ -113,13 +119,13 @@ const Planet = ({
       {Array.from({ length: moons }).map((_, i) => (
         <motion.div
           key={i}
-          animate={{ rotate: 360 }}
+          animate={prefersReducedMotion ? {} : { rotate: 360 }}
           transition={{
-            duration: 15 + i * 8, // Varying speeds
-            repeat: Infinity,
+            duration: 15 + i * 8,
+            repeat: prefersReducedMotion ? 0 : Infinity,
             ease: "linear",
           }}
-          className="absolute z-20" // z-20 to fly OVER the planet
+          className="absolute z-20"
           style={{
             width: `${140 + i * 50}%`,
             height: `${140 + i * 50}%`,
@@ -129,7 +135,7 @@ const Planet = ({
             className="absolute w-3 h-3 rounded-full bg-white"
             style={{
               top: "50%",
-              left: 0, // Starts at the edge
+              left: 0,
               transform: "translate(-50%, -50%)",
               boxShadow: `0 0 15px ${glowColor}, 0 0 5px white`,
             }}

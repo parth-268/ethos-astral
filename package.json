@@ -1,13 +1,25 @@
 {
   "name": "ethos-astral",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
+    "build:analyze": "tsc -b && vite build --mode production && npm run analyze",
+    "analyze": "npx vite-bundle-visualizer",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "lint:fix": "eslint . --fix",
+    "preview": "vite preview",
+    "type-check": "tsc --noEmit",
+    "format": "prettier --write \"src/**/*.{ts,tsx,css,md}\"",
+    "format:check": "prettier --check \"src/**/*.{ts,tsx,css,md}\"",
+    "test:lighthouse": "lighthouse http://localhost:8080 --view --output html --output-path ./lighthouse-report.html",
+    "clean": "rm -rf dist node_modules package-lock.json",
+    "reinstall": "npm run clean && npm install",
+    "prepare": "husky install || true",
+    "pre-commit": "npm run lint && npm run type-check",
+    "deploy": "npm run build && vercel --prod"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
@@ -61,6 +73,7 @@
     "tailwind-merge": "^2.6.0",
     "tailwindcss-animate": "^1.0.7",
     "vaul": "^0.9.9",
+    "web-vitals": "^3.5.0",
     "zod": "^3.25.76"
   },
   "devDependencies": {
@@ -76,12 +89,19 @@
     "eslint-plugin-react-hooks": "^7.0.1",
     "eslint-plugin-react-refresh": "^0.4.24",
     "globals": "^16.5.0",
+    "husky": "^8.0.0",
+    "lighthouse": "^11.0.0",
     "lovable-tagger": "^1.1.13",
     "postcss": "^8.5.6",
     "prettier": "^3.0.0",
+    "rollup-plugin-visualizer": "^5.12.0",
     "tailwindcss": "^3.4.17",
     "typescript": "~5.9.3",
     "typescript-eslint": "^8.46.4",
     "vite": "^7.2.4"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
   }
 }

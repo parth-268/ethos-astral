@@ -1,28 +1,28 @@
+// src/components/SponsorsSection.tsx - Optimized Version
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 import { Crown, Zap } from "lucide-react";
 import Planet from "./Planet";
-
-const sponsors = [
-  { name: "State Bank of India", tier: "Title Sponsor" },
-  { name: "NTPC", tier: "Powered By" },
-  { name: "Tata Steel", tier: "Associate Sponsor" },
-  { name: "Reliance Industries", tier: "Associate Sponsor" },
-  { name: "Odisha Tourism", tier: "Official Partner" },
-  { name: "Red Bull", tier: "Energy Partner" },
-];
+import { SPONSORS } from "@/config/constants";
+import { useReducedMotion } from "@/hooks/useReducedMotion";
 
 const SponsorsSection = () => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
+  const prefersReducedMotion = useReducedMotion();
+
+  const transitionConfig = prefersReducedMotion
+    ? { duration: 0.01 }
+    : { duration: 0.5 };
 
   return (
     <section
       id="sponsors"
       className="py-32 relative overflow-hidden nebula-jupiter"
+      aria-labelledby="sponsors-heading"
     >
       {/* Jupiter Planet */}
-      <div className="absolute -left-32 top-1/4 opacity-60">
+      <div className="absolute -left-32 top-1/4 opacity-60" aria-hidden="true">
         <Planet
           size="w-72 h-72"
           gradient="var(--planet-jupiter)"
@@ -34,9 +34,14 @@ const SponsorsSection = () => {
 
       {/* Storm effects */}
       <motion.div
-        animate={{ rotate: 360 }}
-        transition={{ duration: 200, repeat: Infinity, ease: "linear" }}
+        animate={prefersReducedMotion ? {} : { rotate: 360 }}
+        transition={{
+          duration: 200,
+          repeat: prefersReducedMotion ? 0 : Infinity,
+          ease: "linear",
+        }}
         className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] pointer-events-none opacity-10"
+        aria-hidden="true"
       >
         <div className="absolute inset-0 rounded-full border border-amber-500/20" />
         <div className="absolute inset-12 rounded-full border border-amber-500/15" />
@@ -47,32 +52,46 @@ const SponsorsSection = () => {
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.8 }}
+          transition={{ duration: prefersReducedMotion ? 0.01 : 0.8 }}
           className="text-center mb-16"
         >
           <motion.div
             initial={{ scale: 0 }}
             animate={isInView ? { scale: 1 } : {}}
-            transition={{ duration: 0.5, delay: 0.2 }}
+            transition={{
+              duration: prefersReducedMotion ? 0.01 : 0.5,
+              delay: prefersReducedMotion ? 0 : 0.2,
+            }}
             className="inline-flex items-center gap-2 px-4 py-2 bg-amber-500/10 border border-amber-500/30 rounded-full text-amber-400 text-sm font-semibold tracking-widest uppercase mb-6"
           >
-            <Crown className="w-4 h-4" />
+            <Crown className="w-4 h-4" aria-hidden="true" />
             Planet Jupiter — The Giant
           </motion.div>
 
-          <h2 className="font-display text-5xl md:text-7xl text-gradient">
+          <h2
+            id="sponsors-heading"
+            className="font-display text-5xl md:text-7xl text-gradient"
+          >
             SPONSORS
           </h2>
         </motion.div>
 
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
-          {sponsors.map((sponsor, index) => (
+        <div
+          className="grid grid-cols-2 md:grid-cols-3 gap-6"
+          role="list"
+          aria-label="Event sponsors"
+        >
+          {SPONSORS.map((sponsor, index) => (
             <motion.div
               key={sponsor.name}
               initial={{ opacity: 0, scale: 0.8 }}
               animate={isInView ? { opacity: 1, scale: 1 } : {}}
-              transition={{ duration: 0.5, delay: 0.2 + index * 0.1 }}
+              transition={{
+                ...transitionConfig,
+                delay: prefersReducedMotion ? 0 : 0.2 + index * 0.1,
+              }}
               className="group relative"
+              role="listitem"
             >
               <div className="absolute inset-0 bg-gradient-to-br from-amber-500/10 to-orange-500/5 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
@@ -83,7 +102,7 @@ const SponsorsSection = () => {
                   </span>
                 </div>
                 <span className="inline-flex items-center gap-1 text-xs text-amber-400 font-medium tracking-wider uppercase bg-amber-500/10 px-3 py-1 rounded-full">
-                  <Zap className="w-3 h-3" />
+                  <Zap className="w-3 h-3" aria-hidden="true" />
                   {sponsor.tier}
                 </span>
               </div>
@@ -94,7 +113,10 @@ const SponsorsSection = () => {
         <motion.p
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.8, delay: 0.8 }}
+          transition={{
+            duration: prefersReducedMotion ? 0.01 : 0.8,
+            delay: prefersReducedMotion ? 0 : 0.8,
+          }}
           className="text-center text-muted-foreground mt-12"
         >
           Interested in partnering with ETHOS?{" "}

@@ -1,7 +1,10 @@
+// src/components/ShootingStars.tsx - Optional Enhancement (Reduced Motion)
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
+import { useReducedMotion } from "@/hooks/useReducedMotion";
 
 const ShootingStars = () => {
+  const prefersReducedMotion = useReducedMotion();
   const [stars, setStars] = useState<
     {
       id: number;
@@ -12,20 +15,16 @@ const ShootingStars = () => {
     }[]
   >([]);
 
-  useEffect(() => {
-    setStars(
-      [...Array(3)].map((_, i) => ({
-        id: i,
-        top: Math.random() * 100,
-        delay: Math.random() * 5,
-        duration: Math.random() * 2 + 3,
-        repeatDelay: Math.random() * 10 + 5,
-      })),
-    );
-  }, []);
+  // Don't render if user prefers reduced motion
+  if (prefersReducedMotion) {
+    return null;
+  }
 
   return (
-    <div className="absolute inset-0 overflow-hidden pointer-events-none">
+    <div
+      className="absolute inset-0 overflow-hidden pointer-events-none"
+      aria-hidden="true"
+    >
       {stars.map((star) => (
         <motion.div
           key={star.id}

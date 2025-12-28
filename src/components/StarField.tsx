@@ -1,5 +1,6 @@
+// src/components/StarField.tsx - Fixed Version with More Stars
 import { useEffect, useRef } from "react";
-import { motion } from "framer-motion";
+import { getDeviceType } from "@/utils/performance";
 
 interface Star {
   x: number;
@@ -12,7 +13,7 @@ interface Star {
 const StarField = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const starsRef = useRef<Star[]>([]);
-  const animationRef = useRef<number>(null);
+  const animationRef = useRef<number | null>(null);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -29,7 +30,28 @@ const StarField = () => {
 
     const initStars = () => {
       starsRef.current = [];
-      const numStars = Math.floor((canvas.width * canvas.height) / 8000);
+
+      // Calculate stars based on screen size and device type
+      const baseStars = Math.floor((canvas.width * canvas.height) / 8000);
+      const deviceType = getDeviceType();
+
+      // Apply device multiplier for performance
+      let numStars: number;
+      switch (deviceType) {
+        case "mobile":
+          numStars = Math.floor(baseStars * 0.6); // 60% on mobile
+          break;
+        case "tablet":
+          numStars = Math.floor(baseStars * 0.8); // 80% on tablet
+          break;
+        case "desktop":
+        default:
+          numStars = baseStars; // 100% on desktop
+          break;
+      }
+
+      // Ensure minimum star count for visual appeal
+      numStars = Math.max(numStars, 100);
 
       for (let i = 0; i < numStars; i++) {
         starsRef.current.push({
@@ -75,6 +97,7 @@ const StarField = () => {
       ref={canvasRef}
       className="fixed inset-0 pointer-events-none z-0"
       style={{ background: "transparent" }}
+      aria-hidden="true"
     />
   );
 };
