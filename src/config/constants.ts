@@ -173,7 +173,7 @@ export const PARTNERS = [
   },
 ] as const;
 
-const OTHER_SPONSORS = [
+export const OTHER_SPONSORS = [
   { name: "Hero", type: "Official Automobile Sponsor" },
   { name: "Mia by Tanishq", type: "Official Jewellery Partner" },
   { name: "SAFEXPRESS", type: "Official Logistics Partner" },
