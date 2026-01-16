@@ -1,5 +1,4 @@
-// src/components/HeroSection.tsx
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion } from "framer-motion";
 import { Calendar, MapPin, Sparkles, Rocket, Radio } from "lucide-react";
 import { useState, useEffect } from "react";
 import Planet from "./Planet";
@@ -8,31 +7,15 @@ import { EVENT_DETAILS } from "@/config/constants";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 
 const HeroSection = () => {
-  const { scrollY } = useScroll();
   const prefersReducedMotion = useReducedMotion();
   const [isLive, setIsLive] = useState(false);
 
-  // Parallax effects
-  const yText = useTransform(
-    scrollY,
-    [0, 500],
-    prefersReducedMotion ? [0, 0] : [0, 150],
-  );
-  const yButtons = useTransform(
-    scrollY,
-    [0, 500],
-    prefersReducedMotion ? [0, 0] : [0, 100],
-  );
-
-  // --- FIXED COUNTDOWN LOGIC ---
+  // --- COUNTDOWN LOGIC ---
   const calculateTimeLeft = () => {
     const difference = +new Date(EVENT_DETAILS.dates.start) - +new Date();
-
-    // Just return 0s if time is up, DO NOT set state here
     if (difference <= 0) {
       return { days: 0, hours: 0, minutes: 0, seconds: 0 };
     }
-
     return {
       days: Math.floor(difference / (1000 * 60 * 60 * 24)),
       hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
@@ -44,34 +27,28 @@ const HeroSection = () => {
   const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
 
   useEffect(() => {
-    // Define the update function
     const updateTimer = () => {
       const difference = +new Date(EVENT_DETAILS.dates.start) - +new Date();
-
       if (difference <= 0) {
         setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0 });
-        setIsLive(true); // Safe to set state here inside useEffect
+        setIsLive(true);
       } else {
         setTimeLeft(calculateTimeLeft());
         setIsLive(false);
       }
     };
-
-    // Run once immediately to handle page load status
     updateTimer();
-
-    // Start interval
     const timer = setInterval(updateTimer, 1000);
-
     return () => clearInterval(timer);
-  }, []); // Empty dependency array is fine here
+  }, []);
 
   return (
     <section
       id="hero"
-      className="relative min-h-screen flex items-center justify-center overflow-hidden nebula-sun pt-20 pb-20 md:py-0"
+      // Added transform-gpu to force hardware acceleration and fix glitches
+      className="relative min-h-screen flex items-center justify-center overflow-hidden nebula-sun pt-20 pb-20 md:py-0 transform-gpu"
     >
-      {/* Ethereal light rays */}
+      {/* 1. BACKGROUND RAYS */}
       <div className="absolute inset-0 overflow-hidden" aria-hidden="true">
         <motion.div
           animate={prefersReducedMotion ? {} : { rotate: 360 }}
@@ -80,19 +57,20 @@ const HeroSection = () => {
             repeat: prefersReducedMotion ? 0 : Infinity,
             ease: "linear",
           }}
-          className="absolute -top-1/2 -left-1/2 w-[200%] h-[200%] opacity-30"
+          // will-change-transform ensures the browser optimizes this animation
+          className="absolute -top-1/2 -left-1/2 w-[200%] h-[200%] opacity-30 will-change-transform"
           style={{
             background: `conic-gradient(from 0deg, transparent, hsl(270 80% 65% / 0.1), transparent, hsl(185 100% 60% / 0.1), transparent)`,
           }}
         />
       </div>
 
-      {/* Floating cosmic elements */}
+      {/* 2. PLANETS & ORBITING MOON (Restored) */}
       <div
         className="absolute inset-0 overflow-hidden pointer-events-none"
         aria-hidden="true"
       >
-        {/* Main Sun Planet */}
+        {/* Main Sun Planet - Fixed Position */}
         <div className="absolute -right-20 top-20 opacity-60 md:-right-32 md:top-1/4">
           <Planet
             size="w-48 h-48 md:w-96 md:h-96"
@@ -102,27 +80,29 @@ const HeroSection = () => {
           />
         </div>
 
-        {/* Small orbiting planet */}
+        {/* --- RESTORED ORBITING MOON --- */}
         <motion.div
           animate={prefersReducedMotion ? {} : { rotate: 360 }}
           transition={{
-            duration: 60,
+            duration: 60, // Slow, smooth rotation
             repeat: prefersReducedMotion ? 0 : Infinity,
             ease: "linear",
           }}
-          className="absolute top-10 left-4 md:top-20 md:left-20"
+          // Critical: will-change-transform prevents the "glitch" while keeping the animation
+          className="absolute top-10 left-4 md:top-20 md:left-20 will-change-transform"
         >
+          {/* Visual Planet */}
           <div
             className="w-4 h-4 md:w-8 md:h-8 rounded-full bg-gradient-to-br from-primary to-accent"
             style={{ boxShadow: "0 0 30px hsl(45 100% 60% / 0.5)" }}
           />
         </motion.div>
 
-        {/* Asteroid field */}
+        {/* Asteroid field (Preserved) */}
         {[...Array(6)].map((_, i) => (
           <motion.div
             key={i}
-            className="absolute w-1 h-1 md:w-2 md:h-2 bg-foreground/40 rounded-full"
+            className="absolute w-1 h-1 md:w-2 md:h-2 bg-foreground/40 rounded-full will-change-transform"
             style={{
               left: `${20 + i * 15}%`,
               top: `${10 + i * 12}%`,
@@ -144,10 +124,8 @@ const HeroSection = () => {
         ))}
       </div>
 
-      <motion.div
-        style={{ y: yText }}
-        className="relative z-10 container mx-auto px-4 sm:px-6 text-center"
-      >
+      {/* 3. MAIN CONTENT (Parallax Removed for Stability) */}
+      <div className="relative z-10 container mx-auto px-4 sm:px-6 text-center">
         {/* Eyebrow Label */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -167,7 +145,7 @@ const HeroSection = () => {
           </div>
         </motion.div>
 
-        {/* LOGO SECTION */}
+        {/* LOGO */}
         <div className="relative mb-8 md:mb-10 flex justify-center items-center">
           <motion.div
             initial={{ opacity: 0, scale: 0.8 }}
@@ -203,6 +181,7 @@ const HeroSection = () => {
           />
         </div>
 
+        {/* Title */}
         <div className="overflow-hidden mb-6 md:mb-8">
           <motion.div
             initial={{ y: "100%" }}
@@ -232,7 +211,7 @@ const HeroSection = () => {
           art, and cosmic competition.
         </motion.p>
 
-        {/* Info Buttons */}
+        {/* Buttons */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
@@ -267,9 +246,8 @@ const HeroSection = () => {
           </a>
         </motion.div>
 
-        {/* === DYNAMIC COUNTDOWN / LIVE STATE === */}
+        {/* Countdown / Live Badge */}
         <motion.div
-          style={{ y: yButtons }}
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{
@@ -286,7 +264,6 @@ const HeroSection = () => {
             } border backdrop-blur-md rounded-xl md:rounded-2xl shadow-[0_0_30px_rgba(0,0,0,0.4)]`}
           >
             {!isLive ? (
-              // --- STANDARD COUNTDOWN ---
               <div className="grid grid-cols-4 gap-2 md:gap-12 text-center divide-x divide-white/10">
                 <div className="flex flex-col items-center px-1">
                   <span className="font-mono font-bold text-3xl md:text-4xl text-transparent bg-clip-text bg-gradient-to-b from-white to-blue-200 leading-none">
@@ -322,9 +299,7 @@ const HeroSection = () => {
                 </div>
               </div>
             ) : (
-              // --- LIVE STATE ---
               <div className="flex flex-col md:flex-row items-center gap-4 md:gap-8">
-                {/* Pulsing Beacon */}
                 <div className="relative flex items-center justify-center">
                   <motion.div
                     animate={
@@ -341,13 +316,10 @@ const HeroSection = () => {
                   />
                   <div className="relative w-3 h-3 bg-red-500 rounded-full shadow-[0_0_10px_#ef4444]" />
                 </div>
-
                 <div className="text-center md:text-left">
                   <div className="flex items-center justify-center md:justify-start gap-2 mb-1">
                     <Radio
-                      className={`w-4 h-4 text-red-400 ${
-                        prefersReducedMotion ? "" : "animate-pulse"
-                      }`}
+                      className={`w-4 h-4 text-red-400 ${prefersReducedMotion ? "" : "animate-pulse"}`}
                     />
                     <span className="text-xs font-bold tracking-[0.3em] text-red-400 uppercase">
                       Transmission Live
@@ -357,22 +329,20 @@ const HeroSection = () => {
                     Lift Off Confirmed
                   </h3>
                 </div>
-
                 <motion.a
                   href="#about"
                   whileHover={prefersReducedMotion ? {} : { scale: 1.05 }}
                   whileTap={prefersReducedMotion ? {} : { scale: 0.95 }}
                   className="mt-2 md:mt-0 px-6 py-2 bg-gradient-to-r from-red-600 to-orange-600 text-white text-sm font-bold tracking-wider uppercase rounded-full shadow-lg hover:shadow-red-500/30 transition-shadow flex items-center gap-2"
                 >
-                  Enter The Cosmos
-                  <Rocket className="w-4 h-4" />
+                  Enter The Cosmos <Rocket className="w-4 h-4" />
                 </motion.a>
               </div>
             )}
           </div>
         </motion.div>
 
-        {/* Scroll Indicator */}
+        {/* === SCROLL INDICATOR (Always Visible) === */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -413,7 +383,7 @@ const HeroSection = () => {
             </div>
           </motion.div>
         </motion.div>
-      </motion.div>
+      </div>
     </section>
   );
 };

@@ -1,6 +1,7 @@
 import { HandMetal, LucideIcon, Trophy, Award } from "lucide-react";
 import culturalBg from "@/assets/cultural_bg.jpg";
 import { ReactNode } from "react";
+import proNiteBannner from "@/assets/pro_nite1.png";
 
 export interface EventCard {
   icon: LucideIcon;
@@ -62,8 +63,7 @@ export const EVENT_DATABASE: Record<string, EventDetails> = {
       "Prepare for liftoff as we initiate the primary sequence of Ethos 2026. This isn't just a concert; it's a sonic journey through three distinct phases. From soul-stirring melodies to earth-shattering laughter and high-energy beats, witness the convergence of stars on the main deck.",
     image:
       "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?q=80&w=2070&auto=format&fit=crop",
-    bannerImage:
-      "https://images.unsplash.com/photo-1506157786151-b8491531f063?q=80&w=2070&auto=format&fit=crop",
+    bannerImage: proNiteBannner,
     date: "24 Jan 2026",
     location: "Main Ground",
     prize: "N/A",
@@ -77,7 +77,7 @@ export const EVENT_DATABASE: Record<string, EventDetails> = {
       {
         missionTitle: "Mission #1",
         artistRole: "The Melody Voyager",
-        artistName: "Artist",
+        artistName: "JAVED ALI",
         date: "24 Jan",
         time: "6:00 PM",
         venue: "Main Stage",
@@ -85,7 +85,7 @@ export const EVENT_DATABASE: Record<string, EventDetails> = {
       {
         missionTitle: "Mission #2",
         artistRole: "The Cosmic Jester",
-        artistName: "Stand-Up Comedians",
+        artistName: "KUMAR VARUN",
         date: "24 Jan",
         time: "7:30 PM",
         venue: "Main Stage",
@@ -93,7 +93,7 @@ export const EVENT_DATABASE: Record<string, EventDetails> = {
       {
         missionTitle: "Mission #3",
         artistRole: "The Sonic Pilot",
-        artistName: "DJ",
+        artistName: "SWATTREX",
         date: "24 Jan",
         time: "9:00 PM",
         venue: "Main Stage",

@@ -100,7 +100,7 @@ const SchedulePage = () => {
               </span>
             </h1>
             <p className="text-white/60 font-mono text-xs md:text-sm tracking-widest uppercase">
-              // Mission Timeline: Sector 12B8A
+              // Mission Timeline: Sector 12S8A7K
             </p>
           </div>
 

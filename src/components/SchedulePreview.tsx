@@ -6,7 +6,10 @@ import { SCHEDULE_DATA } from "@/config/scheduleData";
 
 const SchedulePreview = () => {
   return (
-    <section className="py-20 relative overflow-hidden bg-[#030305]">
+    <section
+      className="py-20 relative overflow-hidden bg-[#030305]"
+      id="schedule"
+    >
       {/* Static Background Layer - Locked to GPU */}
       <div
         className="absolute inset-0 nebula-sun pointer-events-none transform-gpu"
