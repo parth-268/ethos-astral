@@ -1,14 +1,18 @@
+// src/components/SchedulePreview.tsx
 import { motion } from "framer-motion";
 import { Calendar, ArrowRight, Star } from "lucide-react";
-import { Link } from "react-router-dom"; // Assuming react-router-dom
+import { Link } from "react-router-dom";
 import { SCHEDULE_DATA } from "@/config/scheduleData";
 
 const SchedulePreview = () => {
   return (
-    <section
-      className="py-20 relative overflow-hidden nebula-sun"
-      id="schedule"
-    >
+    <section className="py-20 relative overflow-hidden bg-[#030305]">
+      {/* Static Background Layer - Locked to GPU */}
+      <div
+        className="absolute inset-0 nebula-sun pointer-events-none transform-gpu"
+        style={{ willChange: "transform", zIndex: 0 }}
+      />
+
       <div className="container mx-auto px-4 relative z-10">
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
@@ -35,19 +39,30 @@ const SchedulePreview = () => {
         {/* 3 Compact Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {SCHEDULE_DATA.map((day, index) => (
-            <Link to="/schedule" key={day.day} className="block group">
+            <Link to="/schedule" key={day.day} className="block group h-full">
               <motion.div
-                initial={{ opacity: 0, y: 20 }}
+                // === SMOOTH ANIMATION SETTINGS ===
+                initial={{ opacity: 0, y: 20 }} // Reduced Y distance for subtlety
                 whileInView={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.1 }}
-                className="relative h-full bg-white/5 border border-white/10 rounded-2xl p-8 hover:bg-white/10 hover:border-amber-500/30 hover:-translate-y-2 transition-all duration-300"
+                viewport={{ once: true, margin: "-10%" }} // Triggers slightly earlier
+                transition={{
+                  duration: 0.8, // Slower duration
+                  delay: index * 0.15, // Slightly more gap between cards
+                  ease: [0.21, 0.47, 0.32, 0.98], // Custom "Soft Landing" Bezier Curve
+                }}
+                // Hardware acceleration styles
+                style={{
+                  backfaceVisibility: "hidden",
+                  WebkitBackfaceVisibility: "hidden",
+                }}
+                className="relative h-full bg-white/5 border border-white/10 rounded-2xl p-8 transition-transform duration-500 ease-out hover:-translate-y-2 hover:bg-white/10 hover:border-amber-500/30"
               >
                 {/* Day Number Background */}
-                <span className="absolute -right-4 -top-4 text-[120px] font-display text-white/5 group-hover:text-amber-500/10 transition-colors pointer-events-none select-none">
+                <span className="absolute -right-4 -top-4 text-[100px] leading-none font-display text-white/5 group-hover:text-amber-500/10 transition-colors duration-500 pointer-events-none select-none">
                   {day.day}
                 </span>
 
-                <div className="relative z-10">
+                <div className="relative z-10 flex flex-col h-full">
                   <div className="flex items-center gap-2 text-amber-400 mb-4">
                     <Calendar className="w-4 h-4" />
                     <span className="text-xs font-bold uppercase tracking-wider">
@@ -55,12 +70,11 @@ const SchedulePreview = () => {
                     </span>
                   </div>
 
-                  <h3 className="text-2xl font-display text-white mb-2 group-hover:text-amber-200 transition-colors">
+                  <h3 className="text-2xl font-display text-white mb-2 group-hover:text-amber-200 transition-colors duration-300">
                     {day.title}
                   </h3>
 
-                  <p className="text-sm text-white/50 mb-6 line-clamp-2">
-                    {/* Show first 2 events as preview */}
+                  <p className="text-sm text-white/50 mb-6 line-clamp-2 flex-grow">
                     {day.events
                       .slice(0, 2)
                       .map((e) => e.title)
@@ -68,7 +82,7 @@ const SchedulePreview = () => {
                     ...
                   </p>
 
-                  <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-white/40 group-hover:text-white transition-colors">
+                  <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-white/40 group-hover:text-white transition-colors duration-300 mt-auto">
                     <Star className="w-3 h-3" />
                     Explore Day {day.day}
                   </div>

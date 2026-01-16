@@ -430,3 +430,23 @@ html {
   z-index: 20;
   opacity: 0.85;
 }
+
+/* Add this to index.css or your global styles */
+@keyframes floatUp {
+  0% {
+    transform: translateY(0) translateX(0);
+    opacity: 0.2;
+  }
+  50% {
+    transform: translateY(-20px) translateX(10px);
+    opacity: 0.5;
+  }
+  100% {
+    transform: translateY(0) translateX(0);
+    opacity: 0.2;
+  }
+}
+
+.animate-float {
+  animation: floatUp 4s ease-in-out infinite;
+}

@@ -1,3 +1,4 @@
+// src/pages/SchedulePage.tsx - Optimized for Smooth Scrolling
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -18,6 +19,37 @@ import Footer from "@/components/Footer";
 import { SCHEDULE_DATA } from "@/config/scheduleData";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 
+// === OPTIMIZATION 1: Move static logic outside component ===
+// This prevents React from recalculating this function on every scroll frame.
+const getCategoryStyles = (category: string) => {
+  switch (category) {
+    case "Technical":
+      return {
+        icon: <Cpu className="w-3 h-3" />,
+        style:
+          "text-cyan-400 border-cyan-400/20 shadow-[0_0_15px_rgba(34,211,238,0.1)] bg-cyan-400/5",
+      };
+    case "Cultural":
+      return {
+        icon: <Music className="w-3 h-3" />,
+        style:
+          "text-fuchsia-400 border-fuchsia-400/20 shadow-[0_0_15px_rgba(232,121,249,0.1)] bg-fuchsia-400/5",
+      };
+    case "Management":
+      return {
+        icon: <Briefcase className="w-3 h-3" />,
+        style:
+          "text-amber-400 border-amber-400/20 shadow-[0_0_15px_rgba(251,191,36,0.1)] bg-amber-400/5",
+      };
+    default:
+      return {
+        icon: <Zap className="w-3 h-3" />,
+        style:
+          "text-blue-300 border-blue-300/20 shadow-[0_0_15px_rgba(147,197,253,0.1)] bg-blue-300/5",
+      };
+  }
+};
+
 const SchedulePage = () => {
   const [activeDay, setActiveDay] = useState(0);
   const prefersReducedMotion = useReducedMotion();
@@ -26,47 +58,18 @@ const SchedulePage = () => {
     window.scrollTo(0, 0);
   }, []);
 
-  // Helper: Get Icon & Color based on category
-  const getCategoryStyles = (category: string) => {
-    switch (category) {
-      case "Technical":
-        return {
-          icon: <Cpu className="w-3 h-3" />,
-          style:
-            "text-cyan-400 border-cyan-400/20 shadow-[0_0_15px_rgba(34,211,238,0.1)] bg-cyan-400/5",
-        };
-      case "Cultural":
-        return {
-          icon: <Music className="w-3 h-3" />,
-          style:
-            "text-fuchsia-400 border-fuchsia-400/20 shadow-[0_0_15px_rgba(232,121,249,0.1)] bg-fuchsia-400/5",
-        };
-      case "Management":
-        return {
-          icon: <Briefcase className="w-3 h-3" />,
-          style:
-            "text-amber-400 border-amber-400/20 shadow-[0_0_15px_rgba(251,191,36,0.1)] bg-amber-400/5",
-        };
-      default:
-        return {
-          icon: <Zap className="w-3 h-3" />,
-          style:
-            "text-blue-300 border-blue-300/20 shadow-[0_0_15px_rgba(147,197,253,0.1)] bg-blue-300/5",
-        };
-    }
-  };
-
   return (
     <main className="bg-[#030305] min-h-screen text-white selection:bg-cyan-500/30 overflow-x-hidden relative">
       <Navbar />
 
-      {/* === OPTIMIZED BACKGROUND (CSS Only, No Heavy Images) === */}
-      <div className="fixed inset-0 z-0 pointer-events-none">
-        {/* Subtle Gradient Spots */}
-        <div className="absolute top-[-10%] left-[-10%] w-[40vw] h-[40vw] bg-blue-600/10 rounded-full blur-[80px] md:blur-[120px]" />
-        <div className="absolute bottom-[-10%] right-[-10%] w-[40vw] h-[40vw] bg-purple-600/10 rounded-full blur-[80px] md:blur-[120px]" />
+      {/* === OPTIMIZATION 2: Hardware Accelerated Background === */}
+      {/* 'transform-gpu' forces the browser to handle this on the graphics card */}
+      <div className="fixed inset-0 z-0 pointer-events-none transform-gpu will-change-transform">
+        {/* Gradients: Reduced blur radius slightly for performance */}
+        <div className="absolute top-[-10%] left-[-10%] w-[40vw] h-[40vw] bg-blue-600/10 rounded-full blur-[60px]" />
+        <div className="absolute bottom-[-10%] right-[-10%] w-[40vw] h-[40vw] bg-purple-600/10 rounded-full blur-[60px]" />
 
-        {/* Simple Star Field (CSS Radial Gradients) */}
+        {/* Star Field: CSS Only */}
         <div
           className="absolute inset-0 opacity-30"
           style={{
@@ -77,7 +80,7 @@ const SchedulePage = () => {
       </div>
 
       <div className="relative z-10 pt-24 pb-20 container mx-auto px-4 md:px-6">
-        {/* === HEADER === */}
+        {/* Header */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 gap-4">
           <div>
             <Link
@@ -109,7 +112,7 @@ const SchedulePage = () => {
           </div>
         </div>
 
-        {/* === PLANETARY DAY SELECTOR (Scrollable on Mobile) === */}
+        {/* Day Selector */}
         <div className="mb-16">
           <div className="flex md:grid md:grid-cols-3 gap-4 overflow-x-auto pb-4 md:pb-0 snap-x hide-scrollbar">
             {SCHEDULE_DATA.map((day, index) => {
@@ -124,7 +127,6 @@ const SchedulePage = () => {
                       : "bg-white/5 border-white/10 hover:bg-white/10"
                   }`}
                 >
-                  {/* Glowing Active Bar */}
                   {isActive && (
                     <motion.div
                       layoutId="activeGlow"
@@ -155,19 +157,19 @@ const SchedulePage = () => {
           </div>
         </div>
 
-        {/* === STAR CHART TIMELINE === */}
-        <div className="max-w-5xl mx-auto relative min-h-[500px]">
+        {/* === OPTIMIZATION 3: Stable Container Height === */}
+        {/* min-h-[600px] ensures the footer doesn't jump up when switching days, reducing visual jitter */}
+        <div className="max-w-5xl mx-auto relative min-h-[800px]">
           <AnimatePresence mode="wait">
             <motion.div
               key={activeDay}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              transition={{ duration: 0.3 }}
-              className="relative pl-6 md:pl-0" // Add padding on mobile for left line
+              transition={{ duration: 0.2 }} // Faster transition feels smoother
+              className="relative pl-6 md:pl-0"
             >
-              {/* TIMELINE GUIDE LINE */}
-              {/* Mobile: Left side | Desktop: Center */}
+              {/* Timeline Line */}
               <div className="absolute left-0 md:left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-cyan-500/0 via-cyan-500/30 to-cyan-500/0 md:-translate-x-1/2" />
 
               <div className="space-y-8 md:space-y-12 pb-12">
@@ -178,32 +180,34 @@ const SchedulePage = () => {
                   return (
                     <motion.div
                       key={index}
+                      // === OPTIMIZATION 4: Viewport Once ===
+                      // viewport={{ once: true }} stops the animation from re-playing when you scroll up/down
                       initial={
                         prefersReducedMotion
-                          ? { opacity: 0 }
+                          ? { opacity: 1 }
                           : { opacity: 0, y: 30 }
                       }
-                      animate={
-                        prefersReducedMotion
-                          ? { opacity: 1 }
-                          : { opacity: 1, y: 0 }
+                      whileInView={
+                        prefersReducedMotion ? {} : { opacity: 1, y: 0 }
                       }
-                      transition={{ delay: index * 0.05, duration: 0.4 }}
+                      viewport={{ once: true, margin: "-10% 0px -10% 0px" }}
+                      transition={{ duration: 0.5, delay: 0.1 }}
                       className={`relative flex flex-col md:flex-row md:items-center ${
                         isEven ? "md:justify-start" : "md:justify-end"
                       }`}
                     >
-                      {/* TIMELINE NODE (The Dot) */}
-                      {/* Mobile: Left | Desktop: Center */}
+                      {/* Node Dot */}
                       <div className="absolute left-[-24px] md:left-1/2 w-3 h-3 bg-[#030305] border border-cyan-500 rounded-full z-20 md:-translate-x-1/2 mt-6 md:mt-0 shadow-[0_0_10px_rgba(6,182,212,0.5)]">
-                        <div className="absolute inset-0 bg-cyan-400 rounded-full animate-ping opacity-20" />
+                        {!prefersReducedMotion && (
+                          <div className="absolute inset-0 bg-cyan-400 rounded-full animate-ping opacity-20" />
+                        )}
                       </div>
 
-                      {/* CONTENT CARD */}
+                      {/* Card Content */}
                       <div
                         className={`w-full md:w-[45%] ${isEven ? "md:pr-12" : "md:pl-12"}`}
                       >
-                        {/* Time Label (Mobile Only - Above Card) */}
+                        {/* Mobile Time */}
                         <div className="md:hidden flex items-center gap-2 mb-2 pl-2">
                           <span className="text-cyan-400 font-mono text-sm font-bold">
                             {event.time}
@@ -211,20 +215,20 @@ const SchedulePage = () => {
                           <div className="h-px flex-grow bg-white/10" />
                         </div>
 
-                        <div className="group relative bg-[#0a0a0c]/80 backdrop-blur-md border border-white/10 rounded-xl p-5 hover:border-cyan-500/30 transition-all duration-300">
-                          {/* Desktop Connection Line */}
+                        {/* Card - Added 'will-change-transform' for scroll performance */}
+                        <div className="group relative bg-[#0a0a0c]/80 backdrop-blur-md border border-white/10 rounded-xl p-5 hover:border-cyan-500/30 transition-all duration-300 will-change-transform">
+                          {/* Desktop Line */}
                           <div
                             className={`hidden md:block absolute top-1/2 h-px bg-cyan-500/20 w-12 ${isEven ? "right-[-48px]" : "left-[-48px]"}`}
                           />
 
-                          {/* Header: Desktop Time + Category */}
+                          {/* Header */}
                           <div className="flex justify-between items-start mb-3">
                             <div className="hidden md:flex items-center gap-2 text-cyan-400 font-mono text-sm font-bold">
                               <Clock className="w-3.5 h-3.5" />
                               {event.time}
                             </div>
 
-                            {/* Category Badge */}
                             <span
                               className={`flex items-center gap-1.5 px-2.5 py-1 rounded text-[10px] font-bold uppercase tracking-wider border ${cat.style} ml-auto`}
                             >
@@ -246,7 +250,6 @@ const SchedulePage = () => {
                             {event.location}
                           </div>
 
-                          {/* Decorative Corner */}
                           <div className="absolute bottom-0 right-0 w-3 h-3 border-b border-r border-white/10 rounded-br-lg group-hover:border-cyan-500/50 transition-colors" />
                         </div>
                       </div>
