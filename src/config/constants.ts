@@ -173,12 +173,26 @@ export const PARTNERS = [
   },
 ] as const;
 
-export const OTHER_SPONSORS = [
-  { name: "Clay Kitchen", type: "Food Sponsor" },
-  { name: "God's Own Kitchen", type: "Food Sponsor" },
-  { name: "Belgian Waffles", type: "Food Sponsor" },
-  { name: "KFC", type: "Food Sponsor" },
+const OTHER_SPONSORS = [
+  { name: "Hero", type: "Official Automobile Sponsor" },
+  { name: "Mia by Tanishq", type: "Official Jewellery Partner" },
+  { name: "SAFEXPRESS", type: "Official Logistics Partner" },
+  { name: "Times of India", type: "Official Print Partner" },
+  { name: "Urban Housy", type: "Official Infrastructure Partner" },
+  { name: "Pizza Hut", type: "Fest Flavour Partner" },
+  { name: "Tattva Wellness", type: "Official Wellness Partner" },
+  { name: "Sach Kahoon", type: "Media Partner" },
+  { name: "Clay Kitchen", type: "Official Restaurant Partner" },
+  { name: "KFC", type: "Restaurant Partner" },
+  { name: "Silver Moon", type: "Hospitality Partner" },
+  { name: "Regenta", type: "Hospitality Partner" },
+  { name: "Nayab Tours and Travels", type: "Official Travel Partner" },
   { name: "Sakshi Handloom", type: "Handloom Partner" },
+  { name: "Belgian Waffle", type: "Waffle Partner" },
+  { name: "Giani", type: "Official Ice-Cream Partner" },
+  { name: "God’s Own Kitchen", type: "Food Partner" },
+  { name: "Chai Break", type: "Cafe Partner" },
+  { name: "Anand Hyper Mart", type: "Retail Partner" },
 ] as const;
 
 export const OTHER_SPONSORS_ToBeAdded = [
