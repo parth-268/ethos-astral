@@ -1,5 +1,3 @@
-// src/config/constants.ts - Updated Version
-
 // ============= DESIGN SYSTEM =============
 export const DESIGN_SYSTEM = {
   spacing: {
@@ -84,7 +82,7 @@ export const EVENT_DETAILS = {
   },
   contact: {
     email: "ethos@iimsambalpur.ac.in",
-    phone: "+91 987 654 3210",
+    phone: "+91 77386 62192",
   },
   social: {
     instagram: "https://www.instagram.com/ethos.iimsambalpur",
@@ -99,7 +97,7 @@ export const EVENT_DETAILS = {
 export const NAV_LINKS = [
   { name: "About", href: "/#about", id: "about" },
   { name: "Events", href: "/#events", id: "events" },
-  // { name: "Sponsors", href: "/#sponsors", id: "sponsors" },
+  { name: "Sponsors", href: "/#sponsors", id: "sponsors" },
   { name: "Gallery", href: "/#gallery", id: "gallery" },
 ] as const;
 
@@ -147,6 +145,57 @@ export const SPONSORS = [
   { name: "Reliance Industries", tier: "Associate Sponsor" },
   { name: "Odisha Tourism", tier: "Official Partner" },
   { name: "Red Bull", tier: "Energy Partner" },
+] as const;
+
+// === SPONSOR DATA ===
+export const CHIEF_SPONSOR = {
+  name: "MCL",
+  logo: "/src/assets/mcl_logo.png",
+  tier: "Chief Sponsor",
+  description: "Mahanadi Coalfields Limited",
+} as const;
+
+export const PARTNERS = [
+  {
+    name: "CBI",
+    logo: "/src/assets/cbi_logo1.png",
+    tier: "Co-Sponsor",
+  },
+  {
+    name: "SBI",
+    logo: "/src/assets/sbi_logo.png",
+    tier: "Banking Partner",
+  },
+  {
+    name: "Shyam Metalics",
+    logo: "/src/assets/shyam_logo.jpeg",
+    tier: "Associate Sponsor",
+  },
+] as const;
+
+export const OTHER_SPONSORS = [
+  { name: "Clay Kitchen", type: "Food Sponsor" },
+  { name: "God's Own Kitchen", type: "Food Sponsor" },
+  { name: "Belgian Waffles", type: "Food Sponsor" },
+  { name: "KFC", type: "Food Sponsor" },
+  { name: "Sakshi Handloom", type: "Handloom Partner" },
+] as const;
+
+export const OTHER_SPONSORS_ToBeAdded = [
+  { name: "Hero", type: "Official Automobile Partner" },
+  { name: "Mia by Tanishq", type: "Jewellery Partner" },
+  { name: "Clay Kitchen", type: "Food Sponsor" },
+  { name: "Safexpress", type: "Official Logistics Partner" },
+  { name: "God's Own Kitchen", type: "Food Sponsor" },
+  { name: "Urban Housy", type: "Infrastructure Partner" },
+  { name: "Giani's Ice Cream", type: "Food Sponsor" },
+  { name: "Sach Kahoon", type: "Media Partner" },
+  { name: "Belgian Waffles", type: "Food Sponsor" },
+  { name: "Tattva Wellness", type: "Wellness Partner" },
+  { name: "KFC", type: "Food Sponsor" },
+  { name: "Sakshi Handloom", type: "Handloom Partner" },
+  { name: "Pizza Hut", type: "Food Sponsor" },
+  { name: "Chai Break", type: "Food Sponsor" },
 ] as const;
 
 // ============= ACCESSIBILITY =============

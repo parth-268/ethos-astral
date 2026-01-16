@@ -1,4 +1,3 @@
-// src/components/Navbar.tsx - Optimized Version
 import { useState, useEffect, useTransition } from "react";
 import { Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
