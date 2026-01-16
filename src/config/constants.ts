@@ -152,7 +152,7 @@ export const SPONSORS = [
 export const CHIEF_SPONSOR = {
   name: "CBI",
   logo: "/sponsors/cbi_logo1.png",
-  tier: "Chief Sponsor",
+  tier: "Title Sponsor",
   description: "Central Bank of India",
 } as const;
 
