@@ -149,16 +149,16 @@ export const SPONSORS = [
 
 // === SPONSOR DATA ===
 export const CHIEF_SPONSOR = {
-  name: "MCL",
-  logo: "/sponsors/mcl_logo.png",
+  name: "CBI",
+  logo: "/sponsors/cbi_logo1.png",
   tier: "Chief Sponsor",
-  description: "Mahanadi Coalfields Limited",
+  description: "Central Bank of India",
 } as const;
 
 export const PARTNERS = [
   {
-    name: "CBI",
-    logo: "/sponsors/cbi_logo1.png",
+    name: "MCL",
+    logo: "/sponsors/mcl_logo.png",
     tier: "Co-Sponsor",
   },
   {
