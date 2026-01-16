@@ -96,20 +96,17 @@ const SponsorsSection = () => {
                   <h3 className="font-display text-3xl text-white mb-1 drop-shadow-md">
                     {CHIEF_SPONSOR.name}
                   </h3>
-                  {CHIEF_SPONSOR.description && (
-                    <p className="text-white/60 text-sm font-light tracking-wide">
-                      {CHIEF_SPONSOR.description}
-                    </p>
-                  )}
                 </div>
               </div>
             </div>
           </motion.div>
         </div>
 
-        {/* === 2. PARTNERS GRID (Compacted) === */}
+        {/* === 2. PARTNERS GRID (Centered Flexible Layout) === */}
         <div
-          className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-16 max-w-5xl mx-auto"
+          // 1. Changed 'grid' to 'flex' with 'justify-center' to center items automatically
+          // 2. 'flex-wrap' allows them to break into new lines if there are many
+          className="flex flex-wrap justify-center gap-4 mb-16 max-w-5xl mx-auto"
           role="list"
         >
           {PARTNERS.map((sponsor, index) => (
@@ -121,7 +118,11 @@ const SponsorsSection = () => {
                 ...transitionConfig,
                 delay: prefersReducedMotion ? 0 : 0.3 + index * 0.1,
               }}
-              className="group relative h-full"
+              // 3. Added width constraints:
+              //    - w-full: Full width on mobile
+              //    - md:w-[32%]: Roughly 1/3 width on desktop (mimics grid-cols-3)
+              //    - max-w-[350px]: Prevents it from getting huge if it's the only one
+              className="group relative h-full w-full md:w-[32%] max-w-[350px]"
             >
               <div className="absolute inset-0 bg-gradient-to-br from-amber-500/10 to-transparent rounded-xl blur-lg opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
@@ -146,7 +147,7 @@ const SponsorsSection = () => {
           ))}
         </div>
 
-        {/* === MARQUEE BANNER (Smaller, Clean) === */}
+        {/* === MARQUEE BANNER (Seamless Loop Fix) === */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={isInView ? { opacity: 1 } : {}}
@@ -158,28 +159,30 @@ const SponsorsSection = () => {
 
           <div className="flex items-center">
             <motion.div
-              className="flex gap-12 items-center flex-nowrap"
+              // FIX 1: Removed 'gap-12'. We handle spacing on items now.
+              className="flex items-center flex-nowrap"
               animate={prefersReducedMotion ? {} : { x: ["0%", "-50%"] }}
               transition={{
                 repeat: Infinity,
                 ease: "linear",
-                duration: 45,
+                duration: 30,
               }}
             >
+              {/* We render the list twice. Each item has padding-right to create the gap. */}
               {[...OTHER_SPONSORS, ...OTHER_SPONSORS].map((sponsor, i) => (
                 <div
                   key={i}
-                  className="flex items-center gap-3 group cursor-default shrink-0"
+                  // FIX 2: Added 'pr-12' (padding-right) here to replace the flex gap.
+                  // This ensures the width of Set 1 is exactly equal to Set 2.
+                  className="flex items-center gap-3 group cursor-default shrink-0 pr-12"
                 >
                   <Sparkles className="w-3 h-3 text-amber-500/60 group-hover:text-amber-400 transition-colors" />
 
                   <div className="flex flex-col text-left">
-                    {/* TYPE: Small & Clean */}
                     <span className="text-[9px] text-amber-400/90 font-bold tracking-[0.15em] uppercase leading-none mb-0.5">
                       {sponsor.type}
                     </span>
 
-                    {/* NAME: Visible but not huge (text-xl) */}
                     <span className="text-xl font-display text-white group-hover:text-amber-100 transition-colors uppercase tracking-widest whitespace-nowrap drop-shadow-sm">
                       {sponsor.name}
                     </span>

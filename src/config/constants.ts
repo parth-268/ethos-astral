@@ -111,7 +111,7 @@ export const STATS = [
 ] as const;
 
 // ============= WEB3FORMS CONFIG =============
-export const WEB3FORMS_ACCESS_KEY = "468e4a91-7f38-4390-bb1b-c0010fe07652";
+export const WEB3FORMS_ACCESS_KEY = import.meta.env.VITE_WEB3FORMS_KEY;
 
 // ============= GALLERY ARCHIVES =============
 export const GALLERY_ARCHIVES = [
@@ -150,10 +150,9 @@ export const SPONSORS = [
 
 // === SPONSOR DATA ===
 export const CHIEF_SPONSOR = {
-  name: "CBI",
+  name: "Central Bank of India",
   logo: "/sponsors/cbi_logo1.png",
   tier: "Title Sponsor",
-  description: "Central Bank of India",
 } as const;
 
 export const PARTNERS = [
@@ -161,16 +160,6 @@ export const PARTNERS = [
     name: "MCL",
     logo: "/sponsors/mcl_logo.png",
     tier: "Co-Sponsor",
-  },
-  {
-    name: "SBI",
-    logo: "/sponsors/sbi_logo.png",
-    tier: "Banking Partner",
-  },
-  {
-    name: "Shyam Metalics",
-    logo: "/sponsors/shyam_logo.jpeg",
-    tier: "Associate Sponsor",
   },
 ] as const;
 
@@ -188,7 +177,7 @@ export const OTHER_SPONSORS = [
   { name: "Silver Moon", type: "Hospitality Partner" },
   { name: "Regenta", type: "Hospitality Partner" },
   { name: "Nayab Tours and Travels", type: "Official Travel Partner" },
-  { name: "Sakshi Handloom", type: "Handloom Partner" },
+  { name: "Sakshi Handloom", type: "Official Handloom Partner" },
   { name: "Belgian Waffle", type: "Waffle Partner" },
   { name: "Giani", type: "Official Ice-Cream Partner" },
   { name: "God’s Own Kitchen", type: "Food Partner" },
@@ -196,21 +185,17 @@ export const OTHER_SPONSORS = [
   { name: "Anand Hyper Mart", type: "Retail Partner" },
 ] as const;
 
-export const OTHER_SPONSORS_ToBeAdded = [
-  { name: "Hero", type: "Official Automobile Partner" },
-  { name: "Mia by Tanishq", type: "Jewellery Partner" },
-  { name: "Clay Kitchen", type: "Food Sponsor" },
-  { name: "Safexpress", type: "Official Logistics Partner" },
-  { name: "God's Own Kitchen", type: "Food Sponsor" },
-  { name: "Urban Housy", type: "Infrastructure Partner" },
-  { name: "Giani's Ice Cream", type: "Food Sponsor" },
-  { name: "Sach Kahoon", type: "Media Partner" },
-  { name: "Belgian Waffles", type: "Food Sponsor" },
-  { name: "Tattva Wellness", type: "Wellness Partner" },
-  { name: "KFC", type: "Food Sponsor" },
-  { name: "Sakshi Handloom", type: "Handloom Partner" },
-  { name: "Pizza Hut", type: "Food Sponsor" },
-  { name: "Chai Break", type: "Food Sponsor" },
+export const PARTNERSToBeAdded = [
+  {
+    name: "SBI",
+    logo: "/sponsors/sbi_logo.png",
+    tier: "Banking Partner",
+  },
+  {
+    name: "Shyam Metalics",
+    logo: "/sponsors/shyam_logo.jpeg",
+    tier: "Associate Sponsor",
+  },
 ] as const;
 
 // ============= ACCESSIBILITY =============
