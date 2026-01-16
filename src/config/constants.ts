@@ -96,6 +96,7 @@ export const EVENT_DETAILS = {
 // ============= NAVIGATION =============
 export const NAV_LINKS = [
   { name: "About", href: "/#about", id: "about" },
+  { name: "Schedule", href: "/#schedule", id: "schedule" },
   { name: "Events", href: "/#events", id: "events" },
   { name: "Sponsors", href: "/#sponsors", id: "sponsors" },
   { name: "Gallery", href: "/#gallery", id: "gallery" },

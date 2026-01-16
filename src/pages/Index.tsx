@@ -9,6 +9,7 @@ import GallerySection from "@/components/GallerySection";
 import ContactSection from "@/components/ContactSection";
 import Footer from "@/components/Footer";
 import StarField from "@/components/StarField";
+import SchedulePreview from "@/components/SchedulePreview";
 
 const Index = () => {
   const location = useLocation();
@@ -43,6 +44,7 @@ const Index = () => {
         <Navbar />
         <HeroSection />
         <AboutSection />
+        <SchedulePreview />
         <EventsSection />
         <SponsorsSection />
         <GallerySection />

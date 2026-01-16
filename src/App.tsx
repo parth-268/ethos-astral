@@ -7,6 +7,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import ErrorBoundary from "./components/ErrorBoundary";
 import ScrollToTop from "./components/ScrollToTop";
+import SchedulePage from "./components/pages/SchedulePage";
 
 // Lazy load pages for better performance
 const Index = lazy(() => import("./pages/Index"));
@@ -52,6 +53,7 @@ const App = () => {
                 <Route path="/" element={<Index />} />
                 <Route path="/events/:eventId" element={<EventDetails />} />
                 <Route path="/gallery/:year" element={<GalleryDetails />} />
+                <Route path="/schedule" element={<SchedulePage />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </Suspense>
