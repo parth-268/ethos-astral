@@ -21,6 +21,7 @@ export interface EventDetails {
   prize: string;
   registerLink: string;
   rules: string[];
+  contact?: string[];
   lineup?: Array<{
     missionTitle: string;
     artistRole: string;
@@ -101,27 +102,34 @@ export const EVENT_DATABASE: Record<string, EventDetails> = {
     ],
   },
   gaming: {
-    title: "GAMING ARENA",
-    subtitle: "The Ultimate Battleground",
-    description: `Enter the ultimate arena where physical prowess meets digital dominance. This mission spans across three dimensions:
+    title: "UTKRISHTHA",
+    subtitle: "The Sports Championship",
+    description: `Enter the ultimate arena of physical prowess and strategy. Utkrishtha brings together the finest athletes to compete for glory in 6 major sports categories:
 
-      1. Digital Warfare (Esports): Compete in high-octane tournaments from FPS to strategy.
-      2. Field Operations (Outdoor): Test your endurance and agility in adrenaline-pumping physical challenges.
-      3. Tactical HQ (Indoor): Engage in strategic tabletop and indoor competitive games.
+    1. Football (Men)
+    2. Futsal (Women)
+    3. Volleyball (Men & Women)
+    4. Badminton (Men & Women)
+    5. Table Tennis (Men & Women)
+    6. Chess (Open Category)
 
-      Prove your mastery across every realm of play.`,
+    Prepare your teams, study the rulebook, and get ready to dominate the field.`,
     image:
       "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=2070&auto=format&fit=crop",
     date: "22-24 Jan 2026",
-    location: "The Sports Arena & Computer Labs",
+    location: "The Sports Arena",
     prize: "₹ 95,000",
-    registerLink:
-      "https://docs.google.com/forms/d/e/1FAIpQLSd_GAMING_FORM/viewform",
+    registerLink: "#rulebook",
     rules: [
       "Teams must register 48 hours before the event.",
-      "Participants must carry valid ID for equipment issuance.",
-      "Sports attire is mandatory for outdoor segments.",
-      "No external software allowed for esports events.",
+      "Participants must carry valid College ID.",
+      "Sports attire is mandatory.",
+      "Referees decision is final and binding.",
+    ],
+    contact: [
+      "Romanius Tirkey: +91 6290658126",
+      "K Vaishnavi Rane: +91 9545952211",
+      "Naman Verma: +91 9644060020",
     ],
   },
   competitions: {

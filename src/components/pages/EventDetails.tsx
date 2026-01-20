@@ -1,6 +1,7 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import { useParams, Link } from "react-router-dom";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   ArrowLeft,
   Calendar,
@@ -14,20 +15,23 @@ import {
   Music,
   Clock,
   Radio,
+  BookOpen,
+  X,
+  Phone,
 } from "lucide-react";
 import Navbar from "../Navbar";
-import { EVENT_DATABASE, DEFAULT_EVENT } from "../../data/events";
-import { getOptimizedImageUrl } from "../../utils/performance";
+import { EVENT_DATABASE, DEFAULT_EVENT } from "@/data/events";
+import { getOptimizedImageUrl } from "@/utils/performance";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
+import { RULEBOOK_CONTENT } from "@/data/sports_rulebook";
 
 const EventDetails = () => {
   const { eventId } = useParams<{ eventId: string }>();
   const prefersReducedMotion = useReducedMotion();
+  const [showRulebook, setShowRulebook] = useState(false);
 
   const data = EVENT_DATABASE[eventId || ""] || DEFAULT_EVENT;
   const optimizedImage = getOptimizedImageUrl(data.image, "large");
-
-  // Optimize banner if it exists
   const optimizedBanner = data.bannerImage
     ? getOptimizedImageUrl(data.bannerImage, "large")
     : null;
@@ -44,6 +48,17 @@ const EventDetails = () => {
     document.title = `${data.title} | ETHOS 2026`;
   }, [eventId, data.title]);
 
+  useEffect(() => {
+    if (showRulebook) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "unset";
+    }
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, [showRulebook]);
+
   const transitionConfig = prefersReducedMotion
     ? { duration: 0.01 }
     : { duration: 0.8 };
@@ -52,7 +67,6 @@ const EventDetails = () => {
     <div className="min-h-screen bg-[#030305] text-white selection:bg-blue-500/30">
       <Navbar />
 
-      {/* Hero Header */}
       <header className="relative h-[60vh] overflow-hidden flex items-end pb-20">
         <div className="absolute inset-0 z-0">
           <img
@@ -94,10 +108,8 @@ const EventDetails = () => {
       </header>
 
       <main className="container mx-auto px-4 py-12 relative z-10">
-        {/* ================= PRO NITES LAYOUT ================= */}
         {data.lineup ? (
           <div className="space-y-16">
-            {/* 1. Briefing & Banner */}
             <div className="max-w-4xl mx-auto space-y-12">
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
@@ -109,7 +121,7 @@ const EventDetails = () => {
                   <Sparkles className="w-6 h-6 text-blue-400" />
                   Mission Brief
                 </h2>
-                <p className="text-gray-300 leading-relaxed text-xl">
+                <p className="text-gray-300 leading-relaxed text-xl whitespace-pre-line">
                   {data.description}
                 </p>
               </motion.div>
@@ -131,7 +143,6 @@ const EventDetails = () => {
               )}
             </div>
 
-            {/* 2. THE GRID */}
             <div className="grid md:grid-cols-3 gap-8">
               {data.lineup.map((mission, index) => {
                 const Icon = getMissionIcon(index);
@@ -191,7 +202,6 @@ const EventDetails = () => {
               })}
             </div>
 
-            {/* 3. Protocols - FIXED: Replaced '/' with Red Dot */}
             <motion.div
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
@@ -205,7 +215,6 @@ const EventDetails = () => {
               <div className="grid md:grid-cols-3 gap-4">
                 {data.rules.map((rule: string, i: number) => (
                   <div key={i} className="flex items-start gap-3 text-gray-400">
-                    {/* Fixed: Replaced text '/' with a styled shape */}
                     <div className="w-1.5 h-1.5 rounded-full bg-red-500 mt-2 shrink-0 shadow-[0_0_8px_rgba(239,68,68,0.6)]" />
                     <span className="text-sm">{rule}</span>
                   </div>
@@ -214,7 +223,6 @@ const EventDetails = () => {
             </motion.div>
           </div>
         ) : (
-          /* ================= COMPETITION LAYOUT ================= */
           <div className="grid md:grid-cols-3 gap-12">
             <div className="md:col-span-2 space-y-12">
               <motion.section
@@ -227,7 +235,6 @@ const EventDetails = () => {
                   <Sparkles className="w-6 h-6 text-blue-400" />
                   Mission Brief
                 </h2>
-                {/* ADD whitespace-pre-line HERE 👇 */}
                 <p className="text-gray-300 leading-relaxed text-xl whitespace-pre-line">
                   {data.description}
                 </p>
@@ -329,24 +336,133 @@ const EventDetails = () => {
                       </dd>
                     </div>
                   </div>
+
+                  {/* --- CONTACT SECTION FOR LISTS --- */}
+                  {data.contact && data.contact.length > 0 && (
+                    <div className="pt-4 border-t border-white/10 space-y-3">
+                      <div className="flex items-center gap-2 mb-2">
+                        <div className="p-2 bg-green-500/20 rounded-lg">
+                          <Phone className="w-5 h-5 text-green-400" />
+                        </div>
+                        <dt className="text-xs text-blue-300/60 uppercase tracking-wider font-semibold">
+                          Command Center
+                        </dt>
+                      </div>
+                      <dd className="text-white font-medium space-y-2 pl-2">
+                        {data.contact.map((contactStr: string, idx: number) => {
+                          const [name, number] = contactStr.split(": ");
+                          return (
+                            <div key={idx} className="flex flex-col">
+                              <span className="text-sm text-gray-300">
+                                {name}
+                              </span>
+                              <a
+                                href={`tel:${number?.replace(/\s/g, "")}`}
+                                className="text-green-400 hover:text-green-300 text-sm font-bold tracking-wide transition-colors"
+                              >
+                                {number}
+                              </a>
+                            </div>
+                          );
+                        })}
+                      </dd>
+                    </div>
+                  )}
                 </dl>
 
-                {data.registerLink && data.registerLink !== "#" && (
-                  <a
-                    href={data.registerLink}
-                    target="_blank"
-                    rel="noopener noreferrer"
+                {data.registerLink === "#rulebook" ? (
+                  <button
+                    onClick={() => setShowRulebook(true)}
                     className="relative z-10 w-full mt-8 py-4 bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-500 hover:to-blue-400 text-white font-bold rounded-xl shadow-lg shadow-blue-500/25 transition-all transform hover:scale-[1.02] flex items-center justify-center gap-2"
                   >
-                    Register for Mission
-                    <ExternalLink className="w-4 h-4" />
-                  </a>
+                    Open Rulebook
+                    <BookOpen className="w-4 h-4" />
+                  </button>
+                ) : (
+                  data.registerLink &&
+                  data.registerLink !== "#" && (
+                    <a
+                      href={data.registerLink}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="relative z-10 w-full mt-8 py-4 bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-500 hover:to-blue-400 text-white font-bold rounded-xl shadow-lg shadow-blue-500/25 transition-all transform hover:scale-[1.02] flex items-center justify-center gap-2"
+                    >
+                      Register for Mission
+                      <ExternalLink className="w-4 h-4" />
+                    </a>
+                  )
                 )}
               </motion.div>
             </aside>
           </div>
         )}
       </main>
+
+      {/* --- PORTAL FIXED MODAL --- */}
+      {createPortal(
+        <AnimatePresence>
+          {showRulebook && (
+            <>
+              {/* Backdrop */}
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                onClick={() => setShowRulebook(false)}
+                className="fixed inset-0 bg-black/80 backdrop-blur-sm z-[100]"
+              />
+              {/* Modal Content */}
+              <div className="fixed inset-0 z-[101] flex items-center justify-center p-4 pointer-events-none">
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                  exit={{ opacity: 0, scale: 0.95, y: 20 }}
+                  className="w-full max-w-2xl max-h-[85vh] bg-[#0a0a12] border border-blue-500/30 rounded-2xl shadow-2xl overflow-hidden flex flex-col pointer-events-auto"
+                >
+                  {/* Modal Header */}
+                  <div className="p-5 md:p-6 border-b border-white/10 flex justify-between items-center bg-blue-900/10">
+                    <div className="flex items-center gap-2">
+                      <BookOpen className="w-5 h-5 text-blue-400" />
+                      <h3 className="font-display text-xl text-white tracking-wide">
+                        Utkrishtha Rulebook
+                      </h3>
+                    </div>
+                    <button
+                      onClick={() => setShowRulebook(false)}
+                      className="p-2 hover:bg-white/10 rounded-lg transition-colors text-gray-400 hover:text-white"
+                    >
+                      <X className="w-5 h-5" />
+                    </button>
+                  </div>
+
+                  {/* Modal Body (Scrollable) */}
+                  <div className="flex-1 overflow-y-auto p-5 md:p-6 space-y-8 scrollbar-thin scrollbar-thumb-blue-500/30 scrollbar-track-transparent">
+                    {RULEBOOK_CONTENT.map((section, idx) => (
+                      <div key={idx} className="bg-white/5 rounded-xl p-4">
+                        <h4 className="text-blue-300 font-bold uppercase tracking-wider text-sm mb-3">
+                          {section.title}
+                        </h4>
+                        <ul className="space-y-2.5">
+                          {section.rules.map((rule, rIdx) => (
+                            <li
+                              key={rIdx}
+                              className="text-gray-300 text-sm flex items-start gap-3"
+                            >
+                              <span className="w-1.5 h-1.5 bg-blue-500 rounded-full mt-1.5 shrink-0" />
+                              <span className="leading-relaxed">{rule}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    ))}
+                  </div>
+                </motion.div>
+              </div>
+            </>
+          )}
+        </AnimatePresence>,
+        document.body,
+      )}
     </div>
   );
 };
