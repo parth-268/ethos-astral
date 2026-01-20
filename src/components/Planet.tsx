@@ -1,4 +1,3 @@
-// src/components/Planet.tsx - Optimized Version
 import { motion } from "framer-motion";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 
@@ -36,9 +35,9 @@ const Planet = ({
       className={`relative ${className} flex items-center justify-center`}
       aria-hidden="true"
     >
-      {/* 1. Volumetric Atmosphere (The Outer Glow) */}
+      {/* 1. Volumetric Atmosphere */}
       <div
-        className="absolute rounded-full blur-[50px] opacity-40"
+        className="absolute rounded-full blur-[50px] opacity-40 transform-gpu"
         style={{
           width: "120%",
           height: "120%",
@@ -50,72 +49,40 @@ const Planet = ({
       <motion.div
         animate={prefersReducedMotion ? {} : { rotate: 360 }}
         transition={{
-          duration: 120,
-          repeat: prefersReducedMotion ? 0 : Infinity,
+          duration: 200, // Very slow rotation for stability
+          repeat: Infinity,
           ease: "linear",
         }}
-        className={`${size} rounded-full relative z-10 overflow-hidden`}
+        className={`relative ${size} rounded-full overflow-hidden shadow-2xl will-change-transform`}
         style={{
           background: gradient,
-          boxShadow: `
-            inset -30px -30px 80px rgba(0,0,0,0.8), 
-            inset 10px 10px 40px rgba(255,255,255,0.2),
-            0 0 30px ${glowColor}
-          `,
+          boxShadow: `inset -20px -20px 50px rgba(0,0,0,0.5), 0 0 30px ${glowColor}`,
         }}
       >
-        {/* Soft Gas Bands */}
-        <div
-          className="absolute inset-0 opacity-30"
-          style={{
-            background: `
-              radial-gradient(circle at 50% 50%, transparent 0%, rgba(0,0,0,0.2) 100%),
-              linear-gradient(180deg, transparent 0%, rgba(255,255,255,0.1) 30%, transparent 50%, rgba(0,0,0,0.1) 70%, transparent 100%)
-            `,
-          }}
-        />
-
-        {/* Specular Highlight (Sun Reflection) */}
-        <div className="absolute top-[15%] left-[15%] w-[25%] h-[25%] rounded-full bg-white blur-xl opacity-40" />
+        {/* Surface Texture (Noise) */}
+        <div className="absolute inset-0 opacity-30 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] mix-blend-overlay" />
       </motion.div>
 
-      {/* 3. Rings */}
+      {/* 3. Rings (Optional) */}
       {rings && (
         <motion.div
-          animate={prefersReducedMotion ? {} : { rotateX: 75, rotateZ: -10 }}
-          className="absolute z-0 pointer-events-none"
-          style={{
-            width: "160%",
-            height: "160%",
+          initial={{ rotate: 75, scale: 0.8 }}
+          animate={{ rotate: 75, scale: 1 }}
+          transition={{
+            duration: 3,
+            repeat: Infinity,
+            repeatType: "reverse",
+            ease: "easeInOut",
           }}
-        >
-          {/* Outer Dust Ring */}
-          <div
-            className="absolute inset-0 rounded-full border-[1px] opacity-40 blur-[1px]"
-            style={{
-              borderColor: glowColor,
-              boxShadow: `0 0 20px ${glowColor}`,
-            }}
-          />
-          {/* Inner Ice Ring */}
-          <div
-            className="absolute inset-[12%] rounded-full border-[2px] opacity-30"
-            style={{
-              borderColor: "rgba(255,255,255,0.5)",
-              borderStyle: "solid",
-            }}
-          />
-          {/* Faint Wide Band */}
-          <div
-            className="absolute inset-[20%] rounded-full border-[15px] opacity-10"
-            style={{
-              borderColor: glowColor,
-            }}
-          />
-        </motion.div>
+          className="absolute w-[160%] h-[160%] rounded-full border-[1px] opacity-60 pointer-events-none will-change-transform"
+          style={{
+            borderColor: glowColor,
+            boxShadow: `0 0 20px ${glowColor}`,
+          }}
+        />
       )}
 
-      {/* 4. Orbiting Moons */}
+      {/* 4. Orbiting Moons - OPTIMIZED */}
       {Array.from({ length: moons }).map((_, i) => (
         <motion.div
           key={i}
@@ -125,19 +92,19 @@ const Planet = ({
             repeat: prefersReducedMotion ? 0 : Infinity,
             ease: "linear",
           }}
-          className="absolute z-20"
+          // OPTIMIZATION: will-change-transform prevents repaint
+          className="absolute z-20 will-change-transform"
           style={{
             width: `${140 + i * 50}%`,
             height: `${140 + i * 50}%`,
           }}
         >
           <div
-            className="absolute w-3 h-3 rounded-full bg-white"
+            className="absolute w-3 h-3 rounded-full bg-white shadow-[0_0_15px_white]"
             style={{
               top: "50%",
               left: 0,
               transform: "translate(-50%, -50%)",
-              boxShadow: `0 0 15px ${glowColor}, 0 0 5px white`,
             }}
           />
         </motion.div>

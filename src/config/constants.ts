@@ -86,7 +86,7 @@ export const EVENT_DETAILS = {
   },
   social: {
     instagram: "https://www.instagram.com/ethos.iimsambalpur",
-    twitter: "https://twitter.com/ethos_iims",
+    twitter: "https://twitter.com/ethos_iimsbp",
     linkedin:
       "https://www.linkedin.com/in/ethos-the-annual-fest-of-iim-sambalpur-8546a626a/",
     youtube: "https://www.youtube.com/@iimsambalpurannualfest/",

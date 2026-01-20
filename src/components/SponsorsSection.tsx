@@ -15,15 +15,12 @@ const SponsorsSection = () => {
     : { duration: 0.5 };
 
   // --- STYLING CONSTANTS ---
-
-  // Base Tile: Kept the high opacity (white/80) and shadow so it still "pops"
   const baseTileStyle =
     "w-full flex items-center justify-center bg-white/80 backdrop-blur-md rounded-xl border border-white/20 transition-all duration-300 group-hover:bg-white group-hover:scale-[1.02] shadow-[0_0_15px_rgba(255,255,255,0.1)]";
 
   const chiefTileStyle = `${baseTileStyle} p-4`;
-  const partnerTileStyle = `${baseTileStyle} p-1.5`; // Small padding to fill box
+  const partnerTileStyle = `${baseTileStyle} p-1.5`;
 
-  // Image: kept full opacity/color
   const logoImageStyle =
     "w-full h-full object-contain filter grayscale-0 opacity-100 drop-shadow-sm transition-all duration-500";
 
@@ -65,7 +62,7 @@ const SponsorsSection = () => {
           </h2>
         </motion.div>
 
-        {/* === 1. CHIEF SPONSOR (Compacted) === */}
+        {/* === 1. CHIEF SPONSOR === */}
         <div className="flex justify-center mb-8">
           <motion.div
             initial={{ opacity: 0, scale: 0.95, y: 15 }}
@@ -83,7 +80,6 @@ const SponsorsSection = () => {
                   {CHIEF_SPONSOR.tier}
                 </span>
 
-                {/* --- CHIEF LOGO (Reduced to h-28) --- */}
                 <div className={`h-28 ${chiefTileStyle}`}>
                   <img
                     src={CHIEF_SPONSOR.logo}
@@ -102,10 +98,8 @@ const SponsorsSection = () => {
           </motion.div>
         </div>
 
-        {/* === 2. PARTNERS GRID (Centered Flexible Layout) === */}
+        {/* === 2. PARTNERS GRID === */}
         <div
-          // 1. Changed 'grid' to 'flex' with 'justify-center' to center items automatically
-          // 2. 'flex-wrap' allows them to break into new lines if there are many
           className="flex flex-wrap justify-center gap-4 mb-16 max-w-5xl mx-auto"
           role="list"
         >
@@ -118,16 +112,11 @@ const SponsorsSection = () => {
                 ...transitionConfig,
                 delay: prefersReducedMotion ? 0 : 0.3 + index * 0.1,
               }}
-              // 3. Added width constraints:
-              //    - w-full: Full width on mobile
-              //    - md:w-[32%]: Roughly 1/3 width on desktop (mimics grid-cols-3)
-              //    - max-w-[350px]: Prevents it from getting huge if it's the only one
               className="group relative h-full w-full md:w-[32%] max-w-[350px]"
             >
               <div className="absolute inset-0 bg-gradient-to-br from-amber-500/10 to-transparent rounded-xl blur-lg opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
               <div className="relative h-full flex flex-col bg-card/20 backdrop-blur-sm border border-white/10 rounded-xl p-6 text-center hover:border-amber-500/40 transition-all duration-300 hover:-translate-y-0.5 shadow-md">
-                {/* --- GRID LOGO (Reduced to h-20) --- */}
                 <div className={`h-20 mb-4 ${partnerTileStyle}`}>
                   <img
                     src={sponsor.logo}
@@ -147,7 +136,7 @@ const SponsorsSection = () => {
           ))}
         </div>
 
-        {/* === MARQUEE BANNER (Seamless Loop Fix) === */}
+        {/* === MARQUEE BANNER === */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={isInView ? { opacity: 1 } : {}}
@@ -159,8 +148,8 @@ const SponsorsSection = () => {
 
           <div className="flex items-center">
             <motion.div
-              // FIX 1: Removed 'gap-12'. We handle spacing on items now.
-              className="flex items-center flex-nowrap"
+              // OPTIMIZATION: will-change-transform for smooth scrolling
+              className="flex items-center flex-nowrap will-change-transform"
               animate={prefersReducedMotion ? {} : { x: ["0%", "-50%"] }}
               transition={{
                 repeat: Infinity,
@@ -168,12 +157,9 @@ const SponsorsSection = () => {
                 duration: 30,
               }}
             >
-              {/* We render the list twice. Each item has padding-right to create the gap. */}
               {[...OTHER_SPONSORS, ...OTHER_SPONSORS].map((sponsor, i) => (
                 <div
                   key={i}
-                  // FIX 2: Added 'pr-12' (padding-right) here to replace the flex gap.
-                  // This ensures the width of Set 1 is exactly equal to Set 2.
                   className="flex items-center gap-3 group cursor-default shrink-0 pr-12"
                 >
                   <Sparkles className="w-3 h-3 text-amber-500/60 group-hover:text-amber-400 transition-colors" />

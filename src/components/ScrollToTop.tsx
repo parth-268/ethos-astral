@@ -1,20 +1,20 @@
-import { useLayoutEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useLocation } from "react-router-dom";
 
 const ScrollToTop = () => {
   const { pathname } = useLocation();
+  const prevPath = useRef(pathname);
 
-  useLayoutEffect(() => {
-    // 1. Disable the browser's default scroll restoration to prevent "jumping"
-    if ("scrollRestoration" in history) {
-      history.scrollRestoration = "manual";
+  useEffect(() => {
+    if (window.innerWidth < 768) return;
+
+    if (pathname !== prevPath.current) {
+      window.scrollTo({ top: 0, behavior: "auto" });
+      prevPath.current = pathname;
     }
+  }, [pathname]);
 
-    // 2. Immediately scroll to top (0,0) before the screen paints
-    window.scrollTo(0, 0);
-  }, [pathname]); // This triggers on every route change (navigation) AND initial load
-
-  return null; // This component renders nothing visually
+  return null;
 };
 
 export default ScrollToTop;

@@ -45,7 +45,7 @@ const HeroSection = () => {
   return (
     <section
       id="hero"
-      // Added transform-gpu to force hardware acceleration and fix glitches
+      // Added transform-gpu to force hardware acceleration
       className="relative min-h-screen flex items-center justify-center overflow-hidden nebula-sun pt-20 pb-20 md:py-0 transform-gpu"
     >
       {/* 1. BACKGROUND RAYS */}
@@ -65,7 +65,7 @@ const HeroSection = () => {
         />
       </div>
 
-      {/* 2. PLANETS & ORBITING MOON (Restored) */}
+      {/* 2. PLANETS & ORBITING MOON */}
       <div
         className="absolute inset-0 overflow-hidden pointer-events-none"
         aria-hidden="true"
@@ -80,25 +80,23 @@ const HeroSection = () => {
           />
         </div>
 
-        {/* --- RESTORED ORBITING MOON --- */}
+        {/* Orbiting Moon */}
         <motion.div
           animate={prefersReducedMotion ? {} : { rotate: 360 }}
           transition={{
-            duration: 60, // Slow, smooth rotation
+            duration: 60,
             repeat: prefersReducedMotion ? 0 : Infinity,
             ease: "linear",
           }}
-          // Critical: will-change-transform prevents the "glitch" while keeping the animation
           className="absolute top-10 left-4 md:top-20 md:left-20 will-change-transform"
         >
-          {/* Visual Planet */}
           <div
             className="w-4 h-4 md:w-8 md:h-8 rounded-full bg-gradient-to-br from-primary to-accent"
             style={{ boxShadow: "0 0 30px hsl(45 100% 60% / 0.5)" }}
           />
         </motion.div>
 
-        {/* Asteroid field (Preserved) */}
+        {/* Asteroid field */}
         {[...Array(6)].map((_, i) => (
           <motion.div
             key={i}
@@ -124,7 +122,7 @@ const HeroSection = () => {
         ))}
       </div>
 
-      {/* 3. MAIN CONTENT (Parallax Removed for Stability) */}
+      {/* 3. MAIN CONTENT */}
       <div className="relative z-10 container mx-auto px-4 sm:px-6 text-center">
         {/* Eyebrow Label */}
         <motion.div
@@ -211,7 +209,7 @@ const HeroSection = () => {
           art, and cosmic competition.
         </motion.p>
 
-        {/* Buttons */}
+        {/* Buttons - OPTIMIZED: Added touch-manipulation */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
@@ -219,7 +217,7 @@ const HeroSection = () => {
             duration: prefersReducedMotion ? 0.01 : 0.8,
             delay: prefersReducedMotion ? 0 : 0.8,
           }}
-          className="flex flex-col sm:flex-row items-center justify-center gap-3 md:gap-6 mb-6"
+          className="flex flex-col sm:flex-row items-center justify-center gap-3 md:gap-6 mb-6 touch-manipulation"
         >
           <div className="flex items-center gap-3 text-foreground/90 bg-white/5 border border-white/10 px-5 py-2.5 rounded-full backdrop-blur-md hover:bg-white/10 transition-colors w-full sm:w-auto justify-center">
             <Calendar
@@ -266,7 +264,8 @@ const HeroSection = () => {
             {!isLive ? (
               <div className="grid grid-cols-4 gap-2 md:gap-12 text-center divide-x divide-white/10">
                 <div className="flex flex-col items-center px-1">
-                  <span className="font-mono font-bold text-3xl md:text-4xl text-transparent bg-clip-text bg-gradient-to-b from-white to-blue-200 leading-none">
+                  {/* OPTIMIZATION: tabular-nums prevents jitter */}
+                  <span className="tabular-nums font-mono font-bold text-3xl md:text-4xl text-transparent bg-clip-text bg-gradient-to-b from-white to-blue-200 leading-none">
                     {timeLeft.days}
                   </span>
                   <span className="text-[9px] md:text-xs text-blue-400 uppercase font-sans tracking-widest mt-1">
@@ -274,7 +273,7 @@ const HeroSection = () => {
                   </span>
                 </div>
                 <div className="flex flex-col items-center px-1">
-                  <span className="font-mono font-bold text-3xl md:text-4xl text-transparent bg-clip-text bg-gradient-to-b from-white to-blue-200 leading-none">
+                  <span className="tabular-nums font-mono font-bold text-3xl md:text-4xl text-transparent bg-clip-text bg-gradient-to-b from-white to-blue-200 leading-none">
                     {timeLeft.hours}
                   </span>
                   <span className="text-[9px] md:text-xs text-blue-400 uppercase font-sans tracking-widest mt-1">
@@ -282,7 +281,7 @@ const HeroSection = () => {
                   </span>
                 </div>
                 <div className="flex flex-col items-center px-1">
-                  <span className="font-mono font-bold text-3xl md:text-4xl text-transparent bg-clip-text bg-gradient-to-b from-white to-blue-200 leading-none">
+                  <span className="tabular-nums font-mono font-bold text-3xl md:text-4xl text-transparent bg-clip-text bg-gradient-to-b from-white to-blue-200 leading-none">
                     {timeLeft.minutes}
                   </span>
                   <span className="text-[9px] md:text-xs text-blue-400 uppercase font-sans tracking-widest mt-1">
@@ -290,7 +289,7 @@ const HeroSection = () => {
                   </span>
                 </div>
                 <div className="flex flex-col items-center px-1">
-                  <span className="font-mono font-bold text-3xl md:text-4xl text-transparent bg-clip-text bg-gradient-to-b from-white to-blue-200 leading-none min-w-[1.5ch]">
+                  <span className="tabular-nums font-mono font-bold text-3xl md:text-4xl text-transparent bg-clip-text bg-gradient-to-b from-white to-blue-200 leading-none min-w-[1.5ch]">
                     {timeLeft.seconds}
                   </span>
                   <span className="text-[9px] md:text-xs text-blue-400 uppercase font-sans tracking-widest mt-1">
@@ -333,7 +332,7 @@ const HeroSection = () => {
                   href="#about"
                   whileHover={prefersReducedMotion ? {} : { scale: 1.05 }}
                   whileTap={prefersReducedMotion ? {} : { scale: 0.95 }}
-                  className="mt-2 md:mt-0 px-6 py-2 bg-gradient-to-r from-red-600 to-orange-600 text-white text-sm font-bold tracking-wider uppercase rounded-full shadow-lg hover:shadow-red-500/30 transition-shadow flex items-center gap-2"
+                  className="mt-2 md:mt-0 px-6 py-2 bg-gradient-to-r from-red-600 to-orange-600 text-white text-sm font-bold tracking-wider uppercase rounded-full shadow-lg hover:shadow-red-500/30 transition-shadow flex items-center gap-2 touch-manipulation"
                 >
                   Enter The Cosmos <Rocket className="w-4 h-4" />
                 </motion.a>
@@ -342,7 +341,7 @@ const HeroSection = () => {
           </div>
         </motion.div>
 
-        {/* === SCROLL INDICATOR (Always Visible) === */}
+        {/* === SCROLL INDICATOR === */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}

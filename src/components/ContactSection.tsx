@@ -1,4 +1,4 @@
-// src/components/ContactSection.tsx - Optimized Version
+// src/components/ContactSection.tsx
 import { motion, useInView } from "framer-motion";
 import { useRef, useState, useMemo } from "react";
 import { Send, Mail, Phone, MapPin, Radio, Loader2 } from "lucide-react";
@@ -27,7 +27,7 @@ const ContactSection = () => {
     return generateParticles(count);
   }, []);
 
-  // Animation variants
+  // --- ANIMATION VARIANTS (UNCHANGED) ---
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -103,10 +103,15 @@ const ContactSection = () => {
     }
   };
 
+  // UX OPTIMIZATION: text-base on mobile prevents iOS zoom
+  const inputClasses =
+    "w-full px-4 py-3 bg-black/40 border border-emerald-500/20 rounded-xl focus:outline-none focus:border-emerald-500/50 focus:ring-1 focus:ring-emerald-500/20 transition-all text-base md:text-sm text-foreground placeholder:text-muted-foreground disabled:opacity-50";
+
   return (
     <section
       id="contact"
-      className="py-32 relative overflow-hidden nebula-emerald"
+      // COMPACT: Reduced vertical padding from py-32 to py-20
+      className="py-20 md:py-24 relative overflow-hidden nebula-emerald"
       aria-labelledby="contact-heading"
     >
       {/* Emerald Planet */}
@@ -153,12 +158,12 @@ const ContactSection = () => {
       </div>
 
       <div className="container mx-auto px-4 relative z-10" ref={ref}>
-        {/* Header */}
+        {/* Header - COMPACT: Reduced margin from mb-16 to mb-10 */}
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: prefersReducedMotion ? 0.01 : 0.8 }}
-          className="text-center mb-16 will-change-transform"
+          className="text-center mb-10 md:mb-12 will-change-transform"
         >
           <motion.div
             initial={{ scale: 0 }}
@@ -167,7 +172,7 @@ const ContactSection = () => {
               duration: prefersReducedMotion ? 0.01 : 0.5,
               delay: prefersReducedMotion ? 0 : 0.2,
             }}
-            className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-500/10 border border-emerald-500/30 rounded-full text-emerald-400 text-sm font-semibold tracking-widest uppercase mb-6"
+            className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-500/10 border border-emerald-500/30 rounded-full text-emerald-400 text-sm font-semibold tracking-widest uppercase mb-4"
           >
             <Radio className="w-4 h-4" aria-hidden="true" />
             Planet Terra — The Living Core
@@ -175,20 +180,21 @@ const ContactSection = () => {
 
           <h2
             id="contact-heading"
-            className="font-display text-5xl md:text-7xl text-gradient-emerald mb-6"
+            className="font-display text-4xl md:text-6xl text-gradient-emerald mb-4"
           >
             ESTABLISH CONTACT
           </h2>
-          <p className="text-lg text-emerald-100/60 font-light max-w-2xl mx-auto">
+          <p className="text-base md:text-lg text-emerald-100/60 font-light max-w-2xl mx-auto px-2">
             Ready to embark on this cosmic journey? Send a transmission to our
             base station, and our team will respond at light speed.
           </p>
         </motion.div>
 
-        <div className="grid lg:grid-cols-2 gap-12 max-w-6xl mx-auto">
+        {/* COMPACT: Reduced gap from 12 to 8 */}
+        <div className="grid lg:grid-cols-2 gap-8 max-w-5xl mx-auto">
           {/* Contact Info Cards */}
           <motion.div
-            className="space-y-6"
+            className="space-y-4" // COMPACT: Reduced from space-y-6
             variants={containerVariants}
             initial="hidden"
             animate={isInView ? "visible" : "hidden"}
@@ -196,25 +202,26 @@ const ContactSection = () => {
             {/* Email Card */}
             <motion.div
               variants={cardVariants}
-              className="bg-card/30 backdrop-blur-md border border-emerald-500/20 rounded-2xl p-8 hover:border-emerald-500/40 transition-colors duration-300 group will-change-transform"
+              // COMPACT: Reduced padding from p-8 to p-6
+              className="bg-card/30 backdrop-blur-md border border-emerald-500/20 rounded-2xl p-6 hover:border-emerald-500/40 transition-colors duration-300 group will-change-transform"
             >
-              <div className="flex items-start gap-6">
+              <div className="flex items-start gap-5">
                 <div
-                  className="w-12 h-12 bg-emerald-500/20 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300"
+                  className="w-10 h-10 md:w-12 md:h-12 bg-emerald-500/20 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300"
                   aria-hidden="true"
                 >
-                  <Mail className="w-6 h-6 text-emerald-400" />
+                  <Mail className="w-5 h-5 md:w-6 md:h-6 text-emerald-400" />
                 </div>
                 <div>
-                  <h3 className="font-display text-2xl text-white mb-2">
+                  <h3 className="font-display text-xl md:text-2xl text-white mb-1">
                     Email Frequency
                   </h3>
-                  <p className="text-emerald-100/60 mb-2">
+                  <p className="text-emerald-100/60 text-sm mb-1">
                     For general inquiries and sponsorship
                   </p>
                   <a
                     href={`mailto:${EVENT_DETAILS.contact.email}`}
-                    className="text-emerald-400 hover:text-emerald-300 font-medium tracking-wide transition-colors"
+                    className="text-emerald-400 hover:text-emerald-300 font-medium tracking-wide transition-colors text-sm md:text-base"
                   >
                     {EVENT_DETAILS.contact.email}
                   </a>
@@ -225,25 +232,25 @@ const ContactSection = () => {
             {/* Phone Card */}
             <motion.div
               variants={cardVariants}
-              className="bg-card/30 backdrop-blur-md border border-emerald-500/20 rounded-2xl p-8 hover:border-emerald-500/40 transition-colors duration-300 group will-change-transform"
+              className="bg-card/30 backdrop-blur-md border border-emerald-500/20 rounded-2xl p-6 hover:border-emerald-500/40 transition-colors duration-300 group will-change-transform"
             >
-              <div className="flex items-start gap-6">
+              <div className="flex items-start gap-5">
                 <div
-                  className="w-12 h-12 bg-emerald-500/20 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300"
+                  className="w-10 h-10 md:w-12 md:h-12 bg-emerald-500/20 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300"
                   aria-hidden="true"
                 >
-                  <Phone className="w-6 h-6 text-emerald-400" />
+                  <Phone className="w-5 h-5 md:w-6 md:h-6 text-emerald-400" />
                 </div>
                 <div>
-                  <h3 className="font-display text-2xl text-white mb-2">
+                  <h3 className="font-display text-xl md:text-2xl text-white mb-1">
                     Direct Line
                   </h3>
-                  <p className="text-emerald-100/60 mb-2">
+                  <p className="text-emerald-100/60 text-sm mb-1">
                     Available during Earth business hours
                   </p>
                   <a
                     href={`tel:${EVENT_DETAILS.contact.phone}`}
-                    className="text-emerald-400 hover:text-emerald-300 font-medium tracking-wide transition-colors"
+                    className="text-emerald-400 hover:text-emerald-300 font-medium tracking-wide transition-colors text-sm md:text-base"
                   >
                     {EVENT_DETAILS.contact.phone}
                   </a>
@@ -251,25 +258,32 @@ const ContactSection = () => {
               </div>
             </motion.div>
 
-            {/* Location Card */}
+            {/* Location Card - FIXED HTML & LINK */}
             <motion.div
               variants={cardVariants}
-              className="bg-card/30 backdrop-blur-md border border-emerald-500/20 rounded-2xl p-8 hover:border-emerald-500/40 transition-colors duration-300 group will-change-transform"
+              className="bg-card/30 backdrop-blur-md border border-emerald-500/20 rounded-2xl p-6 hover:border-emerald-500/40 transition-colors duration-300 group will-change-transform"
             >
-              <div className="flex items-start gap-6">
+              <div className="flex items-start gap-5">
                 <div
-                  className="w-12 h-12 bg-emerald-500/20 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300"
+                  className="w-10 h-10 md:w-12 md:h-12 bg-emerald-500/20 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300"
                   aria-hidden="true"
                 >
-                  <MapPin className="w-6 h-6 text-emerald-400" />
+                  <MapPin className="w-5 h-5 md:w-6 md:h-6 text-emerald-400" />
                 </div>
                 <div>
-                  <h3 className="font-display text-2xl text-white mb-2">
-                    Base Coordinates
-                  </h3>
-                  <p className="text-emerald-100/60">
-                    {EVENT_DETAILS.location.full}
-                  </p>
+                  <a
+                    href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(EVENT_DETAILS.location.full)}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block group/link"
+                  >
+                    <h3 className="font-display text-xl md:text-2xl text-white mb-1 group-hover/link:text-emerald-400 transition-colors">
+                      Base Coordinates
+                    </h3>
+                    <p className="text-emerald-100/60 text-sm md:text-base leading-snug hover:text-emerald-200 transition-colors">
+                      {EVENT_DETAILS.location.full}
+                    </p>
+                  </a>
                 </div>
               </div>
             </motion.div>
@@ -284,7 +298,8 @@ const ContactSection = () => {
           >
             <form
               onSubmit={handleSubmit}
-              className="bg-card/30 backdrop-blur-md border border-emerald-500/20 rounded-3xl p-8 md:p-10 space-y-6 relative overflow-hidden"
+              // COMPACT: Reduced internal padding and spacing
+              className="bg-card/30 backdrop-blur-md border border-emerald-500/20 rounded-3xl p-6 md:p-8 space-y-4 relative overflow-hidden"
               aria-label="Contact form"
             >
               <div className="absolute -top-20 -right-20 w-64 h-64 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none transform-gpu" />
@@ -292,7 +307,7 @@ const ContactSection = () => {
               <div className="relative z-10">
                 <label
                   htmlFor="name"
-                  className="block text-sm font-medium text-foreground mb-2"
+                  className="block text-xs font-bold text-emerald-400/80 uppercase tracking-widest mb-1.5"
                 >
                   Explorer Identity
                 </label>
@@ -306,7 +321,7 @@ const ContactSection = () => {
                   }
                   required
                   disabled={isSubmitting}
-                  className="w-full px-4 py-3 bg-black/40 border border-emerald-500/20 rounded-xl focus:outline-none focus:border-emerald-500/50 focus:ring-1 focus:ring-emerald-500/20 transition-all text-foreground placeholder:text-muted-foreground disabled:opacity-50"
+                  className={inputClasses}
                   placeholder="Your Name"
                   aria-required="true"
                 />
@@ -315,9 +330,9 @@ const ContactSection = () => {
               <div className="relative z-10">
                 <label
                   htmlFor="email"
-                  className="block text-sm font-medium text-foreground mb-2"
+                  className="block text-xs font-bold text-emerald-400/80 uppercase tracking-widest mb-1.5"
                 >
-                  Communication Channel (Email)
+                  Communication Channel
                 </label>
                 <input
                   type="email"
@@ -329,7 +344,7 @@ const ContactSection = () => {
                   }
                   required
                   disabled={isSubmitting}
-                  className="w-full px-4 py-3 bg-black/40 border border-emerald-500/20 rounded-xl focus:outline-none focus:border-emerald-500/50 focus:ring-1 focus:ring-emerald-500/20 transition-all text-foreground placeholder:text-muted-foreground disabled:opacity-50"
+                  className={inputClasses}
                   placeholder="your@email.com"
                   aria-required="true"
                 />
@@ -338,7 +353,7 @@ const ContactSection = () => {
               <div className="relative z-10">
                 <label
                   htmlFor="message"
-                  className="block text-sm font-medium text-foreground mb-2"
+                  className="block text-xs font-bold text-emerald-400/80 uppercase tracking-widest mb-1.5"
                 >
                   Message Payload
                 </label>
@@ -352,7 +367,7 @@ const ContactSection = () => {
                   required
                   disabled={isSubmitting}
                   rows={4}
-                  className="w-full px-4 py-3 bg-black/40 border border-emerald-500/20 rounded-xl focus:outline-none focus:border-emerald-500/50 focus:ring-1 focus:ring-emerald-500/20 transition-all text-foreground placeholder:text-muted-foreground resize-none disabled:opacity-50"
+                  className={`${inputClasses} resize-none`}
                   placeholder="Your transmission..."
                   aria-required="true"
                 />
@@ -361,7 +376,7 @@ const ContactSection = () => {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full px-8 py-4 bg-emerald-500 disabled:bg-emerald-500/50 disabled:cursor-not-allowed text-white font-semibold rounded-xl hover:bg-emerald-400 transition-all duration-300 flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(16,185,129,0.3)] hover:shadow-[0_0_30px_rgba(16,185,129,0.5)]"
+                className="w-full px-8 py-3.5 bg-emerald-500 disabled:bg-emerald-500/50 disabled:cursor-not-allowed text-white font-semibold rounded-xl hover:bg-emerald-400 transition-all duration-300 flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(16,185,129,0.3)] hover:shadow-[0_0_30px_rgba(16,185,129,0.5)] active:scale-[0.98] touch-manipulation"
                 aria-label={isSubmitting ? "Submitting form" : "Submit form"}
               >
                 {isSubmitting ? (
