@@ -83,7 +83,7 @@ export const EVENT_DATABASE: Record<string, EventDetails> = {
         artistName: "HASEEB KHAN",
         instagram: "https://www.instagram.com/haseebkhan01",
         date: "22 Jan",
-        time: "6:00 PM",
+        time: "8:00 PM",
         venue: "Auditorium",
       },
       {
@@ -92,7 +92,7 @@ export const EVENT_DATABASE: Record<string, EventDetails> = {
         artistName: "ANURAG HALDER",
         instagram: "https://www.instagram.com/anuraghalder_official",
         date: "22 Jan",
-        time: "8:00 PM",
+        time: "10:00 PM",
         venue: "Main Stage",
       },
       // DAY 2: 23rd Jan
@@ -102,7 +102,7 @@ export const EVENT_DATABASE: Record<string, EventDetails> = {
         artistName: "KUMAR VARUN",
         instagram: "https://www.instagram.com/randomvarun",
         date: "23 Jan",
-        time: "6:00 PM",
+        time: "8:00 PM",
         venue: "Auditorium",
       },
       {
@@ -111,7 +111,7 @@ export const EVENT_DATABASE: Record<string, EventDetails> = {
         artistName: "JAVED ALI",
         instagram: "https://www.instagram.com/javedali4u",
         date: "23 Jan",
-        time: "8:00 PM",
+        time: "10:00 PM",
         venue: "Main Stage",
       },
       // DAY 3: 24th Jan
@@ -121,7 +121,7 @@ export const EVENT_DATABASE: Record<string, EventDetails> = {
         artistName: "DJ PARTHO",
         instagram: "https://www.instagram.com/djpartho",
         date: "24 Jan",
-        time: "7:00 PM",
+        time: "9:00 PM",
         venue: "Main Ground",
       },
       {
@@ -130,7 +130,7 @@ export const EVENT_DATABASE: Record<string, EventDetails> = {
         artistName: "DJ SWATTREX",
         instagram: "https://www.instagram.com/swattrex",
         date: "24 Jan",
-        time: "9:00 PM",
+        time: "10:00 PM",
         venue: "Main Ground",
       },
     ],
