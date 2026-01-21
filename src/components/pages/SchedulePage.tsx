@@ -13,14 +13,13 @@ import {
   Star,
   Rocket,
 } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom"; // Added useLocation
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { SCHEDULE_DATA } from "@/config/scheduleData";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 
 // === OPTIMIZATION 1: Move static logic outside component ===
-// This prevents React from recalculating this function on every scroll frame.
 const getCategoryStyles = (category: string) => {
   switch (category) {
     case "Technical":
@@ -51,7 +50,9 @@ const getCategoryStyles = (category: string) => {
 };
 
 const SchedulePage = () => {
-  const [activeDay, setActiveDay] = useState(0);
+  const { state } = useLocation(); // Access navigation state
+  // Initialize activeDay from state if available, otherwise default to 0 (Day 1)
+  const [activeDay, setActiveDay] = useState(state?.activeDay || 0);
   const prefersReducedMotion = useReducedMotion();
 
   useEffect(() => {
@@ -63,9 +64,7 @@ const SchedulePage = () => {
       <Navbar />
 
       {/* === OPTIMIZATION 2: Hardware Accelerated Background === */}
-      {/* 'transform-gpu' forces the browser to handle this on the graphics card */}
       <div className="fixed inset-0 z-0 pointer-events-none transform-gpu will-change-transform">
-        {/* Gradients: Reduced blur radius slightly for performance */}
         <div className="absolute top-[-10%] left-[-10%] w-[40vw] h-[40vw] bg-blue-600/10 rounded-full blur-[60px]" />
         <div className="absolute bottom-[-10%] right-[-10%] w-[40vw] h-[40vw] bg-purple-600/10 rounded-full blur-[60px]" />
 
@@ -84,7 +83,7 @@ const SchedulePage = () => {
         <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 gap-4">
           <div>
             <Link
-              to="/"
+              to="/#schedule"
               className="inline-flex items-center gap-2 text-white/50 hover:text-cyan-400 transition-colors mb-6 group"
             >
               <ChevronLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
@@ -157,8 +156,7 @@ const SchedulePage = () => {
           </div>
         </div>
 
-        {/* === OPTIMIZATION 3: Stable Container Height === */}
-        {/* min-h-[600px] ensures the footer doesn't jump up when switching days, reducing visual jitter */}
+        {/* Timeline Container */}
         <div className="max-w-5xl mx-auto relative min-h-[800px]">
           <AnimatePresence mode="wait">
             <motion.div
@@ -166,7 +164,7 @@ const SchedulePage = () => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              transition={{ duration: 0.2 }} // Faster transition feels smoother
+              transition={{ duration: 0.2 }}
               className="relative pl-6 md:pl-0"
             >
               {/* Timeline Line */}
@@ -180,8 +178,6 @@ const SchedulePage = () => {
                   return (
                     <motion.div
                       key={index}
-                      // === OPTIMIZATION 4: Viewport Once ===
-                      // viewport={{ once: true }} stops the animation from re-playing when you scroll up/down
                       initial={
                         prefersReducedMotion
                           ? { opacity: 1 }
@@ -215,14 +211,14 @@ const SchedulePage = () => {
                           <div className="h-px flex-grow bg-white/10" />
                         </div>
 
-                        {/* Card - Added 'will-change-transform' for scroll performance */}
+                        {/* Event Card */}
                         <div className="group relative bg-[#0a0a0c]/80 backdrop-blur-md border border-white/10 rounded-xl p-5 hover:border-cyan-500/30 transition-all duration-300 will-change-transform">
-                          {/* Desktop Line */}
+                          {/* Desktop Connector Line */}
                           <div
                             className={`hidden md:block absolute top-1/2 h-px bg-cyan-500/20 w-12 ${isEven ? "right-[-48px]" : "left-[-48px]"}`}
                           />
 
-                          {/* Header */}
+                          {/* Card Header */}
                           <div className="flex justify-between items-start mb-3">
                             <div className="hidden md:flex items-center gap-2 text-cyan-400 font-mono text-sm font-bold">
                               <Clock className="w-3.5 h-3.5" />

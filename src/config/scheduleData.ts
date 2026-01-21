@@ -132,17 +132,17 @@ export const SCHEDULE_DATA = [
       },
       {
         time: "8:00 PM - 9:00 PM",
-        title: "Concert Night",
-        location: "Main Ground",
-        category: "Cultural",
-        description: "Live musical performance.",
-      },
-      {
-        time: "10:00 PM - 2:00 AM",
         title: "Stand Up Comedy",
         location: "Auditorium",
         category: "Cultural",
         description: "Late night comedy show.",
+      },
+      {
+        time: "10:00 PM - 2:00 AM",
+        title: "Concert Night",
+        location: "Main Ground",
+        category: "Cultural",
+        description: "Live musical performance.",
       },
     ],
   },
@@ -294,7 +294,7 @@ export const SCHEDULE_DATA = [
       {
         time: "9:00 PM - 2:00 AM",
         title: "DJ Night",
-        location: "Festival Ground",
+        location: "Main Ground",
         category: "Cultural",
         description: "EDM night finale.",
       },

@@ -16,13 +16,13 @@ const SponsorsSection = () => {
 
   // --- STYLING CONSTANTS ---
   const baseTileStyle =
-    "w-full flex items-center justify-center bg-white/80 backdrop-blur-md rounded-xl border border-white/20 transition-all duration-300 group-hover:bg-white group-hover:scale-[1.02] shadow-[0_0_15px_rgba(255,255,255,0.1)]";
+    "w-full flex items-center justify-center bg-white/90 backdrop-blur-md rounded-xl border border-white/20 transition-all duration-300 group-hover:bg-white group-hover:scale-[1.02] shadow-[0_0_15px_rgba(255,255,255,0.1)] relative overflow-hidden";
 
   const chiefTileStyle = `${baseTileStyle} p-4`;
   const partnerTileStyle = `${baseTileStyle} p-1.5`;
 
   const logoImageStyle =
-    "w-full h-full object-contain filter grayscale-0 opacity-100 drop-shadow-sm transition-all duration-500";
+    "w-full h-full object-contain filter grayscale-0 opacity-100 drop-shadow-sm transition-all duration-500 relative z-10";
 
   return (
     <section
@@ -30,6 +30,22 @@ const SponsorsSection = () => {
       className="py-24 relative overflow-hidden nebula-jupiter"
       aria-labelledby="sponsors-heading"
     >
+      {/* CSS Animation for Marquee (Ensures Pause on Hover works instantly) */}
+      <style>{`
+        @keyframes scroll {
+          0% { transform: translateX(0); }
+          100% { transform: translateX(-50%); }
+        }
+        .animate-marquee {
+          display: flex;
+          width: max-content;
+          animation: scroll 40s linear infinite;
+        }
+        .marquee-container:hover .animate-marquee {
+          animation-play-state: paused;
+        }
+      `}</style>
+
       {/* Jupiter Planet */}
       <div className="absolute -left-32 top-1/4 opacity-60" aria-hidden="true">
         <Planet
@@ -73,7 +89,8 @@ const SponsorsSection = () => {
             {/* Background Glow */}
             <div className="absolute inset-0 bg-gradient-to-r from-amber-500/20 via-orange-500/10 to-amber-500/20 rounded-2xl blur-xl opacity-50 group-hover:opacity-80 transition-opacity duration-700" />
 
-            <div className="relative bg-black/50 backdrop-blur-xl border border-amber-500/40 rounded-2xl p-6 text-center hover:border-amber-400/60 transition-all duration-300">
+            {/* Static Card */}
+            <div className="block relative bg-black/50 backdrop-blur-xl border border-amber-500/40 rounded-2xl p-6 text-center hover:border-amber-400/60 transition-all duration-300">
               <div className="flex flex-col items-center gap-4">
                 <span className="inline-flex items-center gap-1.5 text-xs text-amber-300 font-bold tracking-[0.15em] uppercase bg-amber-500/10 px-3 py-1 rounded-full border border-amber-500/10">
                   <Crown className="w-3.5 h-3.5" fill="currentColor" />
@@ -81,6 +98,9 @@ const SponsorsSection = () => {
                 </span>
 
                 <div className={`h-28 ${chiefTileStyle}`}>
+                  {/* Subtle Shine Effect */}
+                  <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/40 to-transparent opacity-0 group-hover:animate-shine z-0 pointer-events-none" />
+
                   <img
                     src={CHIEF_SPONSOR.logo}
                     alt={`${CHIEF_SPONSOR.name} logo`}
@@ -116,8 +136,12 @@ const SponsorsSection = () => {
             >
               <div className="absolute inset-0 bg-gradient-to-br from-amber-500/10 to-transparent rounded-xl blur-lg opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
-              <div className="relative h-full flex flex-col bg-card/20 backdrop-blur-sm border border-white/10 rounded-xl p-6 text-center hover:border-amber-500/40 transition-all duration-300 hover:-translate-y-0.5 shadow-md">
+              {/* Static Card */}
+              <div className="block relative h-full flex flex-col bg-card/20 backdrop-blur-sm border border-white/10 rounded-xl p-6 text-center hover:border-amber-500/40 transition-all duration-300 hover:-translate-y-0.5 shadow-md">
+                {/* Logo Container */}
                 <div className={`h-20 mb-4 ${partnerTileStyle}`}>
+                  {/* Subtle Shine Effect */}
+                  <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/40 to-transparent opacity-0 group-hover:animate-shine z-0 pointer-events-none" />
                   <img
                     src={sponsor.logo}
                     alt={`${sponsor.name} logo`}
@@ -125,42 +149,43 @@ const SponsorsSection = () => {
                   />
                 </div>
 
-                <div className="mt-auto border-t border-white/10 pt-3">
-                  <span className="inline-flex items-center gap-1.5 text-xs text-amber-400 font-bold tracking-wider uppercase drop-shadow-sm">
-                    <Zap className="w-3 h-3" fill="currentColor" />
-                    {sponsor.tier}
-                  </span>
+                {/* Name & Tier */}
+                <div className="mt-auto flex flex-col items-center gap-2">
+                  <h3 className="font-display text-xl text-white drop-shadow-md">
+                    {sponsor.name}
+                  </h3>
+
+                  <div className="border-t border-white/10 pt-2 w-full">
+                    <span className="inline-flex items-center gap-1.5 text-xs text-amber-400 font-bold tracking-wider uppercase drop-shadow-sm">
+                      <Zap className="w-3 h-3" fill="currentColor" />
+                      {sponsor.tier}
+                    </span>
+                  </div>
                 </div>
               </div>
             </motion.div>
           ))}
         </div>
 
-        {/* === MARQUEE BANNER === */}
+        {/* === MARQUEE BANNER (CSS Animated) === */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={isInView ? { opacity: 1 } : {}}
           transition={{ delay: 0.6, duration: 1 }}
-          className="relative w-full overflow-hidden border-y border-amber-500/20 py-4 bg-amber-950/10 backdrop-blur-md"
+          className="marquee-container relative w-full overflow-hidden border-y border-amber-500/20 py-4 bg-amber-950/10 backdrop-blur-md"
         >
-          <div className="absolute left-0 top-0 bottom-0 w-16 bg-gradient-to-r from-[#030305] to-transparent z-10" />
-          <div className="absolute right-0 top-0 bottom-0 w-16 bg-gradient-to-l from-[#030305] to-transparent z-10" />
+          {/* Fade Edges */}
+          <div className="absolute left-0 top-0 bottom-0 w-16 bg-gradient-to-r from-[#030305] to-transparent z-10 pointer-events-none" />
+          <div className="absolute right-0 top-0 bottom-0 w-16 bg-gradient-to-l from-[#030305] to-transparent z-10 pointer-events-none" />
 
+          {/* Scrolling Content */}
           <div className="flex items-center">
-            <motion.div
-              // OPTIMIZATION: will-change-transform for smooth scrolling
-              className="flex items-center flex-nowrap will-change-transform"
-              animate={prefersReducedMotion ? {} : { x: ["0%", "-50%"] }}
-              transition={{
-                repeat: Infinity,
-                ease: "linear",
-                duration: 30,
-              }}
-            >
+            <div className="animate-marquee flex items-center flex-nowrap">
+              {/* Duplicated list to create seamless loop */}
               {[...OTHER_SPONSORS, ...OTHER_SPONSORS].map((sponsor, i) => (
                 <div
                   key={i}
-                  className="flex items-center gap-3 group cursor-default shrink-0 pr-12"
+                  className="flex items-center gap-3 group cursor-default shrink-0 pr-16 opacity-70 hover:opacity-100 transition-opacity"
                 >
                   <Sparkles className="w-3 h-3 text-amber-500/60 group-hover:text-amber-400 transition-colors" />
 
@@ -175,7 +200,7 @@ const SponsorsSection = () => {
                   </div>
                 </div>
               ))}
-            </motion.div>
+            </div>
           </div>
         </motion.div>
       </div>

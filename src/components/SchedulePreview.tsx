@@ -1,4 +1,3 @@
-// src/components/SchedulePreview.tsx
 import { motion } from "framer-motion";
 import { Calendar, ArrowRight, Star } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -42,18 +41,22 @@ const SchedulePreview = () => {
         {/* 3 Compact Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {SCHEDULE_DATA.map((day, index) => (
-            <Link to="/schedule" key={day.day} className="block group h-full">
+            <Link
+              to="/schedule"
+              state={{ activeDay: index }} // <--- THIS LINE ENABLES DIRECT NAVIGATION
+              key={day.day}
+              className="block group h-full"
+            >
               <motion.div
                 // === SMOOTH ANIMATION SETTINGS ===
-                initial={{ opacity: 0, y: 20 }} // Reduced Y distance for subtlety
+                initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-10%" }} // Triggers slightly earlier
+                viewport={{ once: true, margin: "-10%" }}
                 transition={{
-                  duration: 0.8, // Slower duration
-                  delay: index * 0.15, // Slightly more gap between cards
-                  ease: [0.21, 0.47, 0.32, 0.98], // Custom "Soft Landing" Bezier Curve
+                  duration: 0.8,
+                  delay: index * 0.15,
+                  ease: [0.21, 0.47, 0.32, 0.98],
                 }}
-                // Hardware acceleration styles
                 style={{
                   backfaceVisibility: "hidden",
                   WebkitBackfaceVisibility: "hidden",

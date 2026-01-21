@@ -26,6 +26,7 @@ export interface EventDetails {
     missionTitle: string;
     artistRole: string;
     artistName: string;
+    instagram?: string; // New field for Insta ID
     date: string;
     time: string;
     venue: string;
@@ -61,11 +62,11 @@ export const EVENT_DATABASE: Record<string, EventDetails> = {
     title: "PRO NITES",
     subtitle: "The Galaxy's Loudest Symphony",
     description:
-      "Prepare for liftoff as we initiate the primary sequence of Ethos 2026. This isn't just a concert; it's a sonic journey through three distinct phases. From soul-stirring melodies to earth-shattering laughter and high-energy beats, witness the convergence of stars on the main deck.",
+      "Prepare for a three-day sonic voyage at Ethos 2026. From the laughter-filled echoes of comedy to the soul-stirring melodies of Sufi rock and the high-octane bass drops of EDM, the main stage transforms into a portal of pure energy. Witness six stellar acts lighting up the Sambalpur sky.",
     image:
       "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?q=80&w=2070&auto=format&fit=crop",
     bannerImage: proNiteBannner,
-    date: "24 Jan 2026",
+    date: "22-24 Jan 2026",
     location: "Main Ground",
     prize: "N/A",
     registerLink: "",
@@ -75,29 +76,62 @@ export const EVENT_DATABASE: Record<string, EventDetails> = {
       "No outside food or beverages permitted.",
     ],
     lineup: [
+      // DAY 1: 22nd Jan
       {
-        missionTitle: "Mission #1",
-        artistRole: "The Melody Voyager",
-        artistName: "JAVED ALI",
-        date: "24 Jan",
+        missionTitle: "Day 1: Laughter Launch",
+        artistRole: "Stand-up Comedian",
+        artistName: "HASEEB KHAN",
+        instagram: "https://www.instagram.com/haseebkhan01",
+        date: "22 Jan",
         time: "6:00 PM",
-        venue: "Main Stage",
+        venue: "Auditorium",
       },
       {
-        missionTitle: "Mission #2",
+        missionTitle: "Day 1: Acoustic Orbit",
+        artistRole: "Singer-Songwriter",
+        artistName: "ANURAG HALDER",
+        instagram: "https://www.instagram.com/anuraghalder_official",
+        date: "22 Jan",
+        time: "8:00 PM",
+        venue: "Main Stage",
+      },
+      // DAY 2: 23rd Jan
+      {
+        missionTitle: "Day 2: Comic Relief",
         artistRole: "The Cosmic Jester",
         artistName: "KUMAR VARUN",
-        date: "24 Jan",
-        time: "7:30 PM",
-        venue: "Main Stage",
+        instagram: "https://www.instagram.com/randomvarun",
+        date: "23 Jan",
+        time: "6:00 PM",
+        venue: "Auditorium",
       },
       {
-        missionTitle: "Mission #3",
+        missionTitle: "Day 2: Sufi Starlight",
+        artistRole: "The Melody Voyager",
+        artistName: "JAVED ALI",
+        instagram: "https://www.instagram.com/javedali4u",
+        date: "23 Jan",
+        time: "8:00 PM",
+        venue: "Main Stage",
+      },
+      // DAY 3: 24th Jan
+      {
+        missionTitle: "Day 3: Bass Boost",
+        artistRole: "Electronic Artist",
+        artistName: "DJ PARTHO",
+        instagram: "https://www.instagram.com/djpartho",
+        date: "24 Jan",
+        time: "7:00 PM",
+        venue: "Main Ground",
+      },
+      {
+        missionTitle: "Day 3: Sonic Finale",
         artistRole: "The Sonic Pilot",
-        artistName: "SWATTREX",
+        artistName: "DJ SWATTREX",
+        instagram: "https://www.instagram.com/swattrex",
         date: "24 Jan",
         time: "9:00 PM",
-        venue: "Main Stage",
+        venue: "Main Ground",
       },
     ],
   },

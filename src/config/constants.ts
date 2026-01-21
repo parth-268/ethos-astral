@@ -82,7 +82,7 @@ export const EVENT_DETAILS = {
   },
   contact: {
     email: "ethos@iimsambalpur.ac.in",
-    phone: "+91 77386 62192",
+    phone: "+91 75033 92210",
   },
   social: {
     instagram: "https://www.instagram.com/ethos.iimsambalpur",
@@ -157,7 +157,7 @@ export const CHIEF_SPONSOR = {
 
 export const PARTNERS = [
   {
-    name: "MCL",
+    name: "Mahanadi Coalfields Limited",
     logo: "/sponsors/mcl_logo.png",
     tier: "Co-Sponsor",
   },
@@ -170,12 +170,10 @@ export const OTHER_SPONSORS = [
   { name: "Times of India", type: "Official Print Partner" },
   { name: "Urban Housy", type: "Official Infrastructure Partner" },
   { name: "Pizza Hut", type: "Fest Flavour Partner" },
-  { name: "Tattva Wellness", type: "Official Wellness Partner" },
   { name: "Sach Kahoon", type: "Media Partner" },
   { name: "Clay Kitchen", type: "Official Restaurant Partner" },
   { name: "KFC", type: "Restaurant Partner" },
   { name: "Silver Moon", type: "Hospitality Partner" },
-  { name: "Regenta", type: "Hospitality Partner" },
   { name: "Nayab Tours and Travels", type: "Official Travel Partner" },
   { name: "Sakshi Handloom", type: "Official Handloom Partner" },
   { name: "Belgian Waffle", type: "Waffle Partner" },
