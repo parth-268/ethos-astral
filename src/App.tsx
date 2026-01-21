@@ -1,4 +1,4 @@
-// src/App.tsx - Optimized Version
+// src/App.tsx
 import { Suspense, lazy } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -6,7 +6,8 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import ErrorBoundary from "./components/ErrorBoundary";
-import ScrollToTop from "./components/ScrollToTop";
+import ScrollToTop from "./components/ScrollToTop"; // Logic: Auto-scroll on route change
+import BackToTopButton from "./components/BackToTopButton"; // UI: Rocket Button (Add this import)
 import SchedulePage from "./components/pages/SchedulePage";
 
 // Lazy load pages for better performance
@@ -47,7 +48,12 @@ const App = () => {
           <Toaster />
           <Sonner />
           <BrowserRouter>
+            {/* 1. Logic: Resets scroll position when route changes */}
             <ScrollToTop />
+
+            {/* 2. UI: The manual 'Rocket' button (Visible on all pages) */}
+            <BackToTopButton />
+
             <Suspense fallback={<PageLoader />}>
               <Routes>
                 <Route path="/" element={<Index />} />
