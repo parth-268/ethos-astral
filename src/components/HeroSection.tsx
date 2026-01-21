@@ -1,19 +1,12 @@
 import { motion } from "framer-motion";
-import {
-  Calendar,
-  MapPin,
-  Sparkles,
-  Rocket,
-  Radio,
-  ChevronRight,
-} from "lucide-react";
+import { Calendar, MapPin, Sparkles, Rocket, ChevronRight } from "lucide-react";
 import { useState, useEffect } from "react";
 import Planet from "./Planet";
 import ethosLogo from "../assets/ethos_logo_3.png";
 import { EVENT_DETAILS } from "@/config/constants";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 
-// --- HELPERS ---
+// --- HELPERS (Outside component for performance) ---
 const getTargetDate = () => {
   return new Date(`${EVENT_DETAILS.dates.start}T00:00:00+05:30`);
 };
@@ -59,7 +52,7 @@ const HeroSection = () => {
   return (
     <section
       id="hero"
-      // RESTORED ORIGINAL PADDING
+      // ORIGINAL PADDING RESTORED (pt-20 pb-20)
       className="relative min-h-screen flex items-center justify-center overflow-hidden nebula-sun pt-20 pb-20 md:py-0 transform-gpu"
     >
       {/* 1. BACKGROUND RAYS */}
@@ -74,7 +67,7 @@ const HeroSection = () => {
         />
       </div>
 
-      {/* 2. PLANETS */}
+      {/* 2. PLANETS & ASTEROIDS */}
       <div
         className="absolute inset-0 overflow-hidden pointer-events-none"
         aria-hidden="true"
@@ -87,6 +80,23 @@ const HeroSection = () => {
             delay={0.5}
           />
         </div>
+
+        {[...Array(6)].map((_, i) => (
+          <motion.div
+            key={i}
+            className="absolute w-1 h-1 md:w-2 md:h-2 bg-foreground/40 rounded-full will-change-transform"
+            style={{
+              left: `${20 + i * 15}%`,
+              top: `${10 + i * 12}%`,
+            }}
+            animate={
+              prefersReducedMotion
+                ? {}
+                : { y: [0, -30, 0], opacity: [0.3, 0.7, 0.3] }
+            }
+            transition={{ duration: 4 + i, repeat: Infinity, delay: i * 0.5 }}
+          />
+        ))}
       </div>
 
       {/* 3. MAIN CONTENT */}
@@ -150,7 +160,7 @@ const HeroSection = () => {
           transition={{ duration: 0.8, delay: 0.8 }}
           className="flex flex-col sm:flex-row items-center justify-center gap-3 md:gap-6 mb-6 touch-manipulation"
         >
-          {/* HIGHLIGHTED DATE BUTTON */}
+          {/* Highlighted Date Button */}
           <div className="relative w-full sm:w-auto">
             <div className="absolute inset-0 bg-amber-500/20 rounded-full blur-md animate-pulse" />
             <div className="relative flex items-center justify-center gap-3 bg-black/50 border border-amber-500/50 px-5 py-2.5 rounded-full backdrop-blur-md">
@@ -226,7 +236,7 @@ const HeroSection = () => {
               </div>
             </div>
           ) : (
-            // SLEEK LIVE STATUS BAR
+            // SLEEK LIVE STATUS BAR (Restored Original Wordings)
             <motion.div
               animate={{
                 boxShadow: [
@@ -243,6 +253,7 @@ const HeroSection = () => {
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
                   <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-red-500"></span>
                 </span>
+                {/* Wordings restored */}
                 <span className="text-xs font-bold tracking-[0.2em] text-red-100 uppercase">
                   Transmission Live
                 </span>
@@ -254,6 +265,7 @@ const HeroSection = () => {
                 href="#about"
                 className="flex items-center gap-2 bg-red-600 hover:bg-red-500 text-white text-[10px] md:text-xs font-bold uppercase tracking-wider px-4 py-2 rounded-full transition-all shadow-[0_0_15px_rgba(220,38,38,0.4)] group-hover:shadow-[0_0_25px_rgba(220,38,38,0.6)]"
               >
+                {/* Wordings restored */}
                 Enter The Cosmos <ChevronRight className="w-3 h-3" />
               </a>
             </motion.div>
