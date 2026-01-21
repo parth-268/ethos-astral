@@ -6,29 +6,36 @@ import ethosLogo from "../assets/ethos_logo_3.png";
 import { EVENT_DETAILS } from "@/config/constants";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 
+// --- HELPERS (Moved outside to fix ESLint & Performance) ---
+const getTargetDate = () => {
+  return new Date(`${EVENT_DETAILS.dates.start}T07:00:00+05:30`);
+};
+
+const calculateTimeLeft = () => {
+  const targetDate = getTargetDate();
+  const difference = +targetDate - +new Date();
+
+  if (difference <= 0) {
+    return { days: 0, hours: 0, minutes: 0, seconds: 0 };
+  }
+  return {
+    days: Math.floor(difference / (1000 * 60 * 60 * 24)),
+    hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
+    minutes: Math.floor((difference / 1000 / 60) % 60),
+    seconds: Math.floor((difference / 1000) % 60),
+  };
+};
+
 const HeroSection = () => {
   const prefersReducedMotion = useReducedMotion();
   const [isLive, setIsLive] = useState(false);
-
-  // --- COUNTDOWN LOGIC ---
-  const calculateTimeLeft = () => {
-    const difference = +new Date(EVENT_DETAILS.dates.start) - +new Date();
-    if (difference <= 0) {
-      return { days: 0, hours: 0, minutes: 0, seconds: 0 };
-    }
-    return {
-      days: Math.floor(difference / (1000 * 60 * 60 * 24)),
-      hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
-      minutes: Math.floor((difference / 1000 / 60) % 60),
-      seconds: Math.floor((difference / 1000) % 60),
-    };
-  };
-
   const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
 
   useEffect(() => {
     const updateTimer = () => {
-      const difference = +new Date(EVENT_DETAILS.dates.start) - +new Date();
+      const targetDate = getTargetDate();
+      const difference = +targetDate - +new Date();
+
       if (difference <= 0) {
         setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0 });
         setIsLive(true);
@@ -37,15 +44,51 @@ const HeroSection = () => {
         setIsLive(false);
       }
     };
+
+    // Initial check
     updateTimer();
+
     const timer = setInterval(updateTimer, 1000);
     return () => clearInterval(timer);
-  }, []);
+  }, []); // Empty dependency array is now 100% correct
+
+  // --- ANIMATION CONFIGURATION ---
+  const containerGlow = {
+    boxShadow: [
+      "0 0 0px rgba(6, 182, 212, 0)",
+      "0 0 20px rgba(6, 182, 212, 0.3)",
+      "0 0 0px rgba(6, 182, 212, 0)",
+    ],
+    borderColor: [
+      "rgba(255, 255, 255, 0.1)",
+      "rgba(6, 182, 212, 0.5)",
+      "rgba(255, 255, 255, 0.1)",
+    ],
+    transition: {
+      duration: 3,
+      repeat: Infinity,
+      repeatType: "reverse" as const,
+      ease: "easeInOut" as const,
+    },
+  };
+
+  const glassSheen = {
+    initial: { x: "-100%", opacity: 0 },
+    animate: {
+      x: "200%",
+      opacity: [0, 0.5, 0],
+    },
+    transition: {
+      repeat: Infinity,
+      repeatDelay: 2,
+      duration: 1.5,
+      ease: "linear" as const,
+    },
+  };
 
   return (
     <section
       id="hero"
-      // Added transform-gpu to force hardware acceleration
       className="relative min-h-screen flex items-center justify-center overflow-hidden nebula-sun pt-20 pb-20 md:py-0 transform-gpu"
     >
       {/* 1. BACKGROUND RAYS */}
@@ -57,7 +100,6 @@ const HeroSection = () => {
             repeat: prefersReducedMotion ? 0 : Infinity,
             ease: "linear",
           }}
-          // will-change-transform ensures the browser optimizes this animation
           className="absolute -top-1/2 -left-1/2 w-[200%] h-[200%] opacity-30 will-change-transform"
           style={{
             background: `conic-gradient(from 0deg, transparent, hsl(270 80% 65% / 0.1), transparent, hsl(185 100% 60% / 0.1), transparent)`,
@@ -70,7 +112,6 @@ const HeroSection = () => {
         className="absolute inset-0 overflow-hidden pointer-events-none"
         aria-hidden="true"
       >
-        {/* Main Sun Planet - Fixed Position */}
         <div className="absolute -right-20 top-20 opacity-60 md:-right-32 md:top-1/4">
           <Planet
             size="w-48 h-48 md:w-96 md:h-96"
@@ -80,7 +121,6 @@ const HeroSection = () => {
           />
         </div>
 
-        {/* Orbiting Moon */}
         <motion.div
           animate={prefersReducedMotion ? {} : { rotate: 360 }}
           transition={{
@@ -96,7 +136,6 @@ const HeroSection = () => {
           />
         </motion.div>
 
-        {/* Asteroid field */}
         {[...Array(6)].map((_, i) => (
           <motion.div
             key={i}
@@ -209,7 +248,7 @@ const HeroSection = () => {
           art, and cosmic competition.
         </motion.p>
 
-        {/* Buttons - OPTIMIZED: Added touch-manipulation */}
+        {/* Buttons */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
@@ -254,91 +293,103 @@ const HeroSection = () => {
           }}
           className="mb-3 md:mb-6 flex justify-center w-full"
         >
-          <div
-            className={`relative w-[90%] sm:w-fit mx-auto transition-all duration-500 ${
+          <motion.div
+            animate={!isLive && !prefersReducedMotion ? containerGlow : {}}
+            className={`relative overflow-hidden w-[90%] sm:w-fit mx-auto transition-all duration-500 ${
               isLive
                 ? "bg-red-500/10 border-red-500/30 px-8 py-4"
                 : "bg-white/5 border-white/10 px-6 py-3 md:px-12 md:py-3"
-            } border backdrop-blur-md rounded-xl md:rounded-2xl shadow-[0_0_30px_rgba(0,0,0,0.4)]`}
+            } border backdrop-blur-md rounded-xl md:rounded-2xl`}
           >
-            {!isLive ? (
-              <div className="grid grid-cols-4 gap-2 md:gap-12 text-center divide-x divide-white/10">
-                <div className="flex flex-col items-center px-1">
-                  {/* OPTIMIZATION: tabular-nums prevents jitter */}
-                  <span className="tabular-nums font-mono font-bold text-3xl md:text-4xl text-transparent bg-clip-text bg-gradient-to-b from-white to-blue-200 leading-none">
-                    {timeLeft.days}
-                  </span>
-                  <span className="text-[9px] md:text-xs text-blue-400 uppercase font-sans tracking-widest mt-1">
-                    Days
-                  </span>
-                </div>
-                <div className="flex flex-col items-center px-1">
-                  <span className="tabular-nums font-mono font-bold text-3xl md:text-4xl text-transparent bg-clip-text bg-gradient-to-b from-white to-blue-200 leading-none">
-                    {timeLeft.hours}
-                  </span>
-                  <span className="text-[9px] md:text-xs text-blue-400 uppercase font-sans tracking-widest mt-1">
-                    Hrs
-                  </span>
-                </div>
-                <div className="flex flex-col items-center px-1">
-                  <span className="tabular-nums font-mono font-bold text-3xl md:text-4xl text-transparent bg-clip-text bg-gradient-to-b from-white to-blue-200 leading-none">
-                    {timeLeft.minutes}
-                  </span>
-                  <span className="text-[9px] md:text-xs text-blue-400 uppercase font-sans tracking-widest mt-1">
-                    Mins
-                  </span>
-                </div>
-                <div className="flex flex-col items-center px-1">
-                  <span className="tabular-nums font-mono font-bold text-3xl md:text-4xl text-transparent bg-clip-text bg-gradient-to-b from-white to-blue-200 leading-none min-w-[1.5ch]">
-                    {timeLeft.seconds}
-                  </span>
-                  <span className="text-[9px] md:text-xs text-blue-400 uppercase font-sans tracking-widest mt-1">
-                    Secs
-                  </span>
-                </div>
-              </div>
-            ) : (
-              <div className="flex flex-col md:flex-row items-center gap-4 md:gap-8">
-                <div className="relative flex items-center justify-center">
-                  <motion.div
-                    animate={
-                      prefersReducedMotion
-                        ? { opacity: 0.5 }
-                        : { scale: [1, 1.5, 1], opacity: [0.5, 0, 0.5] }
-                    }
-                    transition={
-                      prefersReducedMotion
-                        ? {}
-                        : { duration: 2, repeat: Infinity }
-                    }
-                    className="absolute w-full h-full bg-red-500 rounded-full blur-md"
-                  />
-                  <div className="relative w-3 h-3 bg-red-500 rounded-full shadow-[0_0_10px_#ef4444]" />
-                </div>
-                <div className="text-center md:text-left">
-                  <div className="flex items-center justify-center md:justify-start gap-2 mb-1">
-                    <Radio
-                      className={`w-4 h-4 text-red-400 ${prefersReducedMotion ? "" : "animate-pulse"}`}
-                    />
-                    <span className="text-xs font-bold tracking-[0.3em] text-red-400 uppercase">
-                      Transmission Live
+            {/* THE "SHEEN" EFFECT LAYER */}
+            {!isLive && !prefersReducedMotion && (
+              <motion.div
+                className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent skew-x-12 z-0 pointer-events-none"
+                initial={glassSheen.initial}
+                animate={glassSheen.animate}
+                transition={glassSheen.transition}
+              />
+            )}
+
+            <div className="relative z-10">
+              {!isLive ? (
+                <div className="grid grid-cols-4 gap-2 md:gap-12 text-center divide-x divide-white/10">
+                  <div className="flex flex-col items-center px-1">
+                    <span className="tabular-nums font-mono font-bold text-3xl md:text-4xl text-transparent bg-clip-text bg-gradient-to-b from-white to-blue-200 leading-none">
+                      {timeLeft.days}
+                    </span>
+                    <span className="text-[9px] md:text-xs text-blue-400 uppercase font-sans tracking-widest mt-1">
+                      Days
                     </span>
                   </div>
-                  <h3 className="text-xl md:text-2xl font-display text-white tracking-wider uppercase drop-shadow-md">
-                    Lift Off Confirmed
-                  </h3>
+                  <div className="flex flex-col items-center px-1">
+                    <span className="tabular-nums font-mono font-bold text-3xl md:text-4xl text-transparent bg-clip-text bg-gradient-to-b from-white to-blue-200 leading-none">
+                      {timeLeft.hours}
+                    </span>
+                    <span className="text-[9px] md:text-xs text-blue-400 uppercase font-sans tracking-widest mt-1">
+                      Hrs
+                    </span>
+                  </div>
+                  <div className="flex flex-col items-center px-1">
+                    <span className="tabular-nums font-mono font-bold text-3xl md:text-4xl text-transparent bg-clip-text bg-gradient-to-b from-white to-blue-200 leading-none">
+                      {timeLeft.minutes}
+                    </span>
+                    <span className="text-[9px] md:text-xs text-blue-400 uppercase font-sans tracking-widest mt-1">
+                      Mins
+                    </span>
+                  </div>
+                  <div className="flex flex-col items-center px-1">
+                    <span className="tabular-nums font-mono font-bold text-3xl md:text-4xl text-transparent bg-clip-text bg-gradient-to-b from-white to-blue-200 leading-none min-w-[1.5ch]">
+                      {timeLeft.seconds}
+                    </span>
+                    <span className="text-[9px] md:text-xs text-blue-400 uppercase font-sans tracking-widest mt-1">
+                      Secs
+                    </span>
+                  </div>
                 </div>
-                <motion.a
-                  href="#about"
-                  whileHover={prefersReducedMotion ? {} : { scale: 1.05 }}
-                  whileTap={prefersReducedMotion ? {} : { scale: 0.95 }}
-                  className="mt-2 md:mt-0 px-6 py-2 bg-gradient-to-r from-red-600 to-orange-600 text-white text-sm font-bold tracking-wider uppercase rounded-full shadow-lg hover:shadow-red-500/30 transition-shadow flex items-center gap-2 touch-manipulation"
-                >
-                  Enter The Cosmos <Rocket className="w-4 h-4" />
-                </motion.a>
-              </div>
-            )}
-          </div>
+              ) : (
+                <div className="flex flex-col md:flex-row items-center gap-4 md:gap-8">
+                  <div className="relative flex items-center justify-center">
+                    <motion.div
+                      animate={
+                        prefersReducedMotion
+                          ? { opacity: 0.5 }
+                          : { scale: [1, 1.5, 1], opacity: [0.5, 0, 0.5] }
+                      }
+                      transition={
+                        prefersReducedMotion
+                          ? {}
+                          : { duration: 2, repeat: Infinity }
+                      }
+                      className="absolute w-full h-full bg-red-500 rounded-full blur-md"
+                    />
+                    <div className="relative w-3 h-3 bg-red-500 rounded-full shadow-[0_0_10px_#ef4444]" />
+                  </div>
+                  <div className="text-center md:text-left">
+                    <div className="flex items-center justify-center md:justify-start gap-2 mb-1">
+                      <Radio
+                        className={`w-4 h-4 text-red-400 ${prefersReducedMotion ? "" : "animate-pulse"}`}
+                      />
+                      <span className="text-xs font-bold tracking-[0.3em] text-red-400 uppercase">
+                        Transmission Live
+                      </span>
+                    </div>
+                    <h3 className="text-xl md:text-2xl font-display text-white tracking-wider uppercase drop-shadow-md">
+                      Lift Off Confirmed
+                    </h3>
+                  </div>
+                  <motion.a
+                    href="#about"
+                    whileHover={prefersReducedMotion ? {} : { scale: 1.05 }}
+                    whileTap={prefersReducedMotion ? {} : { scale: 0.95 }}
+                    className="mt-2 md:mt-0 px-6 py-2 bg-gradient-to-r from-red-600 to-orange-600 text-white text-sm font-bold tracking-wider uppercase rounded-full shadow-lg hover:shadow-red-500/30 transition-shadow flex items-center gap-2 touch-manipulation"
+                  >
+                    Enter The Cosmos <Rocket className="w-4 h-4" />
+                  </motion.a>
+                </div>
+              )}
+            </div>
+          </motion.div>
         </motion.div>
 
         {/* === SCROLL INDICATOR === */}
