@@ -33,8 +33,13 @@ const EventDetails = () => {
 
   const data = EVENT_DATABASE[eventId || ""] || DEFAULT_EVENT;
   const optimizedImage = getOptimizedImageUrl(data.image, "large");
+  // Banner 1
   const optimizedBanner = data.bannerImage
     ? getOptimizedImageUrl(data.bannerImage, "large")
+    : null;
+  // Banner 2
+  const optimizedBanner2 = data.secondaryBannerImage
+    ? getOptimizedImageUrl(data.secondaryBannerImage, "large")
     : null;
 
   const getMissionIcon = (index: number) => {
@@ -68,7 +73,6 @@ const EventDetails = () => {
     <div className="min-h-screen bg-[#030305] text-white selection:bg-blue-500/30">
       <Navbar />
 
-      {/* Hero Header - Slightly reduced height for compactness */}
       <header className="relative h-[50vh] md:h-[55vh] overflow-hidden flex items-end pb-12 md:pb-16">
         <div className="absolute inset-0 z-0">
           <img
@@ -112,44 +116,68 @@ const EventDetails = () => {
       <main className="container mx-auto px-4 py-8 md:py-12 relative z-10">
         {data.lineup ? (
           <div className="space-y-10">
-            {/* 1. Briefing & Banner - Compacted */}
-            <div className="max-w-5xl mx-auto grid md:grid-cols-2 gap-8 items-center">
+            {/* 1. Briefing & Banners */}
+            <div className="max-w-6xl mx-auto space-y-8">
               <motion.div
                 initial={{ opacity: 0, x: -20 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
+                className="text-center md:text-left"
               >
-                <h2 className="font-display text-2xl text-white mb-4 flex items-center gap-2">
+                <h2 className="font-display text-2xl text-white mb-4 flex items-center justify-center md:justify-start gap-2">
                   <Sparkles className="w-5 h-5 text-blue-400" />
                   Mission Brief
                 </h2>
-                <p className="text-gray-300 leading-relaxed text-base md:text-lg whitespace-pre-line">
+                <p className="text-gray-300 leading-relaxed text-base md:text-lg whitespace-pre-line max-w-4xl">
                   {data.description}
                 </p>
               </motion.div>
 
-              {optimizedBanner && (
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.95 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
-                  viewport={{ once: true }}
-                  className="relative w-full aspect-video rounded-xl overflow-hidden border border-white/10 shadow-2xl shadow-blue-900/20"
+              {/* Dynamic Banner Grid: Shows 1 or 2 banners based on availability */}
+              {(optimizedBanner || optimizedBanner2) && (
+                <div
+                  className={`grid gap-6 ${optimizedBanner2 ? "grid-cols-1 md:grid-cols-2" : "grid-cols-1"}`}
                 >
-                  <img
-                    src={optimizedBanner}
-                    alt="Mission Banner"
-                    className="w-full h-full object-cover"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#030305]/40 to-transparent" />
-                </motion.div>
+                  {optimizedBanner && (
+                    <motion.div
+                      initial={{ opacity: 0, scale: 0.95 }}
+                      whileInView={{ opacity: 1, scale: 1 }}
+                      viewport={{ once: true }}
+                      className="relative w-full aspect-video rounded-xl overflow-hidden border border-white/10 shadow-2xl shadow-blue-900/20 group"
+                    >
+                      <img
+                        src={optimizedBanner}
+                        alt="Mission Banner 1"
+                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-[#030305]/40 to-transparent" />
+                    </motion.div>
+                  )}
+
+                  {optimizedBanner2 && (
+                    <motion.div
+                      initial={{ opacity: 0, scale: 0.95 }}
+                      whileInView={{ opacity: 1, scale: 1 }}
+                      viewport={{ once: true }}
+                      transition={{ delay: 0.1 }}
+                      className="relative w-full aspect-video rounded-xl overflow-hidden border border-white/10 shadow-2xl shadow-blue-900/20 group"
+                    >
+                      <img
+                        src={optimizedBanner2}
+                        alt="Mission Banner 2"
+                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-[#030305]/40 to-transparent" />
+                    </motion.div>
+                  )}
+                </div>
               )}
             </div>
 
-            {/* 2. THE ARTIST GRID - Visual Upgrade */}
+            {/* 2. THE ARTIST GRID */}
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
               {data.lineup.map((mission, index) => {
                 const Icon = getMissionIcon(index);
-                // Extract simple Day text (e.g., "Day 1")
                 const dayTag = mission.missionTitle.split(":")[0];
 
                 return (
@@ -161,10 +189,9 @@ const EventDetails = () => {
                     transition={{ delay: index * 0.1 }}
                     className="group relative bg-[#0a0a12] border border-white/10 rounded-xl overflow-hidden hover:border-blue-500/40 transition-all duration-300 hover:shadow-[0_0_30px_rgba(59,130,246,0.15)] flex flex-col"
                   >
-                    {/* Background Glow */}
                     <div className="absolute inset-0 bg-gradient-to-b from-blue-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                    <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-blue-400/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
-                    {/* Top Row: Badge + Social */}
                     <div className="p-5 pb-0 flex justify-between items-start relative z-10">
                       <span className="px-2 py-1 bg-white/5 rounded text-[10px] font-bold text-blue-300 uppercase tracking-widest border border-white/5 group-hover:bg-blue-500/20 transition-colors">
                         {dayTag}
@@ -183,7 +210,6 @@ const EventDetails = () => {
                       )}
                     </div>
 
-                    {/* Center: Artist Info */}
                     <div className="p-6 text-center flex-grow flex flex-col items-center justify-center relative z-10">
                       <div className="mb-4 w-12 h-12 bg-gradient-to-br from-blue-600 to-purple-600 rounded-xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
                         <Icon className="w-6 h-6 text-white" />
@@ -197,7 +223,6 @@ const EventDetails = () => {
                       </p>
                     </div>
 
-                    {/* Bottom: Info Strip */}
                     <div className="relative z-10 border-t border-white/5 bg-white/[0.02]">
                       <div className="grid grid-cols-3 divide-x divide-white/5">
                         <div className="p-3 text-center">
@@ -231,7 +256,7 @@ const EventDetails = () => {
               })}
             </div>
 
-            {/* 3. Protocols - Compact Strip */}
+            {/* 3. Protocols */}
             <motion.div
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
@@ -380,7 +405,6 @@ const EventDetails = () => {
                     </div>
                   </div>
 
-                  {/* --- CONTACT SECTION --- */}
                   {data.contact && data.contact.length > 0 && (
                     <div className="pt-4 border-t border-white/10 space-y-3">
                       <div className="flex items-center gap-2 mb-2">

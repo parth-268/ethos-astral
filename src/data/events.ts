@@ -2,6 +2,7 @@ import { HandMetal, LucideIcon, Trophy, Award } from "lucide-react";
 import culturalBg from "@/assets/cultural_bg.jpg";
 import { ReactNode } from "react";
 import proNiteBannner from "@/assets/pro_nite1.png";
+import proNiteBanner2 from "@/assets/pro_nite2.jpg";
 
 export interface EventCard {
   icon: LucideIcon;
@@ -16,6 +17,7 @@ export interface EventDetails {
   description: ReactNode;
   image: string;
   bannerImage?: string;
+  secondaryBannerImage?: string; // NEW FIELD
   date: string;
   location: string;
   prize: string;
@@ -26,7 +28,7 @@ export interface EventDetails {
     missionTitle: string;
     artistRole: string;
     artistName: string;
-    instagram?: string; // New field for Insta ID
+    instagram?: string;
     date: string;
     time: string;
     venue: string;
@@ -66,6 +68,7 @@ export const EVENT_DATABASE: Record<string, EventDetails> = {
     image:
       "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?q=80&w=2070&auto=format&fit=crop",
     bannerImage: proNiteBannner,
+    secondaryBannerImage: proNiteBanner2, // ADDED SECOND BANNER HERE
     date: "22-24 Jan 2026",
     location: "Main Ground",
     prize: "N/A",

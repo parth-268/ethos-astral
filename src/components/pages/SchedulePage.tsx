@@ -13,7 +13,7 @@ import {
   Star,
   Rocket,
 } from "lucide-react";
-import { Link, useLocation } from "react-router-dom"; // Added useLocation
+import { Link, useLocation } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { SCHEDULE_DATA } from "@/config/scheduleData";
@@ -78,13 +78,15 @@ const SchedulePage = () => {
         />
       </div>
 
-      <div className="relative z-10 pt-24 pb-20 container mx-auto px-4 md:px-6">
+      {/* COMPACTED: Reduced top padding from pt-24 to pt-20 */}
+      <div className="relative z-10 pt-20 pb-16 container mx-auto px-4 md:px-6">
         {/* Header */}
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 gap-4">
+        {/* COMPACTED: Reduced bottom margin from mb-12 to mb-8 */}
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 gap-4">
           <div>
             <Link
               to="/#schedule"
-              className="inline-flex items-center gap-2 text-white/50 hover:text-cyan-400 transition-colors mb-6 group"
+              className="inline-flex items-center gap-2 text-white/50 hover:text-cyan-400 transition-colors mb-4 group"
             >
               <ChevronLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
               <span className="uppercase tracking-widest text-xs font-bold">
@@ -92,7 +94,8 @@ const SchedulePage = () => {
               </span>
             </Link>
 
-            <h1 className="text-5xl md:text-7xl font-display text-white mb-2 tracking-tight">
+            {/* COMPACTED: Reduced font size from text-5xl/7xl to text-4xl/6xl */}
+            <h1 className="text-4xl md:text-6xl font-display text-white mb-2 tracking-tight">
               FLIGHT{" "}
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">
                 PLAN
@@ -103,7 +106,7 @@ const SchedulePage = () => {
             </p>
           </div>
 
-          <div className="flex items-center gap-2 px-4 py-2 bg-white/5 rounded-full border border-white/10 backdrop-blur-sm">
+          <div className="flex items-center gap-2 px-3 py-1.5 bg-white/5 rounded-full border border-white/10 backdrop-blur-sm">
             <Rocket className="w-4 h-4 text-amber-400" />
             <span className="text-xs font-bold uppercase tracking-wider text-white/80">
               Status: <span className="text-green-400">On Schedule</span>
@@ -112,7 +115,8 @@ const SchedulePage = () => {
         </div>
 
         {/* Day Selector */}
-        <div className="mb-16">
+        {/* COMPACTED: Reduced bottom margin from mb-16 to mb-10 */}
+        <div className="mb-10">
           <div className="flex md:grid md:grid-cols-3 gap-4 overflow-x-auto pb-4 md:pb-0 snap-x hide-scrollbar">
             {SCHEDULE_DATA.map((day, index) => {
               const isActive = activeDay === index;
@@ -120,7 +124,8 @@ const SchedulePage = () => {
                 <button
                   key={day.day}
                   onClick={() => setActiveDay(index)}
-                  className={`relative flex-shrink-0 w-[85vw] md:w-auto snap-center group overflow-hidden rounded-2xl p-6 text-left transition-all duration-300 border ${
+                  // COMPACTED: Reduced padding from p-6 to p-5
+                  className={`relative flex-shrink-0 w-[85vw] md:w-auto snap-center group overflow-hidden rounded-2xl p-5 text-left transition-all duration-300 border ${
                     isActive
                       ? "bg-white/10 border-cyan-500/50 shadow-[0_0_20px_rgba(6,182,212,0.1)]"
                       : "bg-white/5 border-white/10 hover:bg-white/10"
@@ -144,7 +149,8 @@ const SchedulePage = () => {
                     />
                   </div>
 
-                  <h3 className="text-2xl font-display text-white mb-2">
+                  {/* COMPACTED: Reduced font size slightly */}
+                  <h3 className="text-xl md:text-2xl font-display text-white mb-1">
                     {day.title}
                   </h3>
                   <div className="text-xs font-mono text-white/50">
@@ -170,7 +176,8 @@ const SchedulePage = () => {
               {/* Timeline Line */}
               <div className="absolute left-0 md:left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-cyan-500/0 via-cyan-500/30 to-cyan-500/0 md:-translate-x-1/2" />
 
-              <div className="space-y-8 md:space-y-12 pb-12">
+              {/* COMPACTED: Reduced vertical space between items */}
+              <div className="space-y-6 md:space-y-10 pb-12">
                 {SCHEDULE_DATA[activeDay].events.map((event, index) => {
                   const isEven = index % 2 === 0;
                   const cat = getCategoryStyles(event.category);
