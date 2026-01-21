@@ -8,7 +8,7 @@ import { useReducedMotion } from "@/hooks/useReducedMotion";
 
 // --- HELPERS (Moved outside to fix ESLint & Performance) ---
 const getTargetDate = () => {
-  return new Date(`${EVENT_DETAILS.dates.start}T07:00:00+05:30`);
+  return new Date(`${EVENT_DETAILS.dates.start}T00:00:00+05:30`);
 };
 
 const calculateTimeLeft = () => {
