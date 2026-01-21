@@ -2,7 +2,7 @@
 
 > The official website for ETHOS 2026, IIM Sambalpur's annual cultural festival. A cosmic journey through music, art, and competition.
 
-![ETHOS 2026](public/og-image.png)
+![ETHOS 2026](public/og-image.jpeg)
 
 ## 🚀 Quick Start
 
@@ -89,7 +89,7 @@ Visit `http://localhost:8080`
 ```
 ethos-astral/
 ├── public/
-│   ├── og-image.png         # Open Graph image
+│   ├── og-image.jpeg         # Open Graph image
 │   ├── sitemap.xml          # SEO sitemap
 │   └── robots.txt           # Crawler instructions
 ├── src/

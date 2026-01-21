@@ -12,6 +12,7 @@ import {
   Cpu,
   Star,
   Rocket,
+  ArrowUp,
 } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import Navbar from "@/components/Navbar";
@@ -53,11 +54,28 @@ const SchedulePage = () => {
   const { state } = useLocation(); // Access navigation state
   // Initialize activeDay from state if available, otherwise default to 0 (Day 1)
   const [activeDay, setActiveDay] = useState(state?.activeDay || 0);
+  const [showBackToTop, setShowBackToTop] = useState(false); // State for scroll button
   const prefersReducedMotion = useReducedMotion();
 
   useEffect(() => {
     window.scrollTo(0, 0);
+
+    // Scroll Listener
+    const handleScroll = () => {
+      if (window.scrollY > 300) {
+        setShowBackToTop(true);
+      } else {
+        setShowBackToTop(false);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
 
   return (
     <main className="bg-[#030305] min-h-screen text-white selection:bg-cyan-500/30 overflow-x-hidden relative">
@@ -274,6 +292,23 @@ const SchedulePage = () => {
           </AnimatePresence>
         </div>
       </div>
+
+      {/* --- BACK TO TOP BUTTON --- */}
+      <AnimatePresence>
+        {showBackToTop && (
+          <motion.button
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.8 }}
+            onClick={scrollToTop}
+            className="fixed bottom-8 right-8 z-50 p-3 bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 rounded-full backdrop-blur-md shadow-[0_0_20px_rgba(6,182,212,0.2)] hover:bg-cyan-500 hover:text-black transition-all duration-300 group"
+            aria-label="Back to top"
+          >
+            <ArrowUp className="w-6 h-6 group-hover:-translate-y-1 transition-transform" />
+          </motion.button>
+        )}
+      </AnimatePresence>
+
       <Footer />
     </main>
   );
